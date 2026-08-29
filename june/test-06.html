@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka PC & SSC CBT Mock Test - Pages 54 to 63</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #319795;
+            --success: #38a169;
+            --danger: #e53e3e;
+            --warning: #dd6b20;
+            --bg: #f7fafc;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevents global page freeze */
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            height: 60px;
+        }
+
+        header h1 {
+            font-size: 1.1rem;
+        }
+
+        .timer-box {
+            background-color: #2d3748;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #feb2b2;
+            border: 1px solid #e53e3e;
+        }
+
+        .cbt-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+            overflow: hidden; /* Enables independent inner scrolling */
+        }
+
+        /* Question Area - Independent Scroll */
+        .question-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #ffffff;
+            height: 100%;
+        }
+
+        .page-badge {
+            display: inline-block;
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            border: 1px solid #bee3f8;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .option-item.selected {
+            border-color: var(--secondary);
+            background-color: #ebf8ff;
+            font-weight: bold;
+        }
+
+        .option-prefix {
+            font-weight: bold;
+            margin-right: 12px;
+            background: #cbd5e0;
+            color: #2d3748;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .option-item.selected .option-prefix {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary { background-color: var(--secondary); color: white; }
+        .btn-primary:hover { background-color: #2c5282; }
+        .btn-success { background-color: var(--success); color: white; }
+        .btn-success:hover { background-color: #276749; }
+        .btn-warning { background-color: var(--warning); color: white; }
+        .btn-danger { background-color: var(--danger); color: white; }
+        .btn-secondary { background-color: #718096; color: white; }
+
+        /* Sidebar - Independent Scroll */
+        .sidebar {
+            width: 320px;
+            background-color: #edf2f7;
+            border-left: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            flex-shrink: 0;
+        }
+
+        .profile-card {
+            padding: 12px 15px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .status-legend {
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            font-size: 0.75rem;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 3px;
+            display: inline-block;
+            text-align: center;
+            line-height: 18px;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .bg-answered { background-color: var(--success); }
+        .bg-not-answered { background-color: var(--danger); }
+        .bg-marked { background-color: var(--warning); }
+        .bg-not-visited { background-color: #cbd5e0; color: #4a5568; }
+
+        .palette-container {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto; /* Independent scroll for question numbers */
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .palette-btn {
+            height: 36px;
+            border: 1px solid #cbd5e0;
+            background-color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .palette-btn.active {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 5px rgba(43, 108, 176, 0.5);
+        }
+
+        .palette-btn.answered { background-color: var(--success); color: white; border: none; }
+        .palette-btn.not-answered { background-color: var(--danger); color: white; border: none; }
+        .palette-btn.marked { background-color: var(--warning); color: white; border: none; }
+
+        .sidebar-footer {
+            padding: 12px 15px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+
+        #result-screen {
+            display: none;
+            padding: 25px;
+            overflow-y: auto;
+            height: calc(100vh - 60px);
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .score-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .score-number {
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .explanation-card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--secondary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .cbt-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 260px; }
+            body { overflow: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Karnataka PC & SSC CBT Exam Mock Test (Pages 54 - 63)</h1>
+        <div class="timer-box" id="timer">Time Left: 25:00</div>
+    </header>
+
+    <div class="cbt-container" id="exam-interface">
+        <main class="question-area">
+            <div id="question-wrapper">
+                <span class="page-badge" id="page-label">Page 54</span>
+                <div class="question-text" id="q-text">Loading question...</div>
+                <ul class="options-list" id="options-container"></ul>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="previousQuestion()">Previous</button>
+                <button class="btn btn-warning" onclick="markForReview()">Mark for Review</button>
+                <button class="btn btn-primary" onclick="saveAndNext()">Save & Next</button>
+                <button class="btn btn-danger" style="margin-left: auto;" onclick="clearResponse()">Clear Response</button>
+            </div>
+        </main>
+
+        <aside class="sidebar">
+            <div class="profile-card">
+                <div class="avatar">PC</div>
+                <div>
+                    <strong>KSP / SSC Candidate</strong><br>
+                    <small>Roll No: 2026-KSP-5463</small>
+                </div>
+            </div>
+
+            <div class="status-legend">
+                <div class="legend-item"><span class="badge-icon bg-answered" id="count-answered">0</span> Answered</div>
+                <div class="legend-item"><span class="badge-icon bg-not-answered" id="count-not-answered">0</span> Not Answered</div>
+                <div class="legend-item"><span class="badge-icon bg-marked" id="count-marked">0</span> Marked for Review</div>
+                <div class="legend-item"><span class="badge-icon bg-not-visited" id="count-not-visited">27</span> Not Visited</div>
+            </div>
+
+            <div class="palette-container">
+                <h4 style="margin-bottom: 8px; font-size: 0.85rem; color: #4a5568;">Question Palette</h4>
+                <div class="palette-grid" id="palette-grid"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-success" style="width: 100%;" onclick="submitExam()">Submit Test</button>
+            </div>
+        </aside>
+    </div>
+
+    <div id="result-screen">
+        <div class="score-box">
+            <h2>Exam Completed!</h2>
+            <div class="score-number" id="final-score">0 / 27</div>
+            <p id="score-analysis">You completed the test successfully.</p>
+            <button class="btn btn-primary" style="margin-top: 15px;" onclick="resetTest()">Retry Test</button>
+        </div>
+
+        <h3 style="margin-bottom: 15px; color: var(--primary);">Answer Key & Detailed Explanations (ಉತ್ತರಗಳು ಮತ್ತು ವಿವರಣೆ)</h3>
+        <div id="explanations-container"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            // Page 54
+            {
+                page: 54,
+                question: "ಓಮನ್ ಮತ್ತು ಭಾರತದ ನಡುವೆ ಮುಕ್ತ ವ್ಯಾಪಾರ ಒಪ್ಪಂದಕ್ಕೆ (FTA) ಸಂಬಂಧಿಸಿದಂತೆ ಯಾವ ಜಲಸಂಧಿಯ ತಾಪತ್ರಯವಿಲ್ಲದೆ ವ್ಯಾಪಾರ ವಹಿವಾಟು ನಡೆಸಲು ನೆರವಾಗುತ್ತದೆ?",
+                options: ["ಮಲಕ್ಕಾ ಜಲಸಂಧಿ", "ಹರ್ಮೂಜ್ ಜಲಸಂಧಿ", "ಪಾಕ್ ಜಲಸಂಧಿ", "ಬಾಬ್-ಎಲ್-ಮಂಡೇಬ್"],
+                correct: 1,
+                explanation: "ಓಮನ್-ಭಾರತ ಮುಕ್ತ ವ್ಯಾಪಾರ ಒಪ್ಪಂದದಿಂದಾಗಿ ಅಪಾಯಕಾರಿ ಹರ್ಮೂಜ್ ಜಲಸಂಧಿಯನ್ನು దాಟುವ ಅಗತ್ಯವಿಲ್ಲದೆ ವ್ಯಾಪಾರ ಸುಲಭವಾಗುತ್ತದೆ."
+            },
+            {
+                page: 54,
+                question: "ಕ್ವಾಡ್ (Quad) ವಿದೇಶಾಂಗ ಸಚಿವರ ಸಭೆಯು 2026 ಮೇ 26 ರಂದು ಎಲ್ಲಿ ನಡೆಯಿತು ಮತ್ತು ಇದರ ಅಧ್ಯಕ್ಷತೆಯನ್ನು ಯಾರು ವಹಿಸಿದ್ದರು?",
+                options: ["ಟೋಕಿಯೋ - ಜಪಾನ್ ಪ್ರಧಾನಿ", "ನವದೆಹಲಿ - ಭಾರತದ ವಿದೇಶಾಂಗ ಸಚಿವ ಎಸ್. ಜೈಶಂಕರ್", "ಕ್ಯಾನ್‌ಬೆರ್ರಾ - ಆಸ್ಟ್ರೇಲಿಯಾ ವಿದೇಶಾಂಗ ಸಚಿವ", "ವಾಷಿಂಗ್ಟನ್ - ಅಮೆರಿಕ ವಿದೇಶಾಂಗ ಕಾರ್ಯದರ್ಶಿ"],
+                correct: 1,
+                explanation: "ಕ್ವಾಡ್ ವಿದೇಶಾಂಗ ಸಚಿವರ ಸಭೆಯು ನವದೆಹಲಿಯಲ್ಲಿ ಭಾರತದ ವಿದೇಶಾಂಗ ಸಚಿವ ಎಸ್. ಜೈಶಂಕರ್ ಅಧ್ಯಕ್ಷತೆಯಲ್ಲಿ ನಡೆಯಿತು."
+            },
+            {
+                page: 54,
+                question: "ಕ್ವಾಡ್ (Quad) ಒಕ್ಕೂಟವನ್ನು ಅಧಿಕೃತವಾಗಿ ಯಾವ ವರ್ಷದಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾಯಿತು?",
+                options: ["2005", "2007", "2015", "2020"],
+                correct: 1,
+                explanation: "ಕ್ವಾಡ್ (Quadrilateral Security Dialogue) ಒಕ್ಕೂಟವು 2007 ರಲ್ಲಿ ಜಪಾನ್‌ನ ಮಾಜಿ ಪ್ರಧಾನಿ ಶಿಂಜೋ ಅಬೆ ಅವರ ಉದ್ಯಮದಿಂದ ಆರಂಭವಾಯಿತು."
+            },
+
+            // Page 55
+            {
+                page: 55,
+                question: "ಕೇಂದ್ರ ಸಂಪುಟವು 2026-27ನೇ ಸಾಲಿನ ಮುಂಗಾರು ಹಂಗಾಮಿಗೆ ಒಟ್ಟು ಎಷ್ಟು ಬೆಳೆಗಳಿಗೆ ಕನಿಷ್ಠ ಬೆಂಬಲ ಬೆಲೆಯನ್ನು (MSP) ಹೆಚ್ಚಿಸಿದೆ?",
+                options: ["10 ಬೆಳೆಗಳು", "14 ಬೆಳೆಗಳು", "18 ಬೆಳೆಗಳು", "22 ಬೆಳೆಗಳು"],
+                correct: 1,
+                explanation: "ಕೇಂದ್ರ ಸರ್ಕಾರವು ಮುಂಗಾರು ಹಂಗಾಮಿನ 14 ಪ್ರಮುಖ ಬೆಳೆಗಳಿಗೆ ಕನಿಷ್ಠ ಬೆಂಬಲ ಬೆಲೆ (MSP) ಏರಿಕೆ ಮಾಡಿದೆ."
+            },
+            {
+                page: 55,
+                question: "ಭಾರತದಲ್ಲಿ ಕನಿಷ್ಠ ಬೆಂಬಲ ಬೆಲೆಯನ್ನು (MSP) ಸರ್ಕಾರಕ್ಕೆ ಶಿಫಾರಸು ಮಾಡುವ ಸಂಸ್ಥೆ ಯಾವುದು?",
+                options: ["NABARD", "CACP (ಕೃಷಿ ವೆಚ್ಚ ಮತ್ತು ಬೆಲೆಗಳ ಆಯೋಗ)", "NITI ಆಯೋಗ", "FSSAI"],
+                correct: 1,
+                explanation: "ಕೃಷಿ ವೆಚ್ಚ ಮತ್ತು ಬೆಲೆಗಳ ಆಯೋಗ (CACP) ಶಿಫಾರಸಿನ ಆಧಾರದ ಮೇಲೆ ಕೇಂದ್ರ ಸರ್ಕಾರವು MSP ನಿಗದಿಪಡಿಸುತ್ತದೆ."
+            },
+            {
+                page: 55,
+                question: "ಹಕ್ಕು ಪಡೆಯದ ಹಣಕಾಸು ಆಸ್ತಿಗಳನ್ನು (Unclaimed Assets) ಹುಡುಕಲು ಕೇಂದ್ರ ಹಣಕಾಸು ಸಚಿವಾಲಯವು ಬಿಡುಗಡೆ ಮಾಡಿದ ನೂತನ ಪೋರ್ಟಲ್ ಯಾವುದು?",
+                options: ["ಉದ್ಗಮ್ ಪೋರ್ಟಲ್", "unclaimedassetsportal.in", "ಧನ ಸಂಚಯ್ ಪೋರ್ಟಲ್", "ಜನ ಧನ್ ಆಸ್ತಿ ಪೋರ್ಟಲ್"],
+                correct: 1,
+                explanation: "ಹಕ್ಕು ಪಡೆಯದ ಬ್ಯಾಂಕ್ ಠೇವಣಿ, ವಿಮೆ ಹಾಗೂ ಷೇರುಗಳನ್ನು ಹುಡುಕಲು https://www.unclaimedassetsportal.in ಬಿಡುಗಡೆ ಮಾಡಲಾಗಿದೆ."
+            },
+
+            // Page 56
+            {
+                page: 56,
+                question: "ಹಣದುಬ್ಬರ ಮೌಲ್ಯಮಾಪನಕ್ಕಾಗಿ ಕೇಂದ್ರ ಸರ್ಕಾರವು ಸಗಟು ಬೆಲೆ ಸೂಚ್ಯಂಕದ (WPI) ಬದಲಾಗಿ ಯಾವ ನೂತನ ಸೂಚ್ಯಂಕವನ್ನು ಪರಿಚಯಿಸಲು ಸಿದ್ಧತೆ ನಡೆಸಿದೆ?",
+                options: ["ಗ್ರಾಹಕ ಬೆಲೆ ಸೂಚ್ಯಂಕ (CPI)", "ಉತ್ಪಾದಕ ಬೆಲೆ ಸೂಚ್ಯಂಕ (PPI - Producer Price Index)", "ಸಾಮಾನ್ಯ ಬೆಲೆ ಸೂಚ್ಯಂಕ (GPI)", "ಕೈಗಾರಿಕಾ ಉತ್ಪಾದನಾ ಸೂಚ್ಯಂಕ (IIP)"],
+                correct: 1,
+                explanation: "WPI ಬದಲು ಅಂತಾರಾಷ್ಟ್ರೀಯ ಮಾನದಂಡದ ಉತ್ಪಾದಕ ಬೆಲೆ ಸೂಚ್ಯಂಕವನ್ನು (PPI) ಜಾರಿಗೆ ತರಲು ನಿರ್ಧರಿಸಲಾಗಿದೆ."
+            },
+            {
+                page: 56,
+                question: "ಕೇಂದ್ರ ಸರ್ಕಾರವು ಮುಂಗಡ ಅಧಿಕಾರ ಯೋಜನೆಯಡಿ (Advance Authorization Scheme) ಚಿನ್ನದ ಆಮದಿಗೆ ಗರಿಷ್ಠ ಎಷ್ಟು ಕೆಜಿ ಮಿತಿಯನ್ನು ವಿಧಿಸಿದೆ?",
+                options: ["50 kg", "100 kg", "200 kg", "500 kg"],
+                correct: 1,
+                explanation: "ಮುಂಗಡ ಅಧಿಕಾರ ಯೋಜನೆಯಡಿ ಆಭರಣ ರಫ್ತುದಾರರಿಗೆ ಗರಿಷ್ಠ 100 kg ಚಿನ್ನದ ಆಮದಿಗೆ ಮಿತಿ ವಿಧಿಸಲಾಗಿದೆ."
+            },
+
+            // Page 57
+            {
+                page: 57,
+                question: "NCRB 2024ರ ವರದಿಯ ಪ್ರಕಾರ ದೇಶದಲ್ಲೇ ಅತಿ ಹೆಚ್ಚು ಭ್ರಷ್ಟಾಚಾರ ಪ್ರಕರಣಗಳು ದಾಖಲಾದ ರಾಜ್ಯಗಳ ಪಟ್ಟಿಯಲ್ಲಿ ಕರ್ನಾಟಕ ಎಷ್ಟನೇ ಸ್ಥಾನದಲ್ಲಿದೆ? [STATE PRIORITY]",
+                options: ["ಮೊದಲನೇ ಸ್ಥಾನ", "ಎರಡನೇ ಸ್ಥಾನ", "ಮೂರನೇ ಸ್ಥಾನ", "ಐದನೇ ಸ್ಥಾನ"],
+                correct: 2,
+                explanation: "NCRB ವರದಿಯಂತೆ 334 ಭ್ರಷ್ಟಾಚಾರ ಪ್ರಕರಣಗಳೊಂದಿಗೆ ಕರ್ನಾಟಕವು ದೇಶದಲ್ಲೇ 3ನೇ ಸ್ಥಾನದಲ್ಲಿದೆ (ಮಹಾರಾಷ್ಟ್ರ 1, ತಮಿಳುನಾಡು 2)."
+            },
+            {
+                page: 57,
+                question: "NCRB ವರದಿಯ ಪ್ರಕಾರ ಅಕ್ರಮ ಆಸ್ತಿ ಗಳಿಕೆ (Disproportionate Assets) ಪ್ರಕರಣಗಳಲ್ಲಿ ಭಾರತದಲ್ಲೇ ಮೊದಲ ಸ್ಥಾನದಲ್ಲಿರುವ ರಾಜ್ಯ ಯಾವುದು? [STATE PRIORITY]",
+                options: ["ಕರ್ನಾಟಕ (75 ಪ್ರಕರಣಗಳು)", "ಒಡಿಶಾ", "ಮಹಾರಾಷ್ಟ್ರ", "ಉತ್ತರ ಪ್ರದೇಶ"],
+                correct: 0,
+                explanation: "ಅಕ್ರಮ ಆಸ್ತಿ ಗಳಿಕೆ ಪ್ರಕರಣಗಳಲ್ಲಿ 75 ಪ್ರಕರಣಗಳೊಂದಿಗೆ ಕರ್ನಾಟಕ ದೇಶದಲ್ಲೇ ಪ್ರಥಮ ಸ್ಥಾನದಲ್ಲಿದೆ."
+            },
+            {
+                page: 57,
+                question: "NCRB ವರದಿಯ ಪ್ರಕಾರ ದೇಶದ ಪ್ರಮುಖ 53 ನಗರಗಳಲ್ಲಿ ಆತ್ಮಹತ್ಯೆ ಪ್ರಕರಣಗಳ ಸಂಖ್ಯೆಯಲ್ಲಿ ಬೆಂಗಳೂರು ನಗರ ಎಷ್ಟನೇ ಸ್ಥಾನದಲ್ಲಿದೆ? [STATE PRIORITY]",
+                options: ["1ನೇ ಸ್ಥಾನ", "2ನೇ ಸ್ಥಾನ (2,403 ಪ್ರಕರಣಗಳು)", "3ನೇ ಸ್ಥಾನ", "4ನೇ ಸ್ಥಾನ"],
+                correct: 1,
+                explanation: "ಆತ್ಮಹತ್ಯೆ ಪ್ರಕರಣಗಳಲ್ಲಿ ದೆಹಲಿ ಮೊದಲ ಸ್ಥಾನದಲ್ಲಿದ್ದರೆ, 2,403 ಪ್ರಕರಣಗಳೊಂದಿಗೆ ಬೆಂಗಳೂರು 2ನೇ ಸ್ಥಾನದಲ್ಲಿದೆ."
+            },
+
+            // Page 58
+            {
+                page: 58,
+                question: "ಕರ್ನಾಟಕ ಸರ್ಕಾರವು ಇತ್ತೀಚೆಗೆ ರಾಜ್ಯ ಕೀಟ ಮತ್ತು ರಾಜ್ಯ ಉಭಯವಾಸಿ ಎಂದು ಘೋಷಿಸಲು ಕ್ರಮ ಕೈಗೊಂಡಿರುವ ಜೀವ ವೈವಿಧ್ಯಗಳು ಯಾವುವು? [STATE PRIORITY]",
+                options: ["ತುಡುವೆ ಜೇನು (Apis Cerana) ಮತ್ತು ಮಲೆನಾಡಿನ ಮರಗಂಟಿ ಕಪ್ಪೆ (Malabar Tree Toad)", "ಚಿಟ್ಟೆ ಮತ್ತು ಹಸಿರು ಕಪ್ಪೆ", "ಸಾಕಣೆ ಜೇನು ಮತ್ತು ಕಪ್ಪೆ", "ಚಿನ್ನದ ಜೇನು ಮತ್ತು ನೆಲ ಕಪ್ಪೆ"],
+                correct: 0,
+                explanation: "ಕರ್ನಾಟಕ ಸರ್ಕಾರವು ತುಡುವೆ ಜೇನನ್ನು ರಾಜ್ಯ ಕೀಟ ಹಾಗೂ ಮಲೆನಾಡಿನ ಮರಗಂಟಿ ಕಪ್ಪೆಯನ್ನು ರಾಜ್ಯ ಉಭಯವಾಸಿಯಾಗಿ ಘೋಷಿಸಲು ನಿರ್ಧರಿಸಿದೆ."
+            },
+            {
+                page: 58,
+                question: "ಕರ್ನಾಟಕ ಸರ್ಕಾರವು ಸರ್ಕಾರಿ ಆಡಳಿತ ಸುಧಾರಣೆಗಾಗಿ ಮತ್ತು ಕಡತ ವಿಲೇವಾರಿ ವೇಗಗೊಳಿಸಲು ಜಾರಿಗೆ ತಂದ ನೂತನ ತಂತ್ರಜ್ಞಾನ ವೇದಿಕೆ ಯಾವುದು? [STATE PRIORITY]",
+                options: ["ಇ-ಆಡಳಿತ 2.0", "AI ಸೂಟ್ (AI Suite)", "ಕೆ-ಆಡಳಿತ ಆ್ಯಪ್", "ಆಡಳಿತ ಸುಗಮ ಪೋರ್ಟಲ್"],
+                correct: 1,
+                explanation: "ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ ಬಳಸಿ ಕಡತ ವಿಲೇವಾರಿ ಹಾಗೂ ಭಾಷಾಂತರ ಸುಲಭಗೊಳಿಸಲು ಕರ್ನಾಟಕ ಸರ್ಕಾರ 'AI ಸೂಟ್' ಅಳವಡಿಸಿದೆ."
+            },
+
+            // Page 59
+            {
+                page: 59,
+                question: "ಬೆಳಗಾವಿಯ ಯಲಹಂಕದಲ್ಲಿರುವ ರಾಷ್ಟ್ರೀಯ ಗುಪ್ತಚರ ಜಾಲದ (NATGRID) ಸಿಎಸ್‌ಐಎಸ್ಎಫ್ (CISF) ಭದ್ರತೆಗೆ ಕೇಂದ್ರ ಗೃಹ ಸಚಿವಾಲಯ ಅನುಮೋದನೆ ನೀಡಿದ ಕೇಂದ್ರ ಎಲ್ಲಿದೆ? [STATE PRIORITY]",
+                options: ["ಬೆಂಗಳೂರು (NATGRID)", "ಮೈಸೂರು", "ಮಂಗಳೂರು", "ಧಾರವಾಡ"],
+                correct: 0,
+                explanation: "ಬೆಂಗಳೂರಿನ ಯಲಹಂಕದಲ್ಲಿರುವ ನ್ಯಾಟ್ ಗ್ರಿಡ್ (NATGRID) ಕೇಂದ್ರಕ್ಕೆ CISF ಭದ್ರತೆ ನಿಯೋಜಿಸಲಾಗಿದೆ."
+            },
+            {
+                page: 59,
+                question: "ಸುಪ್ರೀಂ ಕೋರ್ಟ್ ನ್ಯಾಯಮೂರ್ತಿ ವಿಕ್ರಮ್‌ನಾಥ್ ಅವರು ಇತ್ತೀಚೆಗೆ ಕರ್ನಾಟಕದ ಯಾವ ಕಾರಾಗೃಹದಲ್ಲಿ ಕೌಶಲ್ಯಾಭಿವೃದ್ಧಿ ಹಾಗೂ ಕಂಪ್ಯೂಟರ್ ಪ್ರಯೋಗಾಲಯ ಉದ್ಘಾಟಿಸಿದರು? [STATE PRIORITY]",
+                options: ["ಬೆಳಗಾವಿ ಹೈಸೆಕ್ಯುರಿಟಿ ಜೈಲು", "ಬೆಂಗಳೂರಿನ ಪರಪ್ಪನ ಅಗ್ರಹಾರ ಕೇಂದ್ರ ಕಾರಾಗೃಹ", "ಮೈಸೂರು ಕೇಂದ್ರ ಕಾರಾಗೃಹ", "ಬಳ್ಳಾರಿ ಜೈಲು"],
+                correct: 1,
+                explanation: "ನ್ಯಾಯಮೂರ್ತಿ ವಿಕ್ರಮ್‌ನಾಥ್ ಅವರು ಬೆಂಗಳೂರಿನ ಪರಪ್ಪನ ಅಗ್ರಹಾರ ಕೇಂದ್ರ ಕಾರಾಗೃಹದಲ್ಲಿ ವಿವಿಧ ಸುಧಾರಣಾ ಕಾರ್ಯಕ್ರಮಗಳನ್ನು ಉದ್ಘಾಟಿಸಿದರು."
+            },
+
+            // Page 60
+            {
+                page: 60,
+                question: "ಕರ್ನಾಟಕದ ಹಿಂದುಳಿದ ವರ್ಗಗಳ ಆಯೋಗವು ಸಿದ್ಧಪಡಿಸಿದ 'ಜಾತಿ ಸಮೀಕ್ಷೆ ವರದಿ' ನೀಡಿದ ಆಯೋಗದ ಅಧ್ಯಕ್ಷರು ಯಾರು? [STATE PRIORITY]",
+                options: ["ಕಾಂತರಾಜು", "ಮಧುಸೂದನ್ ನಾಯ್ಕ್", "ಜಯಪ್ರಕಾಶ್ ಹೆಗ್ಡೆ", "ಎಚ್. ಎಂ. ರೇವಣ್ಣ"],
+                correct: 1,
+                explanation: "ಮಧುಸೂದನ್ ನಾಯ್ಕ್ ಅಧ್ಯಕ್ಷತೆಯ ರಾಜ್ಯ ಹಿಂದುಳಿದ ವರ್ಗಗಳ ಆಯೋಗವು ಈ ಸಾಮಾಜಿಕ ಮತ್ತು ಶೈಕ್ಷಣಿಕ ಸಮೀಕ್ಷೆ ವರದಿಯನ್ನು ಸಿದ್ಧಪಡಿಸಿದೆ."
+            },
+            {
+                page: 60,
+                question: "ಕರ್ನಾಟಕ ಸರ್ಕಾರವು '108 ಆರೋಗ್ಯ ಕವಚ' ಆಂಬುಲೆನ್ಸ್ ಸೇವೆಯನ್ನು ಯಾರ ಸಾರ್ವಜನಿಕ-ಖಾಸಗಿ ಸಹಭಾಗಿತ್ವದಿಂದ ಹಿಂಪಡೆದು ಸಂಪೂರ್ಣ ಸರ್ಕಾರಿ ಸೌಮ್ಯಕ್ಕೆ ಒಳಪಡಿಸಿದೆ? [STATE PRIORITY]",
+                options: ["ಜಿವಿಕೆ ಇಎಂಆರ್‌ಐ (GVK EMRI)", "ಅಪೋಲೋ ಸಮೂಹ", "ಮಣಿಪಾಲ್ ಸಂಸ್ಥೆ", "ನಾರಾಯಣ ಹೃದಯಾಲಯ"],
+                correct: 0,
+                explanation: "108 ಆರೋಗ್ಯ ಕವಚ ಸೇವೆಯನ್ನು ಖಾಸಗಿ ಸಂಸ್ಥೆಯ ಸಹಭಾಗಿತ್ವದಿಂದ ಮುಕ್ತಗೊಳಿಸಿ ಸಂಪೂರ್ಣ ಸರ್ಕಾರವೇ ನೇರ ನಿಯಂತ್ರಣಕ್ಕೆ ತೆಗೆದುಕೊಂಡಿದೆ."
+            },
+            {
+                page: 60,
+                question: "ಅಪಘಾತ ಸಂಭವಿಸಿದ ಮೊದಲ ಒಂದು ಗಂಟೆಯ ನಿರ್ಣಾಯಕ ಸಮಯವನ್ನು ವೈದ್ಯಕೀಯ ಜಗತ್ತಿನಲ್ಲಿ ಏನೆಂದು ಕರೆಯಲಾಗುತ್ತದೆ?",
+                options: ["ಸಿಲ್ವರ್ ಅವರ್", "ಗೋಲ್ಡನ್ ಅವರ್ (Golden Hour)", "ಡೈಮಂಡ್ ಅವರ್", "ಕ್ರಿಟಿಕಲ್ ಅವರ್"],
+                correct: 1,
+                explanation: "ಅಪಘಾತವಾದ ತಕ್ಷಣದ 1 ಗಂಟೆಯ ಸಮಯ ಜೀವ ರಕ್ಷಣೆಗೆ ಅತ್ಯಂತ ಪ್ರಮುಖವಾಗಿದ್ದು, ಅದನ್ನು 'ಗೋಲ್ಡನ್ ಅವರ್' ಎನ್ನಲಾಗುತ್ತದೆ."
+            },
+
+            // Page 61
+            {
+                page: 61,
+                question: "2026 ಜೂನ್ 03 ರಂದು ಕರ್ನಾಟಕ ರಾಜ್ಯದ 25ನೇ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಪ್ರಮಾಣವಚನ ಸ್ವೀಕರಿಸಿದ ನಾಯಕರು ಯಾರು? [STATE PRIORITY]",
+                options: ["ಸಿದ್ದರಾಮಯ್ಯ", "ಡಿ. ಕೆ. ಶಿವಕುಮಾರ್", "ಡಾ. ಜಿ. ಪರಮೇಶ್ವರ್", "ಎಚ್. ಡಿ. ಕುಮಾರಸ್ವಾಮಿ"],
+                correct: 1,
+                explanation: "ಡಿ. ಕೆ. ಶಿವಕುಮಾರ್ ಅವರು ಕರ್ನಾಟಕದ 25ನೇ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಅಧಿಕಾರ ವಹಿಸಿಕೊಂಡರು."
+            },
+            {
+                page: 61,
+                question: "ಭಾರತದ 18ನೇ ರೈಲ್ವೆ ವಲಯವಾದ 'ದಕ್ಷಿಣ ಕರಾವಳಿ ರೈಲ್ವೆ ವಲಯ' (South Coast Railway) ಕೇಂದ್ರ ಕಚೇರಿ ಎಲ್ಲಿದೆ? [STATE PRIORITY]",
+                options: ["ವಿಶಾಖಪಟ್ಟಣಂ (ಆಂಧ್ರಪ್ರದೇಶ)", "ವಿಜಯವಾಡ", "ಚೆನ್ನೈ", "ಹುಬ್ಬಳ್ಳಿ"],
+                correct: 0,
+                explanation: "18ನೇ ರೈಲ್ವೆ ವಲಯವಾದ ದಕ್ಷಿಣ ಕರಾವಳಿ ರೈಲ್ವೆ ವಲಯದ ಪ್ರಧಾನ ಕಚೇರಿ ಆಂಧ್ರಪ್ರದೇಶದ ವಿಶಾಖಪಟ್ಟಣಂನಲ್ಲಿದೆ (ಇದು ಕರ್ನಾಟಕದ ರೈಲು ಜಾಲವನ್ನೂ ಒಳಗೊಂಡಿದೆ)."
+            },
+
+            // Page 62
+            {
+                page: 62,
+                question: "ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶ ದೆಹಲಿಯಲ್ಲಿ ವಾಯುಮಾಲಿನ್ಯ ತಡೆಯಲು ಕೇಂದ್ರ ಸರ್ಕಾರ ಅನುಮೋದಿಸಿದ ಯೋಜನೆ ಯಾವುದು?",
+                options: ["ಹಳೆಯ ಟ್ರಕ್ ಮತ್ತು ಬಸ್‌ಗಳನ್ನು ಬದಲಾಯಿಸುವ ಯೋಜನೆ (Old Trucks & Buses Replacement Scheme)", "ಇ-ವಾಹನ ಕಡ್ಡಾಯ ಯೋಜನೆ", "ಹಸಿರು ದೆಹಲಿ ಯೋಜನೆ", "ಸಿಎನ್‌ಜಿ ಪ್ರೋತ್ಸಾಹಕ ಅಭಿಯಾನ"],
+                correct: 0,
+                explanation: "ಮಾಲಿನ್ಯ ನಿಯಂತ್ರಣಕ್ಕೆ ದೆಹಲಿಯಲ್ಲಿ ಹಳೆಯ ಮಾಲಿನ್ಯಕಾರಕ ವಾಣಿಜ್ಯ ಟ್ರಕ್ ಮತ್ತು ಬಸ್‌ಗಳನ್ನು ಬದಲಾಯಿಸುವ ಯೋಜನೆಗೆ ಕೇಂದ್ರ ಸರ್ಕಾರ ಸಮ್ಮತಿಸಿದೆ."
+            },
+
+            // Page 63
+            {
+                page: 63,
+                question: "ದೇಶದಲ್ಲೇ ಪ್ರಥಮ ಬಾರಿಗೆ ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ (AI) ಆಧಾರಿತ ಸೈಬರ್ ಸಹಾಯವಾಣಿ ಕಾಲ್ ಸೆಂಟರ್ (1930) ಅನ್ನು ಜಾರಿಗೆ ತಂದ ರಾಜ್ಯ ಯಾವುದು?",
+                options: ["ಕರ್ನಾಟಕ", "ಬಿಹಾರ", "ಮಹಾರಾಷ್ಟ್ರ", "ಉತ್ತರ ಪ್ರದೇಶ"],
+                correct: 1,
+                explanation: "ಬಿಹಾರ ಸರ್ಕಾರವು 1930 ಸೈಬರ್ ವಂಚನೆ ಸಹಾಯವಾಣಿಗೆ AI ತಂತ್ರಜ್ಞಾನ ಜೋಡಿಸಿ ದೇಶದಲ್ಲೇ ಮೊದಲ AI ಸೈಬರ್ ಕಾಲ್ ಸೆಂಟರ್ ಆರಂಭಿಸಿದೆ."
+            },
+            {
+                page: 63,
+                question: "ಕೇಂದ್ರ ಸರ್ಕಾರದ ಗ್ರಾಮೀಣ ನೈರ್ಮಲ್ಯ ಸಮೀಕ್ಷೆಯಲ್ಲಿ ಪೂರ್ವ ವಲಯದಲ್ಲಿ ದೇಶದಲ್ಲೇ ಅತ್ಯುತ್ತಮ ಪ್ರದರ್ಶನ ನೀಡಿದ ಅತ್ಯುತ್ತಮ ಕಾರ್ಯಾಚರಣೆಯ ಜಿಲ್ಲೆ ಯಾವುದು?",
+                options: ["ವಾರಣಾಸಿ", "ಭಾಗಲ್‌ಪುರ (ಬಿಹಾರ)", "ರೋಹ್ಟಕ್", "ಸತಾರಾ"],
+                correct: 1,
+                explanation: "ಗ್ರಾಮೀಣ ನೈರ್ಮಲ್ಯ ಮತ್ತು ತ್ಯಾಜ್ಯ ನಿರ್ವಹಣೆಯಲ್ಲಿ ಬಿಹಾರದ ಭಾಗಲ್‌ಪುರ ಜಿಲ್ಲೆ ಪೂರ್ವ ವಲಯದಲ್ಲೇ ಅತ್ಯುತ್ತಮ ಜಿಲ್ಲೆಯಾಗಿ ಹೊರಹೊಮ್ಮಿದೆ."
+            },
+            {
+                page: 63,
+                question: "ಭಾರತದ ಮೊದಲ ಗುಡುಗು ಮತ್ತು ಮಿಂಚಿಗೆ ಸಂಬಂಧಿಸಿದ ಸಂಶೋಧನಾ ಕೇಂದ್ರ (Thunderstorm Research Center) ಒಡಿಶಾದ ಯಾವ ಸ್ಥಳದಲ್ಲಿದೆ?",
+                options: ["ಭುವನೇಶ್ವರ", "ಬಾಲೇಶ್ವರ್ (Balasore)", "ಕಟಕ್", "ಪುರಿ"],
+                correct: 1,
+                explanation: "ಭಾರತದ ಮೊದಲdedicated ಗುಡುಗು ಮತ್ತು ಮಿಂಚು ಸಂಶೋಧನಾ ಕೇಂದ್ರ ಒಡಿಶಾದ ಬಾಲೇಶ್ವರ್‌ನಲ್ಲಿದೆ."
+            }
+        ];
+
+        let currentIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let userStatus = new Array(quizData.length).fill('not-visited');
+        let timerSeconds = 25 * 60;
+        let timerInterval;
+
+        function initQuiz() {
+            renderPalette();
+            loadQuestion(0);
+            startTimer();
+            updateCounts();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                } else {
+                    timerSeconds--;
+                    let mins = Math.floor(timerSeconds / 60);
+                    let secs = timerSeconds % 60;
+                    document.getElementById('timer').innerText = `Time Left: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        function renderPalette() {
+            const grid = document.getElementById('palette-grid');
+            grid.innerHTML = '';
+            quizData.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `palette-btn ${userStatus[idx]}`;
+                if (idx === currentIndex) btn.classList.add('active');
+                btn.innerText = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+                grid.appendChild(btn);
+            });
+        }
+
+        function loadQuestion(index) {
+            if (userStatus[currentIndex] === 'not-visited') {
+                userStatus[currentIndex] = 'not-answered';
+            }
+
+            currentIndex = index;
+            if (userStatus[currentIndex] === 'not-visited') {
+                userStatus[currentIndex] = 'not-answered';
+            }
+
+            const data = quizData[index];
+            document.getElementById('page-label').innerText = `Page ${data.page}`;
+            document.getElementById('q-text').innerText = `${index + 1}. ${data.question}`;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const prefixes = ['A', 'B', 'C', 'D'];
+            data.options.forEach((opt, optIdx) => {
+                const li = document.createElement('li');
+                li.className = 'option-item';
+                if (userAnswers[index] === optIdx) {
+                    li.classList.add('selected');
+                }
+                li.onclick = () => selectOption(optIdx);
+
+                li.innerHTML = `
+                    <span class="option-prefix">${prefixes[optIdx]}</span>
+                    <span>${opt}</span>
+                `;
+                optionsContainer.appendChild(li);
+            });
+
+            renderPalette();
+            updateCounts();
+        }
+
+        function selectOption(optionIndex) {
+            userAnswers[currentIndex] = optionIndex;
+            userStatus[currentIndex] = 'answered';
+            
+            const items = document.querySelectorAll('.option-item');
+            items.forEach((item, idx) => {
+                if (idx === optionIndex) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+
+            renderPalette();
+            updateCounts();
+        }
+
+        function saveAndNext() {
+            if (currentIndex < quizData.length - 1) {
+                loadQuestion(currentIndex + 1);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentIndex > 0) {
+                loadQuestion(currentIndex - 1);
+            }
+        }
+
+        function markForReview() {
+            userStatus[currentIndex] = 'marked';
+            renderPalette();
+            updateCounts();
+            if (currentIndex < quizData.length - 1) {
+                loadQuestion(currentIndex + 1);
+            }
+        }
+
+        function clearResponse() {
+            userAnswers[currentIndex] = null;
+            userStatus[currentIndex] = 'not-answered';
+            loadQuestion(currentIndex);
+        }
+
+        function jumpToQuestion(index) {
+            loadQuestion(index);
+        }
+
+        function updateCounts() {
+            let answered = 0, notAnswered = 0, marked = 0, notVisited = 0;
+            userStatus.forEach(st => {
+                if (st === 'answered') answered++;
+                else if (st === 'not-answered') notAnswered++;
+                else if (st === 'marked') marked++;
+                else if (st === 'not-visited') notVisited++;
+            });
+
+            document.getElementById('count-answered').innerText = answered;
+            document.getElementById('count-not-answered').innerText = notAnswered;
+            document.getElementById('count-marked').innerText = marked;
+            document.getElementById('count-not-visited').innerText = notVisited;
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+
+            document.getElementById('exam-interface').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+
+            let score = 0;
+            const expContainer = document.getElementById('explanations-container');
+            expContainer.innerHTML = '';
+
+            quizData.forEach((data, idx) => {
+                const isCorrect = userAnswers[idx] === data.correct;
+                if (isCorrect) score++;
+
+                const card = document.createElement('div');
+                card.className = 'explanation-card';
+                card.style.borderLeftColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+
+                const userAnsText = userAnswers[idx] !== null ? data.options[userAnswers[idx]] : 'ಉತ್ತರಿಸಿಲ್ಲ (Not Attempted)';
+                const correctAnsText = data.options[data.correct];
+
+                card.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 5px;">Q${idx + 1} (Page ${data.page}): ${data.question}</div>
+                    <div style="font-size: 0.9rem; margin-bottom: 3px;">
+                        ನಿಮ್ಮ ಉತ್ತರ: <span style="color: ${isCorrect ? 'green' : 'red'}; font-weight: bold;">${userAnsText}</span>
+                    </div>
+                    <div style="font-size: 0.9rem; margin-bottom: 5px; color: var(--success); font-weight: bold;">
+                        ಸರಿಯಾದ ಉತ್ತರ: ${correctAnsText}
+                    </div>
+                    <div style="font-size: 0.85rem; color: #4a5568; background: #edf2f7; padding: 8px; border-radius: 4px; margin-top: 5px;">
+                        💡 <strong>ವಿವರಣೆ:</strong> ${data.explanation}
+                    </div>
+                `;
+                expContainer.appendChild(card);
+            });
+
+            document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
+            const percentage = ((score / quizData.length) * 100).toFixed(1);
+            document.getElementById('score-analysis').innerText = `ನಿಮ್ಮ ಅಂಕ: ${percentage}% | Standard: Karnataka PC & SSC Constable Baseline`;
+        }
+
+        function resetTest() {
+            currentIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            userStatus = new Array(quizData.length).fill('not-visited');
+            timerSeconds = 25 * 60;
+
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('exam-interface').style.display = 'flex';
+
+            initQuiz();
+        }
+
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
