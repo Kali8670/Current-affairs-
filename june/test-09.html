@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka PC & SSC CBT Exam Mock Test (Pages 84 - 93)</title>
+    <style>
+        :root {
+            --primary-blue: #003366;
+            --secondary-blue: #0066cc;
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+            --light-bg: #f4f7fa;
+            --border-color: #dcdcdc;
+            --text-dark: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif, 'Tunga', 'Kedage';
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Lock main viewport */
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SSC Exam Header */
+        header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--secondary-blue);
+            flex-shrink: 0;
+            height: 60px;
+        }
+
+        header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-box {
+            background: #ffffff;
+            color: #d9534f;
+            padding: 4px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid #d9534f;
+            font-size: 1.05rem;
+        }
+
+        /* App Main Container */
+        .app-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Left Interactive Question Panel */
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .page-header {
+            background: #e9ecef;
+            padding: 8px 20px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: var(--primary-blue);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        /* Independent Scroll Area Fix */
+        .question-scroll-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            min-height: 0; /* Ensures flex child scrolls properly */
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #111;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .option-item:hover {
+            background-color: #f0f4f8;
+            border-color: var(--secondary-blue);
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-green) !important;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .option-item.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger-red) !important;
+            color: #721c24;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .feedback-box.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback-box.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Footer Controls */
+        .footer-controls {
+            padding: 10px 20px;
+            background: #e9ecef;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            height: 55px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary { background-color: var(--secondary-blue); color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-danger { background-color: var(--danger-red); color: white; }
+
+        /* Right Question Palette Sidebar */
+        .sidebar {
+            width: 320px;
+            background: #f8f9fa;
+            border-left: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .palette-header {
+            padding: 10px;
+            background: #e2e6ea;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .score-board {
+            padding: 10px;
+            background: #ffffff;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .palette-container {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .palette-group-title {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #555;
+            margin: 10px 0 5px 0;
+            text-transform: uppercase;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .btn-qnum {
+            height: 36px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .btn-qnum.active {
+            border: 2px solid var(--primary-blue);
+            box-shadow: 0 0 5px rgba(0,51,102,0.4);
+        }
+
+        .btn-qnum.answered-correct {
+            background-color: var(--success-green);
+            color: white;
+            border-color: var(--success-green);
+        }
+
+        .btn-qnum.answered-wrong {
+            background-color: var(--danger-red);
+            color: white;
+            border-color: var(--danger-red);
+        }
+
+        .palette-footer {
+            padding: 12px;
+            border-top: 1px solid var(--border-color);
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+
+        /* Answer Key Panel */
+        .answer-key-section {
+            display: none;
+            padding: 20px;
+            background: #ffffff;
+            height: 100%;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .answer-key-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .answer-key-item strong {
+            color: var(--primary-blue);
+        }
+
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 220px; }
+            .main-panel { height: calc(100% - 220px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Header -->
+    <header>
+        <h1>Karnataka PC & SSC CBT Exam Mock Test (Pages 84 - 93)</h1>
+        <div class="header-info">
+            <span>Time Left:</span>
+            <div class="timer-box" id="timer">20:00</div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Layout Container -->
+    <div class="app-container">
+        
+        <!-- Question Test View -->
+        <div class="main-panel" id="quizPanel">
+            <div class="page-header" id="pageTitle">Page 84 Questions</div>
+            
+            <div class="question-scroll-area">
+                <div class="q-text" id="questionText">Loading Question...</div>
+                
+                <ul class="options-list" id="optionsList">
+                    <!-- Options Dynamic Injection -->
+                </ul>
+
+                <div class="feedback-box" id="feedbackBox"></div>
+            </div>
+
+            <div class="footer-controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="navigate(-1)">Previous</button>
+                <button class="btn btn-danger" onclick="resetQuiz()">Reset Test</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="navigate(1)">Next</button>
+            </div>
+        </div>
+
+        <!-- Answer Key Overlay -->
+        <div class="main-panel answer-key-section" id="answerKeyPanel">
+            <h2>Answer Key & Explanations (ಉತ್ತರಗಳು ಮತ್ತು ವಿವರಣೆ)</h2>
+            <br>
+            <div id="answerKeyContent"></div>
+            <br>
+            <button class="btn btn-primary" onclick="toggleAnswerKey(false)">Back to Test</button>
+        </div>
+
+        <!-- Right Side Navigation Palette -->
+        <div class="sidebar">
+            <div class="palette-header">Question Palette</div>
+            
+            <div class="score-board">
+                Score: <span id="score">0</span> / <span id="totalQuestions">0</span>
+            </div>
+
+            <div class="palette-container" id="paletteContainer">
+                <!-- Palette Dynamic Injection -->
+            </div>
+
+            <div class="palette-footer">
+                <button class="btn btn-primary" style="width: 100%;" onclick="toggleAnswerKey(true)">View Answer Key</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Strictly parsed questions based on 10 scanned pages (Pages 84 to 93)
+        // State Priority items (Karnataka related) are strictly positioned first in relevant page blocks.
+        const quizData = [
+            // PAGE 84 (1000033437.jpg)
+            {
+                id: 1,
+                page: "Page 84",
+                question: "ಅಂತರರಾಷ್ಟ್ರೀಯ ಮಟ್ಟದ 'ಗೋಲ್ಡನ್ ಗ್ಲೋಬ್ ಟೈಗರ್ಸ್ ಅವಾರ್ಡ್' ಮತ್ತು 'ಎಕ್ಸಲೆನ್ಸ್ ಇನ್ ಟ್ರೈನಿಂಗ್' ಪ್ರಶಸ್ತಿಗೆ ಭಾಜನವಾದ ಕರ್ನಾಟಕದ ಸಂಸ್ಥೆ ಯಾವುದು?",
+                options: [
+                    "A) ಕೆ.ಎಸ್.ಆರ್.ಟಿ.ಸಿ. (KSRTC)",
+                    "B) ಬಿ.ಎಂ.ಟಿ.ಸಿ. (BMTC)",
+                    "C) ಕೆ.ಪಿ.ಟಿ.ಸಿ.ಎಲ್. (KPTCL)",
+                    "D) ನಮ್ಮ ಮೆಟ್ರೋ (BMRCL)"
+                ],
+                correct: 0,
+                explanation: "ಮಲೇಷ್ಯಾದಲ್ಲಿ ನೀಡಲಾದ ಅಂತರರಾಷ್ಟ್ರೀಯ ಮಟ್ಟದ 'ಗೋಲ್ಡನ್ ಗ್ಲೋಬ್ ಟೈಗರ್ಸ್' ಮತ್ತು ರಾಷ್ಟ್ರೀಯ ಮಟ್ಟದ ಪ್ರಶಸ್ತಿಗಳಿಗೆ ಕೆ.ಎಸ್.ಆರ್.ಟಿ.ಸಿ (KSRTC) ಭಾಜನವಾಗಿದೆ."
+            },
+            {
+                id: 2,
+                page: "Page 84",
+                question: "79ನೇ ಕ್ಯಾನ್ಸ್ ಚಲನಚಿತ್ರೋತ್ಸವ-2026 ರಲ್ಲಿ 'ಪಾಮ್ ಡಿ'ಓರ್' (Palme d'Or) ಅತ್ಯುತ್ತಮ ಚಿತ್ರ ಪ್ರಶಸ್ತಿ ಗೆದ್ದ 'ಫೋರ್ಡ್' (FORD) ಚಿತ್ರದ ನಿರ್ದೇಶಕ ಯಾರು?",
+                options: [
+                    "A) ಕ್ರಿಸ್ಟಿಯನ್ ಮುಂಗಿಯು (Cristian Mungiu)",
+                    "B) ಪಾಯಲ್ ಕಪಾಡಿಯಾ",
+                    "C) ಕ್ವೆಂಟಿನ್ ಟ್ಯಾರಂಟಿನೋ",
+                    "D) ಕ್ರಿಸ್ಟೋಫರ್ ನೋಲನ್"
+                ],
+                correct: 0,
+                explanation: "ರುಮೇನಿಯನ್ ನಿರ್ದೇಶಕ ಕ್ರಿಸ್ಟಿಯನ್ ಮುಂಗಿಯು ಅವರ 'ಫೋರ್ಡ್' ಚಿತ್ರವು 79ನೇ ಕ್ಯಾನ್ಸ್ ಉತ್ಸವದಲ್ಲಿ ಅತ್ಯುತ್ತಮ 'ಪಾಮ್ ಡಿ'ಓರ್' ಪ್ರಶಸ್ತಿ ಪಡೆಯಿತು."
+            },
+            {
+                id: 3,
+                page: "Page 84",
+                question: "ನೀರಿನಿಂದ ಸೂಕ್ಷ್ಮ ಪ್ಲಾಸ್ಟಿಕ್ (Microplastics) ಕಣಗಳನ್ನು ತೆಗೆಯುವ ತಂತ್ರಜ್ಞಾನಕ್ಕಾಗಿ '2026ರ ಜಾಗತಿಕ ಅರ್ಥ್ ಪ್ರಶಸ್ತಿ'ಗೆ ಭಾಜನರಾದ ಭಾರತೀಯ ಮೂಲದ ಮೂವರು ವಿದ್ಯಾರ್ಥಿಗಳಲ್ಲಿ ಸೇರದವರು ಯಾರು?",
+                options: [
+                    "A) ರೋಹನ್ ವರ್ಮಾ",
+                    "B) ವಿವಾನ್ ಚೌಧರಿ",
+                    "C) ಅರಿಯಾನಾ ಅಗರ್ವಾಲ್",
+                    "D) ಆರ್ಯಾನಾ ಮೆಹ್ತಾ"
+                ],
+                correct: 0,
+                explanation: "ವಿವಾನ್ ಚೌಧರಿ, ಅರಿಯಾನಾ ಅಗರ್ವಾಲ್ ಮತ್ತು ಆರ್ಯಾನಾ ಮೆಹ್ತಾ ಈ ಮೂವರು ಜಾಗತಿಕ ಅರ್ಥ್ ಪ್ರಶಸ್ತಿ ಪಡೆದ ವಿದ್ಯಾರ್ಥಿಗಳಾಗಿದ್ದಾರೆ."
+            },
+
+            // PAGE 85 (1000033438.jpg)
+            {
+                id: 4,
+                page: "Page 85",
+                question: "ಬೆಂಗಳೂರಿನ ಕೆ.ಎಸ್.ಎಲ್.ಟಿ.ಎ (KSLTA) ಮೈದಾನದಲ್ಲಿ ನಡೆದ 'ಕರ್ನಾಟಕ ಓಪನ್ ETP ಚಾಲೆಂಜರ್ಸ್ ಟೆನ್ನಿಸ್' ಡಬಲ್ಸ್ ವಿಭಾಗದ ಚಾಂಪಿಯನ್ ಜೋಡಿ ಯಾವುದು?",
+                options: [
+                    "A) ನಿಕಿ ಪೂಣಚಾ ಮತ್ತು ಸಾಕೇತ್ ಮೈನೇನಿ",
+                    "B) ರೋಹನ್ ಬೋಪಣ್ಣ ಮತ್ತು ರೇವಿ ರಾಮ್",
+                    "C) ಸಾತ್ವಿಕ್ ಸಾಯಿರಾಜ್ ಮತ್ತು ಚಿರಾಗ್ ಶೆಟ್ಟಿ",
+                    "D) ಯೂಕಿ ಭಾಂಬ್ರಿ ಮತ್ತು ದಿವಿಸ್ಟ ಶರಣ್"
+                ],
+                correct: 0,
+                explanation: "ಬೆಂಗಳೂರಿನಲ್ಲಿ ನಡೆದ ಟೂರ್ನಿಯಲ್ಲಿ ಭಾರತದ ನಿಕಿ ಪೂಣಚಾ ಮತ್ತು ಸಾಕೇತ್ ಮೈನೇನಿ ಜೋಡಿ ಡಬಲ್ಸ್ ವಿಭಾಗದಲ್ಲಿ ಚಾಂಪಿಯನ್ ಆಯಿತು."
+            },
+            {
+                id: 5,
+                page: "Page 85",
+                question: "ಇಂಗ್ಲೆಂಡ್ ಪುರುಷರ ಟೆಸ್ಟ್ ಕ್ರಿಕೆಟ್ ತಂಡಕ್ಕೆ ಫೀಲ್ಡಿಂಗ್ ಕೋಚ್ ಆಗಿ ನೇಮಕಗೊಂಡ ಪ್ರಥಮ ಮಹಿಳೆ ಯಾರು?",
+                options: [
+                    "A) ಸಾರಾ ಟೇಲರ್ (Sarah Taylor)",
+                    "B) ಶಾರ್ಲೆಟ್ ಎಡ್ವರ್ಡ್ಸ್",
+                    "C) ಮಿಥಾಲಿ ರಾಜ್",
+                    "D) ಎಲಿಸ್ ಪೆರ್ರಿ"
+                ],
+                correct: 0,
+                explanation: "ಇಂಗ್ಲೆಂಡ್‌ನ ಮಾಜಿ ವಿಕೆಟ್ ಕೀಪರ್ ಸಾರಾ ಟೇಲರ್ ಪುರುಷರ ಟೆಸ್ಟ್ ತಂಡದ ಫೀಲ್ಡಿಂಗ್ ಕೋಚ್ ಆಗಿ ನೇಮಕಗೊಂಡ ಮೊದಲ ಮಹಿಳೆಯಾಗಿದ್ದಾರೆ."
+            },
+            {
+                id: 6,
+                page: "Page 85",
+                question: "ಇಟಾಲಿಯನ್ ಓಪನ್ ಟೆನ್ನಿಸ್ ಟೂರ್ನಿ 2026ರಲ್ಲಿ ಪುರುಷರ ಸಿಂಗಲ್ಸ್ ಶೀರ್ಷಿಕೆ ಗೆದ್ದ ಆಟಗಾರ ಯಾರು?",
+                options: [
+                    "A) ಜಾನಿಕ್ ಸಿನ್ನರ್ (Jannik Sinner)",
+                    "B) ಕ್ಯಾಸ್ಪರ್ ರೂಡ್",
+                    "C) ನೋವಾಕ್ ಜೊಕೊವಿಚ್",
+                    "D) ಕಾರ್ಲೋಸ್ ಅಲ್ಕರಾಜ್"
+                ],
+                correct: 0,
+                explanation: "ಇಟಲಿಯ ಜಾನಿಕ್ ಸಿನ್ನರ್ ಅವರು ಫೈನಲ್‌ನಲ್ಲಿ ಕ್ಯಾಸ್ಪರ್ ರೂಡ್ ಅವರನ್ನು ಸೋಲಿಸಿ ಇಟಾಲಿಯನ್ ಓಪನ್ ಪ್ರಶಸ್ತಿ ಗೆದ್ದರು."
+            },
+            {
+                id: 7,
+                page: "Page 85",
+                question: "ಭಾರತ ಮತ್ತು ಶ್ರೀಲಂಕಾ ನಡುವಿನ ಪಾಕ್ ಜಲಸಂಧಿಯನ್ನು ಅತ್ಯಂತ ಕಿರಿಯ ವಯಸ್ಸಿನಲ್ಲಿ ಈಜಿ ವಿಶ್ವ ದಾಖಲೆ ಬರೆದ ಈಜುಗಾರ ಯಾರು?",
+                options: [
+                    "A) ಇಶಾಂಕ್ ಸಿಂಗ್",
+                    "B) ಮಿಹಿರ್ ಸೇನ್",
+                    "C) ಶಂಶೇರ್ ಖಾನ್",
+                    "D) ರೋಹನ್ ನಾಯರ್"
+                ],
+                correct: 0,
+                explanation: "ಜಾರ್ಖಂಡ್‌ ಮೂಲದ 7 ವರ್ಷದ ಇಶಾಂಕ್ ಸಿಂಗ್ ಪಾಕ್ ಜಲಸಂಧಿಯನ್ನು 9 ಗಂಟೆ 50 ನಿಮಿಷಗಳಲ್ಲಿ ಈಜಿ ದಾಖಲೆ ಬರೆದಿದ್ದಾರೆ."
+            },
+
+            // PAGE 86 (1000033439.jpg)
+            {
+                id: 8,
+                page: "Page 86",
+                question: "29ನೇ ರಾಷ್ಟ್ರೀಯ ಅಥ್ಲೆಟಿಕ್ಸ್ ಫೆಡರೇಷನ್ ಕಪ್‌ನ 100 ಮೀಟರ್ ಓಟದಲ್ಲಿ 10.09 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಪೂರ್ಣಗೊಳಿಸಿ ನೂತನ ರಾಷ್ಟ್ರೀಯ ದಾಖಲೆ ಬರೆದವರು ಯಾರು?",
+                options: [
+                    "A) ಗುರುವಿಂದರ್ ವೀರ್ ಸಿಂಗ್",
+                    "B) ವಿಶಾಲ್ ಬಿ.ಕೆ",
+                    "C) ಅನೀಶ್ ಕುಮಾರ್",
+                    "D) ಪ್ರಣವ್ ಪ್ರಮೋದ್"
+                ],
+                correct: 0,
+                explanation: "ಗುರುವಿಂದರ್ ವೀರ್ ಸಿಂಗ್ 100 ಮೀಟರ್ ಓಟದಲ್ಲಿ 10.09 ಸೆಕೆಂಡುಗಳ ಹೊಸ ರಾಷ್ಟ್ರೀಯ ದಾಖಲೆಯೊಂದಿಗೆ ಚಿನ್ನ ಗೆದ್ದರು."
+            },
+            {
+                id: 9,
+                page: "Page 86",
+                question: "ಭಾರತೀಯ ಹಿರಿಯರ ಪುರುಷರ ಕ್ರಿಕೆಟ್ ತಂಡದ 'ಸ್ಪಿನ್ ಬೌಲಿಂಗ್ ಕೋಚ್' ಆಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
+                options: [
+                    "A) ಸಾಯಿರಾಜ್ ಬಹುತುಲೆ (Sairaj Bahutule)",
+                    "B) ಅನಿಲ್ ಕುಂಬ್ಳೆ",
+                    "C) ಹರ್ಭಜನ್ ಸಿಂಗ್",
+                    "D) ವೆಂಕಟಪತಿ ರಾಜು"
+                ],
+                correct: 0,
+                explanation: "ಭಾರತದ ಮಾಜಿ ಲೆಗ್ ಸ್ಪಿನ್ನರ್ ಸಾಯಿರಾಜ್ ಬಹುತುಲೆ ಅವರನ್ನು ಹಿರಿಯರ ತಂಡದ ಸ್ಪಿನ್ ಬೌಲಿಂಗ್ ಕೋಚ್ ಆಗಿ ನೇಮಿಸಲಾಗಿದೆ."
+            },
+            {
+                id: 10,
+                page: "Page 86",
+                question: "ವಿಶ್ವ ಒಳಾಂಗಣ ಅಥ್ಲೆಟಿಕ್ಸ್ ಚಾಂಪಿಯನ್‌ಷಿಪ್ 2028 ರ ಆತಿಥ್ಯ ವಹಿಸಲಿರುವ ಭಾರತದ ನಗರ ಯಾವುದು?",
+                options: [
+                    "A) ಭುವನೇಶ್ವರ (ಒಡಿಶಾ)",
+                    "B) ಬೆಂಗಳೂರು",
+                    "C) ನವದೆಹಲಿ",
+                    "D) ಅಹಮದಾಬಾದ್"
+                ],
+                correct: 0,
+                explanation: "2028ರ ವಿಶ್ವ ಒಳಾಂಗಣ ಅಥ್ಲೆಟಿಕ್ಸ್ ಚಾಂಪಿಯನ್‌ಷಿಪ್ ಕೂಟ ಭುವನೇಶ್ವರದ ಕಳಿಂಗ ಕ್ರೀಡಾಂಗಣದಲ್ಲಿ ನಡೆಯಲಿದೆ."
+            },
+
+            // PAGE 87 (1000033440.jpg)
+            {
+                id: 11,
+                page: "Page 87",
+                question: "8ನೇ ಭಾರತೀಯ ಓಪನ್ ಅಂತರರಾಷ್ಟ್ರೀಯ ಪ್ಯಾರಾ ಅಥ್ಲೆಟಿಕ್ಸ್ ಚಾಂಪಿಯನ್‌ಷಿಪ್ 2026 ಜರುಗಿದ ಸ್ಥಳ ಯಾವುದು?",
+                options: [
+                    "A) ಶ್ರೀ ಕಂಠೀರವ ಕ್ರೀಡಾಂಗಣ (ಬೆಂಗಳೂರು)",
+                    "B) ಜವಾಹರ್ ಲಾಲ್ ನೆಹರೂ ಕ್ರೀಡಾಂಗಣ (ದೆಹಲಿ)",
+                    "C) ಕಳೀಂಗ ಕ್ರೀಡಾಂಗಣ (ಭುವನೇಶ್ವರ)",
+                    "D) ಸಾಲ್ಟ್ ಲೇಕ್ ಸ್ಟೇಡಿಯಂ (ಕೋಲ್ಕತ್ತ)"
+                ],
+                correct: 0,
+                explanation: "8ನೇ ಭಾರತೀಯ ಓಪನ್ ಇಂಟರ್ನ್ಯಾಷನಲ್ ಪ್ಯಾರಾ ಅಥ್ಲೆಟಿಕ್ಸ್ ಚಾಂಪಿಯನ್‌ಷಿಪ್ ಬೆಂಗಳೂರಿನ ಶ್ರೀ ಕಂಠೀರವ ಕ್ರೀಡಾಂಗಣದಲ್ಲಿ ನಡೆಯಿತು."
+            },
+            {
+                id: 12,
+                page: "Page 87",
+                question: "ವಿಶ್ವದ ಅತಿ ಎತ್ತರದ ಮೌಂಟ್ ಎವರೆಸ್ಟ್ ಶಿಖರವನ್ನು ಸತತ 32ನೇ ಬಾರಿಗೆ ಏರಿ ವಿಶ್ವ ದಾಖಲೆ ನಿರ್ಮಿಸಿದ ನೇಪಾಳದ ಪರ್ವತಾರೋಹಿ ಯಾರು?",
+                options: [
+                    "A) ಕಾಮಿ ರಿತಾ ಶೆರ್ಪಾ (Kami Rita Sherpa)",
+                    "B) ತೇನ್ಸಿಂಗ್ ನೋರ್ಗೆ",
+                    "C) ಅಂಗ್ ರೀತಾ ಶೆರ್ಪಾ",
+                    "D) ಅಪಾ ಶೆರ್ಪಾ"
+                ],
+                correct: 0,
+                explanation: "56 ವರ್ಷದ ಜೇಷ್ಠ ಪರ್ವತಾರೋಹಿ ಕಾಮಿ ರಿತಾ ಶೆರ್ಪಾ 32ನೇ ಬಾರಿಗೆ ಎವರೆಸ್ಟ್ ಏರಿ ತಮ್ಮದೇ ವಿಶ್ವ ದಾಖಲೆ ಉತ್ತಮಪಡಿಸಿಕೊಂಡಿದ್ದಾರೆ."
+            },
+            {
+                id: 13,
+                page: "Page 87",
+                question: "ಅಮೆರಿಕದ ರಾಷ್ಟ್ರೀಯ ಗೂಢಚಾರ ನಿರ್ದೇಶಕಿ (DNI) ಹುದ್ದೆಗೆ ರಾಜೀನಾಮೆ ನೀಡಿದ ಭಾರತೀಯ ಮೂಲದ ಮಹಿಳೆ ಯಾರು?",
+                options: [
+                    "A) ತುಳಸಿ ಗಬಾರ್ಡ್ (Tulsi Gabbard)",
+                    "B) ಕಮಲಾ ಹ್ಯಾರಿಸ್",
+                    "C) ನಿಕಿ ಹ್ಯಾಲಿ",
+                    "D) ಸುನೀತಾ ವಿಲಿಯಮ್ಸ್"
+                ],
+                correct: 0,
+                explanation: "ಭಾರತೀಯ ಮೂಲದ ತುಳಸಿ ಗಬಾರ್ಡ್ ಅವರು ಅಮೆರಿಕದ ಡೈರೆಕ್ಟರ್ ಆಫ್ ನ್ಯಾಷನಲ್ ಇಂಟೆಲಿಜೆನ್ಸ್ ಹುದ್ದೆಗೆ ರಾಜೀನಾಮೆ ಘೋಷಿಸಿದರು."
+            },
+
+            // PAGE 88 (1000033441.jpg)
+            {
+                id: 14,
+                page: "Page 88",
+                question: "ಕರ್ನಾಟಕದ ಸಿದ್ದರಾಮಯ್ಯ ನೇತೃತ್ವದ ಸರ್ಕಾರದಲ್ಲಿ ಯೋಜನೆ ಮತ್ತು ಸಾಂಖ್ಯಿಕ ಜಿಲ್ಲಾ ಸಚಿವರಾಗಿದ್ದು ಇತ್ತೀಚೆಗೆ ನಿಧನರಾದ ನಾಯಕ ಯಾರು?",
+                options: [
+                    "A) ಡಾ. ಡಿ. ಸುಧಾಕರ್ (Dr. D. Sudhakar)",
+                    "B) ಎಚ್. ಕೆ. ಪಾಟೀಲ್",
+                    "C) ಬೈರತಿ ಸುರೇಶ್",
+                    "D) ಕೆ. ಜೆ. ಜಾರ್ಜ್"
+                ],
+                correct: 0,
+                explanation: "ಹಿರಿಯ ಸಚಿವರಾಗಿದ್ದ ಡಾ. ಡಿ. ಸುಧಾಕರ್ (66 ವರ್ಷ) ಅವರು 2026 ಮೇ 10 ರಂದು ಅನಾರೋಗ್ಯದಿಂದ ಬೆಂಗಳೂರಿನಲ್ಲಿ ನಿಧನರಾದರು."
+            },
+            {
+                id: 15,
+                page: "Page 88",
+                question: "'ನಾನ್ ಕಾಟೇ, ಅಭಿಕಾ ತೇರೆ ಮೇರೆ ಮುಖ್ಡಾ' ಸೇರಿದಂತೆ ಪ್ರಸಿದ್ಧ ಗೀತೆಗಳನ್ನು ಹಾಡಿದ 2026ರಲ್ಲಿ ನಿಧನರಾದ ಕರ್ನಾಟಕ ಮೂಲದ ಖ್ಯಾತ ಗಾಯಕಿ ಯಾರು?",
+                options: [
+                    "A) ಸುಕನ್ಯಾ ಕಲ್ಯಾಣಪುರ / ಸುಮನ್ ಕಲ್ಯಾಣಪುರ",
+                    "B) ಕೆ. ಎಸ್. ಚಿತ್ರಾ",
+                    "C) ಎಸ್. ಜಾನಕಿ",
+                    "D) ವಾಣಿ ಜಯರಾಮ್"
+                ],
+                correct: 0,
+                explanation: "ಕರ್ನಾಟಕದ ಢಾಕಾದಲ್ಲಿ (1937) ಜನಿಸಿದ ಹಿರಿಯ ಹಿನ್ನೆಲೆ ಗಾಯಕಿ ಸುಮನ್ ಕಲ್ಯಾಣಪುರ ಅವರು ತಮ್ಮ 89ನೇ ವಯಸ್ಸಿನಲ್ಲಿ ನಿಧನರಾದರು."
+            },
+            {
+                id: 16,
+                page: "Page 88",
+                question: "ಏಷ್ಯನ್ ಗೇಮ್ಸ್‌ನಲ್ಲಿ ಭಾರತಕ್ಕೆ ಮೊದಲ ಚಿನ್ನ ತಂದುಕೊಟ್ಟ 5 ಬಾರಿ ಒಲಿಂಪಿಕ್ ಶೂಟರ್ ಇತ್ತೀಚೆಗೆ ನಿಧನರಾದರು, ಅವರ ಹೆಸರೇನು?",
+                options: [
+                    "A) ರಾಜಾ ರಂಧೀರ್ ಸಿಂಗ್",
+                    "B) ಅಭಿನವ್ ಬಿಂದ್ರಾ",
+                    "C) ರಾಜ್ಯವರ್ಧನ್ ಸಿಂಗ್ ರಾಥೋರ್",
+                    "D) ಜಸ್ಪಾಲ್ ರಾಣಾ"
+                ],
+                correct: 0,
+                explanation: "ಮಾಜಿ ಒಲಿಂಪಿಕ್ ಶೂಟರ್ ಹಾಗೂ ಒಲಿಂಪಿಕ್ ಕೌನ್ಸಿಲ್ ಆಫ್ ಏಷ್ಯಾ ಅಧ್ಯಕ್ಷರಾಗಿದ್ದ ರಾಜಾ ರಂಧೀರ್ ಸಿಂಗ್ ವಯೋಸಹಜ ಕಾರಣದಿಂದ ನಿಧನರಾದರು."
+            },
+
+            // PAGE 89 (1000033442.jpg)
+            {
+                id: 17,
+                page: "Page 89",
+                question: "ಕೇಂದ್ರ ಸರ್ಕಾರದಿಂದ ಅನುಮೋದನೆ ಪಡೆದ ಭಾರತದ ಮೊದಲ 'ಸ್ವದೇಶಿ ಸೆಮಿ ಹೈಸ್ಪೀಡ್ ರೈಲು ಯೋಜನೆ' ಯಾವ ನಗರಗಳ ನಡುವೆ ನಿರ್ಮಿಸಲಾಗುತ್ತಿದೆ?",
+                options: [
+                    "A) ಗಾಂಧಿನಗರ - ಅಹಮದಾಬಾದ್ - ಮೊದೀರಾ",
+                    "B) ಮುಂಬೈ - ಅಹಮದಾಬಾದ್",
+                    "C) ಬೆಂಗಳೂರು - ಮೈಸೂರು",
+                    "D) ದೆಹಲಿ - ಆಗ್ರಾ"
+                ],
+                correct: 0,
+                explanation: "ಗುಜರಾತ್‌ನ ಗಾಂಧಿನಗರ (ಸಚಿವಲಾಯ) - ಮೊದೇರಾ ನಡುವೆ 2 ಪಥದ ಸ್ವದೇಶಿ ಸೆಮಿ ಹೈಸ್ಪೀಡ್ ರೈಲು ಕಾರಿಡಾರ್ ನಿರ್ಮಿಸಲಾಗುತ್ತಿದೆ."
+            },
+            {
+                id: 18,
+                page: "Page 89",
+                question: "ದೇಶದ ಮೊದಲ ಸಂಪೂರ್ಣ ಜಲಜನಕ (Hydrogen) ಚಾಲಿತ ರೈಲು ಕಾರ್ಯಾಚರಣೆ ಯಾವ ಮಾರ್ಗದಲ್ಲಿ ಆರಂಭಗೊಳ್ಳಲಿದೆ?",
+                options: [
+                    "A) ಜಿಂದ್ - ಸೋನೆಪತ್ (ಹರ್ಯಾಣ)",
+                    "B) ಶಿಮ್ಲಾ - ಕಲ್ಕಾ",
+                    "C) ಡೆಹ್ರಾಡೂನ್ - ಹರಿದ್ವಾರ",
+                    "D) ಪಠಾನ್‌ಕೋಟ್ - ಜೋಗಿಂದರ್ ನಗರ"
+                ],
+                correct: 0,
+                explanation: "ಉತ್ತರ ರೈಲ್ವೆ ವಲಯದ ಜಿಂದ್ - ಸೋನೆಪತ್ (ಹರ್ಯಾಣ) ಮಾರ್ಗದಲ್ಲಿ ಭಾರತದ ಮೊದಲ ಹೈಡ್ರೋಜನ್ ರೈಲು ಸಂಚರಿಸಲಿದೆ."
+            },
+
+            // PAGE 90 (1000033443.jpg)
+            {
+                id: 19,
+                page: "Page 90",
+                question: "ಕರ್ನಾಟಕ ಪರೀಕ್ಷಾ ಪ್ರಾಧಿಕಾರ (KEA) ಉನ್ನತ ಶಿಕ್ಷಣ ಸಚಿವ ಡಾ. MC ಸುಧಾಕರ್ ಅವರೊಂದಿಗೆ ಬಿಡುಗಡೆ ಮಾಡಿದ ಮಾರ್ಗದರ್ಶನ ಆಪ್ ಯಾವುದು?",
+                options: [
+                    "A) ಕೆಇಎ ಕನೆಕ್ಟ್ ಆಪ್ (KEA Connect App)",
+                    "B) ಸಕಾಲ ಆಪ್",
+                    "C) ಕೆಇಎ ಮಿತ್ರ",
+                    "D) ಸಿಇಟಿ ಗೈಡ್ ಆಪ್"
+                ],
+                correct: 0,
+                explanation: "ವೃತ್ತಿಪರ ಶಿಕ್ಷಣ ಕೋರ್ಸ್‌ಗಳ ಪ್ರವೇಶ ಪಡೆಯುವ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಮಾರ್ಗದರ್ಶನ ನೀಡಲು 'KEA Connect App' ಬಿಡುಗಡೆ ಮಾಡಲಾಗಿದೆ."
+            },
+            {
+                id: 20,
+                page: "Page 90",
+                question: "ಕರ್ನಾಟಕದ ತುಮಕೂರು ಜಿಲ್ಲೆಯಲ್ಲಿ ರೈತರು ಟ್ರ್ಯಾಕ್ಟರ್, ಟಿಲ್ಲರ್, ರೋಟವೇಟರ್ ಯಂತ್ರಗಳನ್ನು ಬುಕ್ ಮಾಡಲು ಅಭಿವೃದ್ಧಿಪಡಿಸಿದ ಆಪ್ ಯಾವುದು?",
+                options: [
+                    "A) ನಮ್ಮ ನೇಗಿಲು ಆಪ್ (Namma Negilu App)",
+                    "B) ರೈತ ಮಿತ್ರ ಆಪ್",
+                    "C) ಇ-ಕೃಷಿ ಆಪ್",
+                    "D) ಕೃಷಿ ಸಂಜೀವಿನಿ"
+                ],
+                correct: 0,
+                explanation: "ಓಲಾ-ಉಬರ್ ಮಾದರಿಯಲ್ಲಿ ಕೃಷಿ ಯಂತ್ರೋಪಕರಣಗಳನ್ನು ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ ಬುಕ್ ಮಾಡಲು 'ನಮ್ಮ ನೇಗಿಲು' ಆಪ್ ಅನ್ನು ತುಮಕೂರಿನಲ್ಲಿ ಪರಿಚಯಿಸಲಾಗಿದೆ."
+            },
+            {
+                id: 21,
+                page: "Page 90",
+                question: "ಕೇಂದ್ರ ಆಯುಷ್ ಸಚಿವಾಲಯವು ವಿವಿಧ ಯೋಜನೆಗಳ ಅನುದಾನ ಪ್ರಸ್ತಾಪ ಮತ್ತು ಪರಿಶೀಲನೆಗಾಗಿ ಬಿಡುಗಡೆ ಮಾಡಿದ ಪೋರ್ಟಲ್ ಯಾವುದು?",
+                options: [
+                    "A) ಆಯುಷ್ ಅನುಧಾನ್ ಪೋರ್ಟಲ್ (Ayush Anudan Portal)",
+                    "B) ಆಯುಷ್ ರಕ್ಷಾ",
+                    "C) ಇ-ಆಯುಷ್ ಪೋರ್ಟಲ್",
+                    "D) ಡಿಜಿಟಲ್ ಆಯುಷ್"
+                ],
+                correct: 0,
+                explanation: "ಕೇಂದ್ರ ಆಯುಷ್ ಸಚಿವಾಲಯವು ಅನುದಾನ ಪ್ರಸ್ತಾವನೆಗಳ ಸಲ್ಲಿಕೆ ಮತ್ತು ಮೇಲ್ವಿಚಾರಣೆಗೆ 'ಆಯುಷ್ ಅನುಧಾನ್ ಪೋರ್ಟಲ್' ಪ್ರಾರಂಭಿಸಿದೆ."
+            },
+
+            // PAGE 91 (1000033444.jpg)
+            {
+                id: 22,
+                page: "Page 91",
+                question: "ಪಶ್ಚಿಮ ಬಂಗಾಳದಲ್ಲಿ ನಾಗರಿಕ ನೈರ್ಮಲ್ಯ ದೂರುಗಳನ್ನು 2 ಗಂಟೆಗಳಲ್ಲಿ ಪರಿಹರಿಸಲು ಕೇಂದ್ರ ಸಚಿವ ಮನೋಹರ್ ಲಾಲ್ ಖಟ್ಟರ್ ಉದ್ಘಾಟಿಸಿದ ಆಪ್ ಯಾವುದು?",
+                options: [
+                    "A) ಸ್ವಚ್ಛ ಮೊಬೈಲ್ ಆಪ್ (Swachh Mobile App)",
+                    "B) ಸುಗಮ ನಗರ ಆಪ್",
+                    "C) ನಮ್ಮ ಸ್ವಚ್ಛತೆ ಆಪ್",
+                    "D) ಸಿಟಿ ಕ್ಲೀನ್ ಆಪ್"
+                ],
+                correct: 0,
+                explanation: "ಪಶ್ಚಿಮ ಬಂಗಾಳದಾದ್ಯಂತ ತ್ಯಾಜ್ಯ ಮತ್ತು ನೈರ್ಮಲ್ಯ ಸಮಸ್ಯೆ ದೂರು ಪರಿಹಾರಕ್ಕಾಗಿ 'ಸ್ವಚ್ಛ ಮೊಬೈಲ್ ಆಪ್' ಬಿಡುಗಡೆ ಮಾಡಲಾಗಿದೆ."
+            },
+            {
+                id: 23,
+                page: "Page 91",
+                question: "ಹಿರಿಯ ನಾಗರಿಕರ ಸಮಗ್ರ ಆರೈಕೆ ಮತ್ತು ಡಿಜಿಟಲ್ ಸೇವೆಗಳಿಗಾಗಿ ಕೇಂದ್ರ ಸಾಮಾಜಿಕ ನ್ಯಾಯ ಸಚಿವಾಲಯ ಪ್ರಾರಂಭಿಸಿದ ಆಪ್ ಮತ್ತು ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಯಾವುದು?",
+                options: [
+                    "A) ಜೀವನ್ ಆಪ್ ಮತ್ತು ಶತಾಯು ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (JEEVAN App & SHATAYU Dashboard)",
+                    "B) ವಯೋಶ್ರೇಷ್ಠ ಆಪ್ ಮತ್ತು ಸಂಜೀವಿನಿ",
+                    "C) ಸುರಕ್ಷಾ ಆಪ್ ಮತ್ತು ಆಯುಷ್ಮಾನ್",
+                    "D) ಹಿರಿಯ ಮಿತ್ರ ಆಪ್"
+                ],
+                correct: 0,
+                explanation: "ಹಿರಿಯ ನಾಗರಿಕರ ಆರೈಕೆ ಮತ್ತು ಸಹಾಯಕ್ಕಾಗಿ 'JEEVAN App' ಹಾಗೂ 'SATAYU Dashboard' ಅನ್ನು ಬಿಡುಗಡೆಗೊಳಿಸಲಾಗಿದೆ."
+            },
+
+            // PAGE 92 (1000033445.jpg)
+            {
+                id: 24,
+                page: "Page 92",
+                question: "ಕೇಂದ್ರ ಸಾಮಾಜಿಕ ನ್ಯಾಯ ಮತ್ತು ಸಬಲೀಕರಣ ಸಚಿವ ಡಾ. ವಿರೇಂದ್ರ ಕುಮಾರ್ ಅವರು ಪರಿಶಿಷ್ಟ ಜಾತಿಯ (SC) ಅಭಿವೃದ್ಧಿಗಾಗಿ ಬಿಡುಗಡೆ ಮಾಡಿದ ಯೋಜನೆ ಯಾವುದು?",
+                options: [
+                    "A) PM-AJAY (ಪ್ರಧಾನ ಮಂತ್ರಿ ಅನುಸೂಚಿತ ಜಾತಿ ಅಭ್ಯುದಯ ಯೋಜನೆ)",
+                    "B) ಪಿಎಂ-ಶ್ರೀ ಯೋಜನೆ",
+                    "C) ಪಿಎಂ-ವಿಕಾಸ್ ಯೋಜನೆ",
+                    "D) ಪಿಎಂ-ಮಿತ್ರ ಯೋಜನೆ"
+                ],
+                correct: 0,
+                explanation: "PM-AJAY (PM Anusuchit Jaati Abhyuday Yojna) ಪೋರ್ಟಲ್ ಮತ್ತು ಆಪ್ ಅನ್ನು ಪರಿಶಿಷ್ಟ ಜಾತಿಯ ಸಮಗ್ರ ಸಬಲೀಕರಣಕ್ಕಾಗಿ ಬಿಡುಗಡೆ ಮಾಡಲಾಗಿದೆ."
+            },
+            {
+                id: 25,
+                page: "Page 92",
+                question: "ಅಡುಗೆ ಸೋಡಾದ ರಾಸಾಯನಿಕ ಹೆಸರು (Chemical Name) ಏನು?",
+                options: [
+                    "A) ಸೋಡಿಯಂ ಬೈಕಾರ್ಬೋನೇಟ್ (NaHCO3)",
+                    "B) ಸೋಡಿಯಂ ಕಾರ್ಬೋನೇಟ್",
+                    "C) ಕ್ಯಾಲ್ಸಿಯಂ ಕಾರ್ಬೋನೇಟ್",
+                    "D) ಸೋಡಿಯಂ ಕ್ಲೋರೈಡ್"
+                ],
+                correct: 0,
+                explanation: "ಅಡುಗೆಗೆ ಬಳಸುವ ಸೋಡಾದ ರಾಸಾಯನಿಕ ಹೆಸರು ಸೋಡಿಯಂ ಬೈಕಾರ್ಬೋನೇಟ್ (NaHCO3)."
+            },
+
+            // PAGE 93 (1000033446.jpg)
+            {
+                id: 26,
+                page: "Page 93",
+                question: "ಪ್ರತಿ ವರ್ಷ ಮೇ 03 ರಂದು ಆಚರಿಸಲಾಗುವ 'ವಿಶ್ವ ಪತ್ರಿಕಾ ಸ್ವಾತಂತ್ರ್ಯ ದಿನ'ದ (World Press Freedom Day) 2026ರ ಧ್ವೇಯವಾಕ್ಯ (Theme) ಏನು?",
+                options: [
+                    "A) ಪತ್ರಿಕಾ ಸ್ವಾತಂತ್ರ್ಯವನ್ನು ಉನ್ನತೀಕರಿಸುವುದು",
+                    "B) ಶಾಂತಿಗಾಗಿ ಪತ್ರಿಕೋದ್ಯಮ",
+                    "C) ಡಿಜಿಟಲ್ ಯುಗದಲ್ಲಿ ಮಾಧ್ಯಮ",
+                    "D) ಸತ್ಯದ ಪರ ಧ್ವನಿ"
+                ],
+                correct: 0,
+                explanation: "2026ರ ವಿಶ್ವ ಪತ್ರಿಕಾ ಸ್ವಾತಂತ್ರ್ಯ ದಿನದ ಮುಖ್ಯ ಆಶಯ 'ಪತ್ರಿಕಾ ಸ್ವಾತಂತ್ರ್ಯವನ್ನು ಉನ್ನತೀಕರಿಸುವುದು' ಎಂದಾಗಿದೆ."
+            },
+            {
+                id: 27,
+                page: "Page 93",
+                question: "ಭಾರತದಲ್ಲಿ ಮೇ 21 ರಂದು ಆಚರಿಸಲಾಗುವ 'ರಾಷ್ಟ್ರೀಯ ಭಯೋತ್ಪಾದನಾ ವಿರೋಧಿ ದಿನ' ಯಾರ ಪುಣ್ಯಸ್ಮರಣೆಯ ಸಂಕೇತವಾಗಿದೆ?",
+                options: [
+                    "A) ಮಾಜಿ ಪ್ರಧಾನಿ ರಾಜೀವ್ ಗಾಂಧಿ",
+                    "B) ಇಂದಿರಾ ಗಾಂಧಿ",
+                    "C) ಲಾಲ್ ಬಹದ್ದೂರ್ ಶಾಸ್ತ್ರಿ",
+                    "D) ಸರ್ದಾರ್ ವಲ್ಲಭಭಾಯಿ ಪಟೇಲ್"
+                ],
+                correct: 0,
+                explanation: "1991 ಮೇ 21 ರಂದು ತಮಿಳುನಾಡಿನ ಶ್ರೀಪೆರಂಬದೂರಿನಲ್ಲಿ ರಾಜೀವ್ ಗಾಂಧಿ ಹತ್ಯೆಯಾದ ದಿನವನ್ನು ಭಯೋತ್ಪಾದನಾ ವಿರೋಧಿ ದಿನವಾಗಿ ಆಚರಿಸಲಾಗುತ್ತದೆ."
+            },
+            {
+                id: 28,
+                page: "Page 93",
+                question: "ಪ್ರತಿ ವರ್ಷ 'ವಿಶ್ವ ತಂಬಾಕು ರಹಿತ ದಿನ'ವನ್ನು (World No Tobacco Day) ಎಂದು ಆಚರಿಸಲಾಗುತ್ತದೆ?",
+                options: [
+                    "A) ಮೇ 31",
+                    "B) ಮೇ 22",
+                    "C) ಮೇ 12",
+                    "D) ಮೇ 08"
+                ],
+                correct: 0,
+                explanation: "ವಿಶ್ವ ಆರೋಗ್ಯ ಸಂಸ್ಥೆ (WHO) ಕರೆ ಮೇರೆಗೆ ಪ್ರತಿ ವರ್ಷ ಮೇ 31 ರಂದು 'ವಿಶ್ವ ತಂಬಾಕು ರಹಿತ ದಿನ' ಎಂದು ಆಚರಿಸಲಾಗುತ್ತದೆ."
+            }
+        ];
+
+        // Global State Variables
+        let currentIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let currentScore = 0;
+        let timerInterval = null;
+        let secondsLeft = 20 * 60; // 20 Minutes Countdowns
+
+        // Core DOM Elements
+        const questionText = document.getElementById("questionText");
+        const optionsList = document.getElementById("optionsList");
+        const feedbackBox = document.getElementById("feedbackBox");
+        const pageTitle = document.getElementById("pageTitle");
+        const paletteContainer = document.getElementById("paletteContainer");
+        const scoreDisplay = document.getElementById("score");
+        const totalQuestionsDisplay = document.getElementById("totalQuestions");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const timerDisplay = document.getElementById("timer");
+
+        // App Initialization
+        function startApp() {
+            totalQuestionsDisplay.textContent = quizData.length;
+            renderPalette();
+            loadQuestion(0);
+            initTimer();
+            buildAnswerKey();
+        }
+
+        // Render Right Sidebar Palette with Dynamic Grouping
+        function renderPalette() {
+            paletteContainer.innerHTML = "";
+            let currentGroup = "";
+            let currentGrid = null;
+
+            quizData.forEach((item, idx) => {
+                if (item.page !== currentGroup) {
+                    currentGroup = item.page;
+                    const groupHeader = document.createElement("div");
+                    groupHeader.className = "palette-group-title";
+                    groupHeader.textContent = currentGroup;
+                    paletteContainer.appendChild(groupHeader);
+
+                    currentGrid = document.createElement("div");
+                    currentGrid.className = "palette-grid";
+                    paletteContainer.appendChild(currentGrid);
+                }
+
+                const btn = document.createElement("button");
+                btn.className = "btn-qnum";
+                btn.id = `palette-btn-${idx}`;
+                btn.textContent = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+                currentGrid.appendChild(btn);
+            });
+        }
+
+        // Load Question View
+        function loadQuestion(index) {
+            currentIndex = index;
+            const item = quizData[index];
+
+            pageTitle.textContent = `${item.page} - Question ${index + 1} of ${quizData.length}`;
+            questionText.textContent = `${index + 1}. ${item.question}`;
+            
+            optionsList.innerHTML = "";
+            feedbackBox.style.display = "none";
+
+            const existingAnswer = userAnswers[index];
+
+            item.options.forEach((optText, optIdx) => {
+                const li = document.createElement("li");
+                li.className = "option-item";
+
+                const isSelected = existingAnswer !== null && existingAnswer.selected === optIdx;
+
+                if (existingAnswer !== null) {
+                    if (optIdx === item.correct) {
+                        li.classList.add("correct");
+                    } else if (isSelected && optIdx !== item.correct) {
+                        li.classList.add("incorrect");
+                    }
+                }
+
+                li.innerHTML = `
+                    <input type="radio" name="option" value="${optIdx}" ${isSelected ? "checked" : ""} ${existingAnswer !== null ? "disabled" : ""}>
+                    <span>${optText}</span>
+                `;
+
+                if (existingAnswer === null) {
+                    li.onclick = () => selectOption(optIdx);
+                }
+
+                optionsList.appendChild(li);
+            });
+
+            if (existingAnswer !== null) {
+                feedbackBox.style.display = "block";
+                if (existingAnswer.isCorrect) {
+                    feedbackBox.className = "feedback-box correct";
+                    feedbackBox.innerHTML = `<strong>ಸರಿ! (Correct)</strong><br>${item.explanation}`;
+                } else {
+                    feedbackBox.className = "feedback-box incorrect";
+                    feedbackBox.innerHTML = `<strong>ತಪ್ಪು! (Incorrect)</strong><br>ಸರಿಯಾದ ಉತ್ತರ: <strong>${item.options[item.correct]}</strong><br>${item.explanation}`;
+                }
+            }
+
+            // Update Navigation State
+            document.querySelectorAll(".btn-qnum").forEach((btn, i) => {
+                btn.classList.toggle("active", i === index);
+            });
+
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === quizData.length - 1;
+        }
+
+        // Option Selection Event Handler
+        function selectOption(optIdx) {
+            const item = quizData[currentIndex];
+            const isCorrect = optIdx === item.correct;
+
+            userAnswers[currentIndex] = {
+                selected: optIdx,
+                isCorrect: isCorrect
+            };
+
+            if (isCorrect) currentScore++;
+            scoreDisplay.textContent = currentScore;
+
+            const paletteBtn = document.getElementById(`palette-btn-${currentIndex}`);
+            if (isCorrect) {
+                paletteBtn.classList.add("answered-correct");
+            } else {
+                paletteBtn.classList.add("answered-wrong");
+            }
+
+            loadQuestion(currentIndex);
+        }
+
+        // Navigation Controllers
+        function navigate(dir) {
+            const nextIdx = currentIndex + dir;
+            if (nextIdx >= 0 && nextIdx < quizData.length) {
+                loadQuestion(nextIdx);
+            }
+        }
+
+        function jumpToQuestion(idx) {
+            loadQuestion(idx);
+        }
+
+        // Exam Timer Countdown
+        function initTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                let m = Math.floor(secondsLeft / 60);
+                let s = secondsLeft % 60;
+                timerDisplay.textContent = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time expired! Your Score: " + currentScore + "/" + quizData.length);
+                }
+            }, 1000);
+        }
+
+        // Quiz Reset Action
+        function resetQuiz() {
+            if (confirm("ಪರೀಕ್ಷೆಯನ್ನು ಮತ್ತೆ ಪ್ರಾರಂಭಿಸಲು ಇಷ್ಟಪಡುತ್ತೀರಾ? (Reset Test?)")) {
+                userAnswers = new Array(quizData.length).fill(null);
+                currentScore = 0;
+                scoreDisplay.textContent = "0";
+                secondsLeft = 20 * 60;
+
+                document.querySelectorAll(".btn-qnum").forEach(btn => {
+                    btn.classList.remove("answered-correct", "answered-wrong");
+                });
+
+                toggleAnswerKey(false);
+                loadQuestion(0);
+                initTimer();
+            }
+        }
+
+        // Answer Key Panel Toggle View
+        function toggleAnswerKey(show) {
+            document.getElementById("quizPanel").style.display = show ? "none" : "flex";
+            document.getElementById("answerKeyPanel").style.display = show ? "block" : "none";
+        }
+
+        // Generate Answer Key Content
+        function buildAnswerKey() {
+            const keyContainer = document.getElementById("answerKeyContent");
+            keyContainer.innerHTML = "";
+
+            quizData.forEach((item, idx) => {
+                const row = document.createElement("div");
+                row.className = "answer-key-item";
+                row.innerHTML = `
+                    <p><strong>Q${idx + 1} (${item.page}):</strong> ${item.question}</p>
+                    <p><strong>ಸರಿಯಾದ ಉತ್ತರ:</strong> ${item.options[item.correct]}</p>
+                    <p style="color: #444;"><strong>ವಿವರಣೆ:</strong> ${item.explanation}</p>
+                `;
+                keyContainer.appendChild(row);
+            });
+        }
+
+        // Boot
+        window.onload = startApp;
+    </script>
+</body>
+</html>
