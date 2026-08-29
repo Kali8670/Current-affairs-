@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka PC & SSC CBT Exam Mock Test (Pages 107 - 110)</title>
+    <style>
+        :root {
+            --primary-blue: #003366;
+            --secondary-blue: #0066cc;
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+            --light-bg: #f4f7fa;
+            --border-color: #dcdcdc;
+            --text-dark: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif, 'Tunga', 'Kedage';
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SSC Exam Header */
+        header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--secondary-blue);
+            flex-shrink: 0;
+            height: 60px;
+        }
+
+        header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-box {
+            background: #ffffff;
+            color: #d9534f;
+            padding: 4px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid #d9534f;
+            font-size: 1.05rem;
+        }
+
+        /* App Main Container */
+        .app-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Left Interactive Question Panel */
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .page-header {
+            background: #e9ecef;
+            padding: 8px 20px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: var(--primary-blue);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        /* Independent Scroll Area Fix */
+        .question-scroll-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #111;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .option-item:hover {
+            background-color: #f0f4f8;
+            border-color: var(--secondary-blue);
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-green) !important;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .option-item.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger-red) !important;
+            color: #721c24;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .feedback-box.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback-box.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Footer Controls */
+        .footer-controls {
+            padding: 10px 20px;
+            background: #e9ecef;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            height: 55px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary { background-color: var(--secondary-blue); color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-danger { background-color: var(--danger-red); color: white; }
+
+        /* Right Question Palette Sidebar */
+        .sidebar {
+            width: 320px;
+            background: #f8f9fa;
+            border-left: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .palette-header {
+            padding: 10px;
+            background: #e2e6ea;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .score-board {
+            padding: 10px;
+            background: #ffffff;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .palette-container {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .palette-group-title {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #555;
+            margin: 10px 0 5px 0;
+            text-transform: uppercase;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .btn-qnum {
+            height: 36px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .btn-qnum.active {
+            border: 2px solid var(--primary-blue);
+            box-shadow: 0 0 5px rgba(0,51,102,0.4);
+        }
+
+        .btn-qnum.answered-correct {
+            background-color: var(--success-green);
+            color: white;
+            border-color: var(--success-green);
+        }
+
+        .btn-qnum.answered-wrong {
+            background-color: var(--danger-red);
+            color: white;
+            border-color: var(--danger-red);
+        }
+
+        .palette-footer {
+            padding: 12px;
+            border-top: 1px solid var(--border-color);
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+
+        /* Answer Key Panel */
+        .answer-key-section {
+            display: none;
+            padding: 20px;
+            background: #ffffff;
+            height: 100%;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .answer-key-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .answer-key-item strong {
+            color: var(--primary-blue);
+        }
+
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 220px; }
+            .main-panel { height: calc(100% - 220px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Header -->
+    <header>
+        <h1>Karnataka PC & SSC CBT Exam Mock Test (Pages 107 - 110)</h1>
+        <div class="header-info">
+            <span>Time Left:</span>
+            <div class="timer-box" id="timer">15:00</div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Layout Container -->
+    <div class="app-container">
+        
+        <!-- Question Test View -->
+        <div class="main-panel" id="quizPanel">
+            <div class="page-header" id="pageTitle">Page 107 Questions</div>
+            
+            <div class="question-scroll-area">
+                <div class="q-text" id="questionText">Loading Question...</div>
+                
+                <ul class="options-list" id="optionsList">
+                    <!-- Options Dynamic Injection -->
+                </ul>
+
+                <div class="feedback-box" id="feedbackBox"></div>
+            </div>
+
+            <div class="footer-controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="navigate(-1)">Previous</button>
+                <button class="btn btn-danger" onclick="resetQuiz()">Reset Test</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="navigate(1)">Next</button>
+            </div>
+        </div>
+
+        <!-- Answer Key Overlay -->
+        <div class="main-panel answer-key-section" id="answerKeyPanel">
+            <h2>Answer Key & Explanations (ಉತ್ತರಗಳು ಮತ್ತು ವಿವರಣೆ)</h2>
+            <br>
+            <div id="answerKeyContent"></div>
+            <br>
+            <button class="btn btn-primary" onclick="toggleAnswerKey(false)">Back to Test</button>
+        </div>
+
+        <!-- Right Side Navigation Palette -->
+        <div class="sidebar">
+            <div class="palette-header">Question Palette</div>
+            
+            <div class="score-board">
+                Score: <span id="score">0</span> / <span id="totalQuestions">0</span>
+            </div>
+
+            <div class="palette-container" id="paletteContainer">
+                <!-- Palette Dynamic Injection -->
+            </div>
+
+            <div class="palette-footer">
+                <button class="btn btn-primary" style="width: 100%;" onclick="toggleAnswerKey(true)">View Answer Key</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Generated strictly based on Scanned Pages 107 to 110
+        // State Priority items (Karnataka related) are strictly positioned first in relevant page blocks.
+        const quizData = [
+            // PAGE 107 (1000033450.jpg)
+            {
+                id: 1,
+                page: "Page 107",
+                question: "ಭಾರತದ ಮೂರು ಸಶಸ್ತ್ರ ಪಡೆಗಳ (ಭೂಸೇನೆ, ನೌಕಾಪಡೆ, ವಾಯುಪಡೆ) ಮಹಾದಂಡನಾಯಕರು (Supreme Commander) ಯಾರು?",
+                options: [
+                    "A) ಪದನಿಮಿತ್ತ ರಾಷ್ಟ್ರಪತಿ",
+                    "B) ಪ್ರಧಾನಮಂತ್ರಿ",
+                    "C) ರಕ್ಷಣಾ ಸಚಿವರು",
+                    "D) ಸಿಡಿಎಸ್ (CDS)"
+                ],
+                correct: 0,
+                explanation: "ಭಾರತದ ಮೂರೂ ಸಶಸ್ತ್ರ ಪಡೆಗಳ ಮಹಾದಂಡನಾಯಕರು ಪದನಿಮಿತ್ತವಾಗಿ ಭಾರತದ ರಾಷ್ಟ್ರಪತಿಯಾಗಿರುತ್ತಾರೆ."
+            },
+            {
+                id: 2,
+                page: "Page 107",
+                question: "ಭಾರತದ 3ನೇ ರಕ್ಷಣಾ ಸಿಬ್ಬಂದಿ ಮುಖ್ಯಸ್ಥರು (CDS - Chief of Defence Staff) ಯಾರು?",
+                options: [
+                    "A) N.S. ರಾಜಾಸುಬ್ರಮಣಿ",
+                    "B) ಅನಿಲ್ ಚೌಹಾಣ್",
+                    "C) ಬಿಪಿನ್ ರಾವತ್",
+                    "D) ಉಪೇಂದ್ರ ದ್ವಿವೇದಿ"
+                ],
+                correct: 0,
+                explanation: "ಎನ್.ಎಸ್. ರಾಜಾಸುಬ್ರಮಣಿ ಅವರು ಭಾರತದ 3ನೇ ರಕ್ಷಣಾ ಸಿಬ್ಬಂದಿ ಮುಖ್ಯಸ್ಥರಾಗಿದ್ದಾರೆ (CDS)."
+            },
+            {
+                id: 3,
+                page: "Page 107",
+                question: "ಭಾರತೀಯ ವಾಯುಪಡೆಯ 28ನೇ ಮುಖ್ಯಸ್ಥರು (Chief of Air Staff) ಯಾರು?",
+                options: [
+                    "A) ಅಮರ್‌ಪ್ರೀತ್ ಸಿಂಗ್",
+                    "B) ವಿ.ಆರ್. ಚೌಧರಿ",
+                    "C) ಕೃಷ್ಣಸ್ವಾಮಿನಾಥನ್",
+                    "D) ಉಪೇಂದ್ರ ದ್ವಿವೇದಿ"
+                ],
+                correct: 0,
+                explanation: "ಅಮರ್‌ಪ್ರೀತ್ ಸಿಂಗ್ ಅವರು ಭಾರತೀಯ ವಾಯುಪಡೆಯ 28ನೇ ಮುಖ್ಯಸ್ಥರಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿದ್ದಾರೆ."
+            },
+
+            // PAGE 108 (1000033449.jpg)
+            {
+                id: 4,
+                page: "Page 108",
+                question: "ಭಾರತದ ಪ್ರಸ್ತುತ (16ನೇ) ಅಟಾರ್ನಿ ಜನರಲ್ (Attorney General of India) ಯಾರು?",
+                options: [
+                    "A) ಆರ್. ವೆಂಕಟರಮಣಿ",
+                    "B) ಕೆ. ಕೆ. ವೇಣುಗೋಪಾಲ್",
+                    "C) ಮುಕುಲ್ ರೋಹತ್ಗಿ",
+                    "D) ತುಷಾರ್ ಮೆಹ್ತಾ"
+                ],
+                correct: 0,
+                explanation: "ಆರ್. ವೆಂಕಟರಮಣಿ ಅವರು ಭಾರತದ 16ನೇ ಅಟಾರ್ನಿ ಜನರಲ್ ಆಗಿ ಸೇವೆ ಸಲ್ಲಿಸುತ್ತಿದ್ದಾರೆ."
+            },
+            {
+                id: 5,
+                page: "Page 108",
+                question: "ಕೇಂದ್ರ ತನಿಖಾ ಸಂಸ್ಥೆ (CBI - Central Bureau of Investigation) ಪ್ರಸ್ತುತ ನಿರ್ದೇಶಕರು ಯಾರು?",
+                options: [
+                    "A) ಪ್ರವೀಣ್ ಸೂದ್",
+                    "B) ಸುಬೋಧ್ ಕುಮಾರ್ ಜೈಸ್ವಾಲ್",
+                    "C) ಸಮಂತ್ ಗೋಯಲ್",
+                    "D) ರವಿ ಸಿನ್ಹಾ"
+                ],
+                correct: 0,
+                explanation: "ಕರ್ನಾಟಕದ ಮಾಜಿ ಡಿಜಿ-ಐಜಿಪಿ ಪ್ರವೀಣ್ ಸೂದ್ ಅವರು ಪ್ರಸ್ತುತ ಸಿಬಿಐ (CBI) ನಿರ್ದೇಶಕರಾಗಿದ್ದಾರೆ."
+            },
+            {
+                id: 6,
+                page: "Page 108",
+                question: "ಭಾರತೀಯ ಬಾಹ್ಯಾಕಾಶ ಸಂಶೋಧನಾ ಸಂಸ್ಥೆ (ISRO) ಹಾಲಿ ಅಧ್ಯಕ್ಷರು ಯಾರು?",
+                options: [
+                    "A) ಎಸ್. ಸೋಮನಾಥ್",
+                    "B) ಕೆ. ಸಿವನ್",
+                    "C) ಎ. ಎಸ್. ಕಿರಣ್ ಕುಮಾರ್",
+                    "D) ಜಿ. ಮಾಧವನ್ ನಾಯರ್"
+                ],
+                correct: 0,
+                explanation: "ಇಸ್ರೋ (ISRO) ಸಂಸ್ಥೆಯ ಪ್ರಸ್ತುತ ಅಧ್ಯಕ್ಷರು ಎಸ್. ಸೋಮನಾಥ್."
+            },
+
+            // PAGE 109 (1000033447.jpg)
+            {
+                id: 7,
+                page: "Page 109",
+                question: "ಕರ್ನಾಟಕದ ಪ್ರಸ್ತುತ ರಾಜ್ಯಪಾಲರು ಯಾರು?",
+                options: [
+                    "A) ರ್ಹಾವರ್ ಚಂದ್ ಗೆಹಲೋತ್",
+                    "B) ವಜುಭಾಯಿ ವಾಲಾ",
+                    "C) ಹಂಸರಾಜ್ ಭಾರದ್ವಾಜ್",
+                    "D) ಆರ್. ಎನ್. ರವಿ"
+                ],
+                correct: 0,
+                explanation: "ಥಾವರ್ ಚಂದ್ ಗೆಹಲೋತ್ ಅವರು ಕರ್ನಾಟಕದ ಪ್ರಸ್ತುತ ರಾಜ್ಯಪಾಲರಾಗಿದ್ದಾರೆ."
+            },
+            {
+                id: 8,
+                page: "Page 109",
+                question: "ಕರ್ನಾಟಕ ವಿಧಾನಸಭೆಯ ಪ್ರಸ್ತುತ ಸಭಾಧ್ಯಕ್ಷರು (Speaker) ಯಾರು?",
+                options: [
+                    "A) ಯು. ಟಿ. ಖಾದರ್",
+                    "B) ರುದ್ರಪ್ಪ ಎಂ. ಲಮಾಣಿ",
+                    "C) ಬಸವರಾಜ ಹೊರಟ್ಟಿ",
+                    "D) ಆರ್. ಅಶೋಕ್"
+                ],
+                correct: 0,
+                explanation: "ಯು. ಟಿ. ಖಾದರ್ ಅವರು ಕರ್ನಾಟಕ ವಿಧಾನಸಭೆಯ ಪ್ರಸ್ತುತ ಸಭಾಧ್ಯಕ್ಷರಾಗಿದ್ದಾರೆ."
+            },
+            {
+                id: 9,
+                page: "Page 109",
+                question: "ಕರ್ನಾಟಕ ರಾಜ್ಯದ ಗೃಹ ಸಚಿವರು (Home Minister) ಯಾರು?",
+                options: [
+                    "A) ಡಾ. ಜಿ. ಪರಮೇಶ್ವರ್",
+                    "B) ಕೆ. ಜೆ. ಜಾರ್ಜ್",
+                    "C) ಎಂ. ಬಿ. ಪಾಟೀಲ್",
+                    "D) ಸತೀಶ್ ಜಾರಕಿಹೊಳಿ"
+                ],
+                correct: 0,
+                explanation: "ಡಾ. ಜಿ. ಪರಮೇಶ್ವರ್ ಅವರು ಕರ್ನಾಟಕದ ಗೃಹ ಸಚಿವರಾಗಿದ್ದಾರೆ (ಅಲ್ಲದೆ ಉಪಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಡಿ.ಕೆ. ಶಿವಕುಮಾರ್ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿದ್ದಾರೆ)."
+            },
+
+            // PAGE 110 (1000033448.jpg)
+            {
+                id: 10,
+                page: "Page 110",
+                question: "ಕರ್ನಾಟಕ ರಾಜ್ಯ ಪೊಲೀಸ್ ಮಹಾನಿರ್ದೇಶಕರು ಮತ್ತು ಆರಕ್ಷಕ ನಿರೀಕ್ಷಕರು (DG & IGP) ಯಾರು?",
+                options: [
+                    "A) ಡಾ. ಆಲೋಕ್ ಮೋಹನ್",
+                    "B) ಪ್ರವೀಣ್ ಸೂದ್",
+                    "C) ಭಾಸ್ಕರ್ ರಾವ್",
+                    "D) ಕಮಲ್ ಪಂತ್"
+                ],
+                correct: 0,
+                explanation: "ಡಾ. ಆಲೋಕ್ ಮೋಹನ್ ಅವರು ಕರ್ನಾಟಕ ರಾಜ್ಯ ಪೊಲೀಸ್ ಮಹಾನಿರ್ದೇಶಕರು ಮತ್ತು ಆರಕ್ಷಕ ನಿರೀಕ್ಷಕರಾಗಿದ್ದಾರೆ (DG & IGP)."
+            },
+            {
+                id: 11,
+                page: "Page 110",
+                question: "ಕರ್ನಾಟಕ ರಾಜ್ಯ ಮಹಿಳಾ ಆಯೋಗದ ಅಧ್ಯಕ್ಷರು ಯಾರು?",
+                options: [
+                    "A) ಡಾ. ನಗಲಕ್ಷ್ಮಿ ಚೌಧರಿ",
+                    "B) ಮಂಜುಳಾ ಮಾನಸ",
+                    "C) ಪ್ರಮೀಳಾ ನೇಸರ್ಗಿ",
+                    "D) ವಿಜಯಲಕ್ಷ್ಮಿ ಶೇಠ್"
+                ],
+                correct: 0,
+                explanation: "ಡಾ. ನಗಲಕ್ಷ್ಮಿ ಚೌಧರಿ ಅವರು ಕರ್ನಾಟಕ ರಾಜ್ಯ ಮಹಿಳಾ ಆಯೋಗದ ಪ್ರಸ್ತುತ ಅಧ್ಯಕ್ಷರಾಗಿದ್ದಾರೆ."
+            },
+            {
+                id: 12,
+                page: "Page 110",
+                question: "ಕರ್ನಾಟಕ ರಾಜ್ಯ ಕಾನೂನು ಆಯೋಗದ ಅಧ್ಯಕ್ಷರು ಯಾರು?",
+                options: [
+                    "A) ನ್ಯಾಯಮೂರ್ತಿ ಬಿ. ವೀರಣ್ಣ",
+                    "B) ನ್ಯಾಯಮೂರ್ತಿ ಎಸ್.ಆರ್. ನಾಯಕ್",
+                    "C) ನ್ಯಾಯಮೂರ್ತಿ ಎಚ್.ಎನ್. ನಾಗಮೋಹನ್ ದಾಸ್",
+                    "D) ನ್ಯಾಯಮೂರ್ತಿ ಕೆ.ಎಲ್. ಮಂಜುನಾಥ್"
+                ],
+                correct: 0,
+                explanation: "ನ್ಯಾಯಮೂರ್ತಿ ಬಿ. ವೀರಣ್ಣ ಅವರು ಕರ್ನಾಟಕ ರಾಜ್ಯ ಕಾನೂನು ಆಯೋಗದ ಅಧ್ಯಕ್ಷರಾಗಿದ್ದಾರೆ."
+            }
+        ];
+
+        // Global State Variables
+        let currentIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let currentScore = 0;
+        let timerInterval = null;
+        let secondsLeft = 15 * 60; // 15 Minutes Countdown
+
+        // Core DOM Elements
+        const questionText = document.getElementById("questionText");
+        const optionsList = document.getElementById("optionsList");
+        const feedbackBox = document.getElementById("feedbackBox");
+        const pageTitle = document.getElementById("pageTitle");
+        const paletteContainer = document.getElementById("paletteContainer");
+        const scoreDisplay = document.getElementById("score");
+        const totalQuestionsDisplay = document.getElementById("totalQuestions");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const timerDisplay = document.getElementById("timer");
+
+        // App Initialization
+        function startApp() {
+            totalQuestionsDisplay.textContent = quizData.length;
+            renderPalette();
+            loadQuestion(0);
+            initTimer();
+            buildAnswerKey();
+        }
+
+        // Render Right Sidebar Palette with Dynamic Grouping
+        function renderPalette() {
+            paletteContainer.innerHTML = "";
+            let currentGroup = "";
+            let currentGrid = null;
+
+            quizData.forEach((item, idx) => {
+                if (item.page !== currentGroup) {
+                    currentGroup = item.page;
+                    const groupHeader = document.createElement("div");
+                    groupHeader.className = "palette-group-title";
+                    groupHeader.textContent = currentGroup;
+                    paletteContainer.appendChild(groupHeader);
+
+                    currentGrid = document.createElement("div");
+                    currentGrid.className = "palette-grid";
+                    paletteContainer.appendChild(currentGrid);
+                }
+
+                const btn = document.createElement("button");
+                btn.className = "btn-qnum";
+                btn.id = `palette-btn-${idx}`;
+                btn.textContent = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+                currentGrid.appendChild(btn);
+            });
+        }
+
+        // Load Question View
+        function loadQuestion(index) {
+            currentIndex = index;
+            const item = quizData[index];
+
+            pageTitle.textContent = `${item.page} - Question ${index + 1} of ${quizData.length}`;
+            questionText.textContent = `${index + 1}. ${item.question}`;
+            
+            optionsList.innerHTML = "";
+            feedbackBox.style.display = "none";
+
+            const existingAnswer = userAnswers[index];
+
+            item.options.forEach((optText, optIdx) => {
+                const li = document.createElement("li");
+                li.className = "option-item";
+
+                const isSelected = existingAnswer !== null && existingAnswer.selected === optIdx;
+
+                if (existingAnswer !== null) {
+                    if (optIdx === item.correct) {
+                        li.classList.add("correct");
+                    } else if (isSelected && optIdx !== item.correct) {
+                        li.classList.add("incorrect");
+                    }
+                }
+
+                li.innerHTML = `
+                    <input type="radio" name="option" value="${optIdx}" ${isSelected ? "checked" : ""} ${existingAnswer !== null ? "disabled" : ""}>
+                    <span>${optText}</span>
+                `;
+
+                if (existingAnswer === null) {
+                    li.onclick = () => selectOption(optIdx);
+                }
+
+                optionsList.appendChild(li);
+            });
+
+            if (existingAnswer !== null) {
+                feedbackBox.style.display = "block";
+                if (existingAnswer.isCorrect) {
+                    feedbackBox.className = "feedback-box correct";
+                    feedbackBox.innerHTML = `<strong>ಸರಿ! (Correct)</strong><br>${item.explanation}`;
+                } else {
+                    feedbackBox.className = "feedback-box incorrect";
+                    feedbackBox.innerHTML = `<strong>ತಪ್ಪು! (Incorrect)</strong><br>ಸರಿಯಾದ ಉತ್ತರ: <strong>${item.options[item.correct]}</strong><br>${item.explanation}`;
+                }
+            }
+
+            // Update Navigation State
+            document.querySelectorAll(".btn-qnum").forEach((btn, i) => {
+                btn.classList.toggle("active", i === index);
+            });
+
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === quizData.length - 1;
+        }
+
+        // Option Selection Event Handler
+        function selectOption(optIdx) {
+            const item = quizData[currentIndex];
+            const isCorrect = optIdx === item.correct;
+
+            userAnswers[currentIndex] = {
+                selected: optIdx,
+                isCorrect: isCorrect
+            };
+
+            if (isCorrect) currentScore++;
+            scoreDisplay.textContent = currentScore;
+
+            const paletteBtn = document.getElementById(`palette-btn-${currentIndex}`);
+            if (isCorrect) {
+                paletteBtn.classList.add("answered-correct");
+            } else {
+                paletteBtn.classList.add("answered-wrong");
+            }
+
+            loadQuestion(currentIndex);
+        }
+
+        // Navigation Controllers
+        function navigate(dir) {
+            const nextIdx = currentIndex + dir;
+            if (nextIdx >= 0 && nextIdx < quizData.length) {
+                loadQuestion(nextIdx);
+            }
+        }
+
+        function jumpToQuestion(idx) {
+            loadQuestion(idx);
+        }
+
+        // Exam Timer Countdown
+        function initTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                let m = Math.floor(secondsLeft / 60);
+                let s = secondsLeft % 60;
+                timerDisplay.textContent = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time expired! Your Score: " + currentScore + "/" + quizData.length);
+                }
+            }, 1000);
+        }
+
+        // Quiz Reset Action
+        function resetQuiz() {
+            if (confirm("ಪರೀಕ್ಷೆಯನ್ನು ಮತ್ತೆ ಪ್ರಾರಂಭಿಸಲು ಇಷ್ಟಪಡುತ್ತೀರಾ? (Reset Test?)")) {
+                userAnswers = new Array(quizData.length).fill(null);
+                currentScore = 0;
+                scoreDisplay.textContent = "0";
+                secondsLeft = 15 * 60;
+
+                document.querySelectorAll(".btn-qnum").forEach(btn => {
+                    btn.classList.remove("answered-correct", "answered-wrong");
+                });
+
+                toggleAnswerKey(false);
+                loadQuestion(0);
+                initTimer();
+            }
+        }
+
+        // Answer Key Panel Toggle View
+        function toggleAnswerKey(show) {
+            document.getElementById("quizPanel").style.display = show ? "none" : "flex";
+            document.getElementById("answerKeyPanel").style.display = show ? "block" : "none";
+        }
+
+        // Generate Answer Key Content
+        function buildAnswerKey() {
+            const keyContainer = document.getElementById("answerKeyContent");
+            keyContainer.innerHTML = "";
+
+            quizData.forEach((item, idx) => {
+                const row = document.createElement("div");
+                row.className = "answer-key-item";
+                row.innerHTML = `
+                    <p><strong>Q${idx + 1} (${item.page}):</strong> ${item.question}</p>
+                    <p><strong>ಸರಿಯಾದ ಉತ್ತರ:</strong> ${item.options[item.correct]}</p>
+                    <p style="color: #444;"><strong>ವಿವರಣೆ:</strong> ${item.explanation}</p>
+                `;
+                keyContainer.appendChild(row);
+            });
+        }
+
+        // Boot
+        window.onload = startApp;
+    </script>
+</body>
+</html>
