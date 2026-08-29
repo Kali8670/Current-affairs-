@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSC & Karnataka PC Online Exam Simulator</title>
+  <style>
+    :root {
+      --primary-color: #003366;
+      --secondary-color: #0056b3;
+      --accent-color: #ff9900;
+      --bg-color: #f4f7f6;
+      --card-bg: #ffffff;
+      --text-color: #222222;
+      --correct-color: #28a745;
+      --wrong-color: #dc3545;
+      --border-color: #cccccc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden; /* Main window fixed; inner container scrolls to prevent UI freeze */
+    }
+
+    /* CBT Top Bar Header */
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .status-bar {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      background-color: rgba(255,255,255,0.2);
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    /* Main Content Layout */
+    .exam-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden; /* Ensures independent scrolling inside main view */
+    }
+
+    /* Question View Area */
+    .main-viewport {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto; /* Independent inner scrolling */
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    .page-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .page-header {
+      background-color: #e9ecef;
+      padding: 8px 14px;
+      border-left: 5px solid var(--secondary-color);
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+    }
+
+    .question-card {
+      margin-bottom: 22px;
+      padding-bottom: 18px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .question-card:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .q-text {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    @media(min-width: 600px) {
+      .options-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .option-btn {
+      background: #f8f9fa;
+      border: 1px solid #ced4da;
+      padding: 10px 14px;
+      border-radius: 4px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .option-btn:hover {
+      background: #e2e6ea;
+    }
+
+    .option-btn.selected {
+      background-color: #d1ecf1;
+      border-color: #17a2b8;
+    }
+
+    .option-btn.correct {
+      background-color: #d4edda !important;
+      border-color: var(--correct-color) !important;
+      color: #155724;
+      font-weight: bold;
+    }
+
+    .option-btn.wrong {
+      background-color: #f8d7da !important;
+      border-color: var(--wrong-color) !important;
+      color: #721c24;
+    }
+
+    .feedback-box {
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      display: none;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 280px;
+      background: #fff;
+      border-left: 1px solid var(--border-color);
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .palette-btn {
+      height: 38px;
+      border: 1px solid var(--border-color);
+      background: #f8f9fa;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .palette-btn.answered {
+      background: var(--correct-color);
+      color: white;
+      border-color: var(--correct-color);
+    }
+
+    .control-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .action-btn {
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+
+    .btn-reset {
+      background-color: #6c757d;
+    }
+
+    .btn-submit {
+      background-color: var(--accent-color);
+    }
+
+    /* Answer Key Section */
+    .answer-key-section {
+      margin-top: 30px;
+      background: #fff;
+      border: 2px solid var(--primary-color);
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    .answer-key-section h2 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    .ak-item {
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dotted #ccc;
+      font-size: 0.92rem;
+    }
+
+    /* Mobile Responsive Setup */
+    @media(max-width: 768px) {
+      .exam-container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+      }
+      .palette-grid {
+        max-height: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Status Header Bar -->
+  <header>
+    <h1>SSC / Karnataka Police Constable Online Exam Simulator</h1>
+    <div class="status-bar">
+      <div>ಸಮಯ: <span id="timer" class="badge">60:00</span></div>
+      <div>ಅಂಕಗಳು: <span id="score-display" class="badge">0 / 22</span></div>
+    </div>
+  </header>
+
+  <div class="exam-container">
+    
+    <!-- Main Scrollable Question Area -->
+    <main class="main-viewport" id="viewport">
+
+      <!-- PAGE 24 -->
+      <div class="page-section" id="page-24">
+        <div class="page-header">ಪುಟ 24 (Page 24) - ವಿಶ್ವಸಂಸ್ಥೆ ಮಿಲಿಟರಿ ಅಂಗ ವಕೀಲ ಪ್ರಶಸ್ತಿ & SCO ಶೃಂಗಸಭೆ</div>
+
+        <!-- Q1 -->
+        <div class="question-card" id="q-card-1">
+          <div class="q-text">1. 2025ರ ವಿಶ್ವಸಂಸ್ಥೆಯ ಮಿಲಿಟರಿ ಲಿಂಗ ವಕೀಲ (UN Military Gender Advocate of the Year) ಪ್ರಶಸ್ತಿ ಪಡೆದ ಭಾರತೀಯ ಶಾಂತಿ ಪಾಲಕಿ ಯಾರು?</div>
+          <div class="options-grid" data-qid="1" data-ans="A">
+            <button class="option-btn" onclick="checkAnswer(1, 'A', this)">A) ಮೇಜರ್ ಅಭಿಲಾಷಾ ಬರಾಕ್</button>
+            <button class="option-btn" onclick="checkAnswer(1, 'B', this)">B) ಸುಮನ್ ಗವಾನಿ</button>
+            <button class="option-btn" onclick="checkAnswer(1, 'C', this)">C) ರಾಧಿಕಾ ಸೇನ್</button>
+            <button class="option-btn" onclick="checkAnswer(1, 'D', this)">D) ಪುನಿತಾ ಅರೋರಾ</button>
+          </div>
+          <div class="feedback-box" id="fb-1"></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-card" id="q-card-2">
+          <div class="q-text">2. 4ನೇ SCO ಕೈಗಾರಿಕಾ ಸಚಿವರ ಸಭೆಯು 2026ರ ಜೂನ್‌ನಲ್ಲಿ ಎಲ್ಲಿ ಜರುಗಿತು?</div>
+          <div class="options-grid" data-qid="2" data-ans="C">
+            <button class="option-btn" onclick="checkAnswer(2, 'A', this)">A) ನವದೆಹಲಿ (ಭಾರತ)</button>
+            <button class="option-btn" onclick="checkAnswer(2, 'B', this)">B) ತಷ್ಕೆಂಟ್ (ಉಜ್ಬೇಕಿಸ್ತಾನ್)</button>
+            <button class="option-btn" onclick="checkAnswer(2, 'C', this)">C) ಕಿರ್ಗಿಸ್ತಾನದ ಬಿಷ್ಕೆಕ್</button>
+            <button class="option-btn" onclick="checkAnswer(2, 'D', this)">D) ಅಸ್ತಾನಾ (ಕಜಕಿಸ್ತಾನ್)</button>
+          </div>
+          <div class="feedback-box" id="fb-2"></div>
+        </div>
+      </div>
+
+      <!-- PAGE 25 -->
+      <div class="page-section" id="page-25">
+        <div class="page-header">ಪುಟ 25 (Page 25) - ನವೀಕೃತ ಜನಸಂಖ್ಯೆಗೆ ಕಾರಣ ಪತ್ತೆಗೆ ಸಮಿತಿ</div>
+
+        <!-- Q3 -->
+        <div class="question-card" id="q-card-3">
+          <div class="q-text">3. ಭಾರತದ ಗಡಿ ಪ್ರದೇಶಗಳಲ್ಲಿ ಅಸಹಜ ಜನಸಂಖ್ಯೆ ಬದಲಾವಣೆ ಕುರಿತು ಅಧ್ಯಯನ ಮಾಡಲು ಕೇಂದ್ರ ಸರ್ಕಾರ ಯಾರ ನೇತೃತ್ವದಲ್ಲಿ ಉನ್ನತ ಮಟ್ಟದ ಸಮಿತಿಯನ್ನು ರಚಿಸಿದೆ?</div>
+          <div class="options-grid" data-qid="3" data-ans="B">
+            <button class="option-btn" onclick="checkAnswer(3, 'A', this)">A) ನ್ಯಾಯಮೂರ್ತಿ ಡಿ.ವೈ. ಚಂದ್ರಚೂಡ್</button>
+            <button class="option-btn" onclick="checkAnswer(3, 'B', this)">B) ನ್ಯಾ. ಪ್ರಕಾಶ್ ಪ್ರಭಾಕರ್ ನಾವಲೇಕರ್</button>
+            <button class="option-btn" onclick="checkAnswer(3, 'C', this)">C) ನ್ಯಾ. ರಂಜನ್ ಗೊಗೋಯ್</button>
+            <button class="option-btn" onclick="checkAnswer(3, 'D', this)">D) ನ್ಯಾ. ಎನ್.ವಿ. ರಮಣ</button>
+          </div>
+          <div class="feedback-box" id="fb-3"></div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-card" id="q-card-4">
+          <div class="q-text">4. ಅಸಹಜ ಜನಸಂಖ್ಯೆ ಬದಲಾವಣೆ ಕುರಿತು ಉನ್ನತ ಮಟ್ಟದ ಸಮಿತಿ ರಚನೆಯ ಕುರಿತು ಪ್ರಧಾನಿ ಮೋದಿ ಯಾವ ದಿನದಂದು ಘೋಷಣೆ ಮಾಡಿದ್ದರು?</div>
+          <div class="options-grid" data-qid="4" data-ans="A">
+            <button class="option-btn" onclick="checkAnswer(4, 'A', this)">A) 2025ರ ಆಗಸ್ಟ್ 15 ರ ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ</button>
+            <button class="option-btn" onclick="checkAnswer(4, 'B', this)">B) 2025ರ ಜನವರಿ 26 ರ ಗಣರಾಜ್ಯೋತ್ಸವ</button>
+            <button class="option-btn" onclick="checkAnswer(4, 'C', this)">C) 2024ರ ಅಕ್ಟೋಬರ್ 2</button>
+            <button class="option-btn" onclick="checkAnswer(4, 'D', this)">D) 2026ರ ಮಾರ್ಚ್ 8</button>
+          </div>
+          <div class="feedback-box" id="fb-4"></div>
+        </div>
+      </div>
+
+      <!-- PAGE 26 -->
+      <div class="page-section" id="page-26">
+        <div class="page-header">ಪುಟ 26 (Page 26) - ಏಕರೂಪ ನಾಗರಿಕ ಸಂಹಿತೆ (UCC) ಮಸೂದೆ 2026</div>
+
+        <!-- Q5 -->
+        <div class="question-card" id="q-card-5">
+          <div class="q-text">5. ಏಕರೂಪ ನಾಗರಿಕ ಸಂಹಿತೆ (UCC) ಮಸೂದೆ 2026 ಅನ್ನು ಅಂಗೀಕರಿಸಿದ ಭಾರತದ 3ನೇ ರಾಜ್ಯ ಯಾವುದು?</div>
+          <div class="options-grid" data-qid="5" data-ans="C">
+            <button class="option-btn" onclick="checkAnswer(5, 'A', this)">A) ಗೋವಾ</button>
+            <button class="option-btn" onclick="checkAnswer(5, 'B', this)">B) ಉತ್ತರಾಖಂಡ</button>
+            <button class="option-btn" onclick="checkAnswer(5, 'C', this)">C) ಅಸ್ಸಾಂ</button>
+            <button class="option-btn" onclick="checkAnswer(5, 'D', this)">D) ಗುಜರಾತ್</button>
+          </div>
+          <div class="feedback-box" id="fb-5"></div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="question-card" id="q-card-6">
+          <div class="q-text">6. ಭಾರತದ ಸಂವಿಧಾನದ ಯಾವ ವಿಧಿಯು ಏಕರೂಪ ನಾಗರಿಕ ಸಂಹಿತೆ (UCC) ಜಾರಿಗೆ ಸಂಬಂಧಿಸಿದೆ?</div>
+          <div class="options-grid" data-qid="6" data-ans="B">
+            <button class="option-btn" onclick="checkAnswer(6, 'A', this)">A) ವಿಧಿ 40</button>
+            <button class="option-btn" onclick="checkAnswer(6, 'B', this)">B) ವಿಧಿ 44</button>
+            <button class="option-btn" onclick="checkAnswer(6, 'C', this)">C) ವಿಧಿ 50</button>
+            <button class="option-btn" onclick="checkAnswer(6, 'D', this)">D) ವಿಧಿ 48</button>
+          </div>
+          <div class="feedback-box" id="fb-6"></div>
+        </div>
+      </div>
+
+      <!-- PAGE 27 (KARNATAKA PRIORITY) -->
+      <div class="page-section" id="page-27">
+        <div class="page-header">ಪುಟ 27 (Page 27) - ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಕಾರ್ಮಿಕರ ಕನಿಷ್ಠ ವೇತನ ಹೆಚ್ಚಳ [STATE PRIORITY]</div>
+
+        <!-- Q7 -->
+        <div class="question-card" id="q-card-7">
+          <div class="q-text">7. [ಕೇಂದ್ರ/ರಾಜ್ಯ ಆದ್ಯತೆ] ಕರ್ನಾಟಕ ಸರ್ಕಾರವು ನಮೂದಿತ ಉದ್ಯೋಗಗಳಲ್ಲಿ ಕಾರ್ಮಿಕರ ಕನಿಷ್ಠ ವೇತನವನ್ನು ಸರಾಸರಿ ಶೇಕಡಾ ಎಷ್ಟರಷ್ಟು ಹೆಚ್ಚಿಸಲು ಕರಡು ಅಧಿಸೂಚನೆ ಹೊರಡಿಸಿದೆ?</div>
+          <div class="options-grid" data-qid="7" data-ans="C">
+            <button class="option-btn" onclick="checkAnswer(7, 'A', this)">A) 20%</button>
+            <button class="option-btn" onclick="checkAnswer(7, 'B', this)">B) 40%</button>
+            <button class="option-btn" onclick="checkAnswer(7, 'C', this)">C) 60%</button>
+            <button class="option-btn" onclick="checkAnswer(7, 'D', this)">D) 50%</button>
+          </div>
+          <div class="feedback-box" id="fb-7"></div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="question-card" id="q-card-8">
+          <div class="q-text">8. ಕರ್ನಾಟಕದ ಕನಿಷ್ಠ ವೇತನ ಅಧಿಸೂಚನೆ ಪ್ರಕಾರ 'ವಲಯ-1' (Zone-1) ಯಾವ ಪ್ರದೇಶಗಳನ್ನು ಒಳಗೊಂಡಿದೆ?</div>
+          <div class="options-grid" data-qid="8" data-ans="A">
+            <button class="option-btn" onclick="checkAnswer(8, 'A', this)">A) ಗ್ರೇಟರ್ ಬೆಂಗಳೂರು ಪ್ರಾಧಿಕಾರ ವ್ಯಾಪ್ತಿ</button>
+            <button class="option-btn" onclick="checkAnswer(8, 'B', this)">B) ಎಲ್ಲಾ ಜಿಲ್ಲಾ ಕೇಂದ್ರಗಳು</button>
+            <button class="option-btn" onclick="checkAnswer(8, 'C', this)">C) ಗ್ರಾಮೀಣ ಪ್ರದೇಶಗಳು</button>
+            <button class="option-btn" onclick="checkAnswer(8, 'D', this)">D) ತಾಲೂಕು ಕೇಂದ್ರಗಳು</button>
+          </div>
+          <div class="feedback-box" id="fb-8"></div>
+        </div>
+      </div>
+
+      <!-- PAGE 28 -->
+      <div class="page-section" id="page-28">
+        <div class="page-header">ಪುಟ 28 (Page 28) - ಪ್ರಧಾನಿ ಮೋದಿ ಯುಎಇ (UAE) ಪ್ರವಾಸ</div>
+
+        <!-- Q9 -->
+        <div class="question-card" id="q-card-9">
+          <div class="q-text">9. ಪ್ರಧಾನಿ ನರೇಂದ್ರ ಮೋದಿ ಮೇ 2026 ರಲ್ಲಿ 5 ದೇಶಗಳ ಪ್ರವಾಸ ಕೈಗೊಂಡಾಗ ಮೊದಲು ಭೇಟಿ ನೀಡಿದ ದೇಶ ಯಾವುದು?</div>
+          <div class="options-grid" data-qid="9" data-ans="B">
+            <button class="option-btn" onclick="checkAnswer(9, 'A', this)">A) ಇಟಲಿ</button>
+            <button class="option-btn" onclick="checkAnswer(9, 'B', this)">B) ಯುಎಇ (UAE)</button>
+            <button class="option-btn" onclick="checkAnswer(9, 'C', this)">C) ಸ್ವೀಡನ್</button>
+            <button class="option-btn" onclick="checkAnswer(9, 'D', this)">D) ನೆದರ್ಲ್ಯಾಂಡ್ಸ್</button>
+          </div>
+          <div class="feedback-box" id="fb-9"></div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="question-card" id="q-card-10">
+          <div class="q-text">10. ಪ್ರಧಾನಿ ಮೋದಿಯವರ ಯುಎಇ ಭೇಟಿಯ ಸಂದರ್ಭದಲ್ಲಿ ಮೋದಿ ವಿಮಾನಕ್ಕೆ ಯಾವ ಫೈಟರ್ ವಿಮಾನಗಳು ಬೆಂಗಾವಲಾಗಿ ಆಗಮಿಸಿ ಗೌರವ ನೀಡಿದವು?</div>
+          <div class="options-grid" data-qid="10" data-ans="A">
+            <button class="option-btn" onclick="checkAnswer(10, 'A', this)">A) F-16 ಯುದ್ಧ ವಿಮಾನಗಳು</button>
+            <button class="option-btn" onclick="checkAnswer(10, 'B', this)">B) ರಫೇಲ್ ವಿಮಾನಗಳು</button>
+            <button class="option-btn" onclick="checkAnswer(10, 'C', this)">C) ಸುಖೋಯ್ Su-30</button>
+            <button class="option-btn" onclick="checkAnswer(10, 'D', this)">D) ಎಫ್-35</button>
+          </div>
+          <div class="feedback-box" id="fb-10"></div>
+        </div>
+      </div>
+
+      <!-- PAGE 29 -->
+      <div class="page-section" id="page-29">
+        <div class="page-header">ಪುಟ 29 (Page 29) - ಪ್ರಧಾನಿ ಮೋದಿ ನೆದರ್ಲ್ಯಾಂಡ್ಸ್, ಸ್ವೀಡನ್ ಮತ್ತು ನಾರ್ವೇ ಪ್ರವಾಸ</div>
+
+        <!-- Q11 -->
+        <div class="question-card" id="q-card-11">
+          <div class="q-text">11. ಸ್ವೀಡನ್ ದೇಶಕ್ಕೆ ಭೇಟಿ ನೀಡಿದ ಪ್ರಧಾನಿ ಮೋದಿಯವರಿಗೆ ನೀಡಿ ಗೌರವಿಸಲಾದ ಸ್ವೀಡನ್‌ನ ಅತ್ಯುನ್ನತ ಗೌರವ ಯಾವುದು?</div>
+          <div class="options-grid" data-qid="11" data-ans="D">
+            <button class="option-btn" onclick="checkAnswer(11, 'A', this)">A) ದಿ ಆರ್ಡರ್ অফ ಸೇಂಟ್ ಆಂಡ್ರ್ಯೂ</button>
+            <button class="option-btn" onclick="checkAnswer(11, 'B', this)">B) ಲೀಜನ್ ಆಫ್ ಆನರ್</button>
+            <button class="option-btn" onclick="checkAnswer(11, 'C', this)">C) ಆರ್ಡರ್ ಆಫ್ ಝಾಯೆದ್</button>
+            <button class="option-btn" onclick="checkAnswer(11, 'D', this)">D) ರಾಯಲ್ ಆರ್ಡರ್ ಆಫ್ ದಿ ಪೋಲಾರ್ ಸ್ಟಾರ್</button>
+          </div>
+          <div class="feedback-box" id="fb-11"></div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="question-card" id="q-card-12">
+          <div class="q-text">12. ನಾರ್ವೇ ದೇಶದ ಅತ್ಯುನ್ನತ ನಾಗರಿಕ ಪ್ರಶಸ್ತಿಯಾದ 'ಗ್ರ್ಯಾಂಡ್ ಕ್ರಾಸ್ ಆಫ್ ದಿ ರಾಯಲ್ ನಾರ್ವೇಜಿಯನ್ ಆರ್ಡರ್ ಆಫ್ ಮೆರಿಟ್' ಪ್ರಶಸ್ತಿ ಸ್ವೀಕರಿಸಿದ ಭಾರತದ ಮೊದಲ ಪ್ರಧಾನಿ ಯಾರು?</div>
+          <div class="options-grid" data-qid="12" data-ans="A">
+            <button class="option-btn" onclick="checkAnswer(12, 'A', this)">A) ನರೇಂದ್ರ ಮೋದಿ</button>
+            <button class="option-btn" onclick="checkAnswer(12, 'B', this)">B) ಜವಾಹರಲಾಲ್ ನೆಹರೂ</button>
+            <button class="option-btn" onclick="checkAnswer(12, 'C', this)">C) ಅಟಲ್ ಬಿಹಾರಿ ವಾಜಪೇಯಿ</button>
+            <button class="option-btn" onclick="checkAnswer(12, 'D', this)">D) ಇಂದಿರಾ ಗಾಂಧಿ</button>
+          </div>
+          <div class="feedback-box" id="fb-12"></div>
+        </div>
+      </div>
+
+      <!-- PAGE 30 -->
+      <div class="page-section" id="page-30">
+        <div class="page-header">ಪುಟ 30 (Page 30) - ಪ್ರಧಾನಿ ಮೋದಿ ಇಟಲಿ ಭೇಟಿ & FAO ಪ್ರಶಸ್ತಿ</div>
+
+        <!-- Q13 -->
+        <div class="question-card" id="q-card-13">
+          <div class="q-text">13. ವಿಶ್ವಸಂಸ್ಥೆಯ ಆಹಾರ ಮತ್ತು ಕೃಷಿ ಸಂಸ್ಥೆ (FAO) 2026ರ ಮೇ 26 ರಂದು ಪ್ರಧಾನಿ ಮೋದಿಯವರಿಗೆ ಯಾವ ಪ್ರಶಸ್ತಿಯನ್ನು ನೀಡಿ ಗೌರವಿಸಿತು?</div>
+          <div class="options-grid" data-qid="13" data-ans="B">
+            <button class="option-btn" onclick="checkAnswer(13, 'A', this)">A) ಚಾಂಪಿಯನ್ಸ್ ಆಫ್ ದಿ ಅರ್ಥ್</button>
+            <button class="option-btn" onclick="checkAnswer(13, 'B', this)">B) ಅಗ್ರಿಕೋಲ ಪ್ರಶಸ್ತಿ (Agricola Medal)</button>
+            <button class="option-btn" onclick="checkAnswer(13, 'C', this)">C) ವಿಶ್ವ ಆಹಾರ ಪ್ರಶಸ್ತಿ</button>
+            <button class="option-btn" onclick="checkAnswer(13, 'D', this)">D) ಗ್ಲೋಬಲ್ ಲೀಡರ್‌ಶಿಪ್ ಅವಾರ್ಡ್</button>
+          </div>
+          <div class="feedback-box" id="fb-13"></div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="question-card" id="q-card-14">
+          <div class="q-text">14. ವಿಶ್ವ ಆಹಾರ ಮತ್ತು ಕೃಷಿ ಸಂಸ್ಥೆ (FAO) ಯ ಪ್ರಧಾನ ಕಚೇರಿ ಎಲ್ಲಿದೆ?</div>
+          <div class="options-grid" data-qid="14" data-ans="C">
+            <button class="option-btn" onclick="checkAnswer(14, 'A', this)">A) ಜೆನೀವಾ (ಸ್ವಿಟ್ಜರ್ಲ್ಯಾಂಡ್)</button>
+            <button class="option-btn" onclick="checkAnswer(14, 'B', this)">B) ಪ್ಯಾರಿಸ್ (ಫ್ರಾನ್ಸ್)</button>
+            <button class="option-btn" onclick="checkAnswer(14, 'C', this)">C) ರೋಮ್ (ಇಟಲಿ)</button>
+            <button class="option-btn" onclick="checkAnswer(14, 'D', this)">D) ನ್ಯೂಯಾರ್ಕ್ (USA)</button>
+          </div>
+          <div class="feedback-box" id="fb-14"></div>
+        </div>
+      </div>
+
+      <!-- PAGE 31 -->
+      <div class="page-section" id="page-31">
+        <div class="page-header">ಪುಟ 31 (Page 31) - 3ನೇ ಭಾರತ-ನಾರ್ಡಿಕ್ ಶೃಂಗಸಭೆ</div>
+
+        <!-- Q15 -->
+        <div class="question-card" id="q-card-15">
+          <div class="q-text">15. 3ನೇ ಭಾರತ-ನಾರ್ಡಿಕ್ ಶೃಂಗಸಭೆಯು 2026 ರಲ್ಲಿ ಎಲ್ಲಿ ಜರುಗಿತು?</div>
+          <div class="options-grid" data-qid="15" data-ans="A">
+            <button class="option-btn" onclick="checkAnswer(15, 'A', this)">A) ಓಸ್ಲೋ (ನಾರ್ವೇ)</button>
+            <button class="option-btn" onclick="checkAnswer(15, 'B', this)">B) ಸ್ಟಾಕ್‌ಹೋಮ್ (ಸ್ವೀಡನ್)</button>
+            <button class="option-btn" onclick="checkAnswer(15, 'C', this)">C) ಕೋಪನ್ ಹೇಗನ್ (ಡೆನ್ಮಾರ್ಕ್)</button>
+            <button class="option-btn" onclick="checkAnswer(15, 'D', this)">D) ಹೆಲ್ಸಿಂಕಿ (ಫಿನ್ಲ್ಯಾಂಡ್)</button>
+          </div>
+          <div class="feedback-box" id="fb-15"></div>
+        </div>
+
+        <!-- Q16 -->
+        <div class="question-card" id="q-card-16">
+          <div class="q-text">16. ಕೆಳಗಿನವುಗಳಲ್ಲಿ ಯಾವುದು ನಾರ್ಡಿಕ್ (Nordic) ದೇಶಗಳ ಗುಂಪಿಗೆ ಸೇರಿಲ್ಲ?</div>
+          <div class="options-grid" data-qid="16" data-ans="D">
+            <button class="option-btn" onclick="checkAnswer(16, 'A', this)">A) ನಾರ್ವೇ</button>
+            <button class="option-btn" onclick="checkAnswer(16, 'B', this)">B) ಐಸ್ಲ್ಯಾಂಡ್</button>
+            <button class="option-btn" onclick="checkAnswer(16, 'C', this)">C) ಡೆನ್ಮಾರ್ಕ್</button>
+            <button class="option-btn" onclick="checkAnswer(16, 'D', this)">D) ಜರ್ಮನಿ</button>
+          </div>
+          <div class="feedback-box" id="fb-16"></div>
+        </div>
+      </div>
+
+      <!-- PAGE 32 -->
+      <div class="page-section" id="page-32">
+        <div class="page-header">ಪುಟ 32 (Page 32) - ಸಿಕ್ಕಿಂ ಸಂಪೂರ್ಣ ಸಾಕ್ಷರ ರಾಜ್ಯ & ಪ್ರೆಸಿಡೆಂಟ್ ಬಣ್ಣ ಪ್ರಶಸ್ತಿ</div>
+
+        <!-- Q17 -->
+        <div class="question-card" id="q-card-17">
+          <div class="q-text">17. 2026ರ ಮೇ ನಲ್ಲಿ ಭಾರತದ 5ನೇ ಸಂಪೂರ್ಣ ಸಾಕ್ಷರ ರಾಜ್ಯ ಎಂದು ಘೋಷಿಸಲ್ಪಟ್ಟ ರಾಜ್ಯ ಯಾವುದು?</div>
+          <div class="options-grid" data-qid="17" data-ans="B">
+            <button class="option-btn" onclick="checkAnswer(17, 'A', this)">A) ಕೇರಳ</button>
+            <button class="option-btn" onclick="checkAnswer(17, 'B', this)">B) ಸಿಕ್ಕಿಂ</button>
+            <button class="option-btn" onclick="checkAnswer(17, 'C', this)">C) ಮಿಜೋರಾಂ</button>
+            <button class="option-btn" onclick="checkAnswer(17, 'D', this)">D) ಗೋವಾ</button>
+          </div>
+          <div class="feedback-box" id="fb-17"></div>
+        </div>
+
+        <!-- Q18 -->
+        <div class="question-card" id="q-card-18">
+          <div class="q-text">18. ರಾಷ್ಟ್ರಪತಿ ದ್ರೌಪದಿ ಮುರ್ಮು ಅವರು 2026 ಮೇ 28 ರಂದು ಯಾವ ರಾಜ್ಯದ ಪೊಲೀಸ್ ಪಡೆಗೆ 'ರಾಷ್ಟ್ರಪತಿಗಳ ಬಣ್ಣ' (President's Colour) ಪ್ರಧಾನ ಮಾಡಿದರು?</div>
+          <div class="options-grid" data-qid="18" data-ans="A">
+            <button class="option-btn" onclick="checkAnswer(18, 'A', this)">A) ಸಿಕ್ಕಿಂ ಪೊಲೀಸ್</button>
+            <button class="option-btn" onclick="checkAnswer(18, 'B', this)">B) ಕರ್ನಾಟಕ ಪೊಲೀಸ್</button>
+            <button class="option-btn" onclick="checkAnswer(18, 'C', this)">C) ಅಸ್ಸಾಂ ಪೊಲೀಸ್</button>
+            <button class="option-btn" onclick="checkAnswer(18, 'D', this)">D) ತಮಿಳುನಾಡು ಪೊಲೀಸ್</button>
+          </div>
+          <div class="feedback-box" id="fb-18"></div>
+        </div>
+
+        <!-- Q19 -->
+        <div class="question-card" id="q-card-19">
+          <div class="q-text">19. ಪ್ರೌಢವಯಸ್ಕರ ಸಾಕ್ಷರತೆಗಾಗಿ ಭಾರತ ಸರ್ಕಾರ ಜಾರಿಗೆ ತಂದ 'ಉಲ್ಲಾಸ್' (ULLAS) ಯೋಜನೆಯ ಪೂರ್ಣ ರೂಪವೇನು?</div>
+          <div class="options-grid" data-qid="19" data-ans="C">
+            <button class="option-btn" onclick="checkAnswer(19, 'A', this)">A) Universal Literacy for Life and Society</button>
+            <button class="option-btn" onclick="checkAnswer(19, 'B', this)">B) Universal Learning Link Across States</button>
+            <button class="option-btn" onclick="checkAnswer(19, 'C', this)">C) Understanding of Lifelong Learning for All in Society</button>
+            <button class="option-btn" onclick="checkAnswer(19, 'D', this)">D) Urban Literacy and Learning Association</button>
+          </div>
+          <div class="feedback-box" id="fb-19"></div>
+        </div>
+      </div>
+
+      <!-- PAGE 33 (KARNATAKA PRIORITY) -->
+      <div class="page-section" id="page-33">
+        <div class="page-header">ಪುಟ 33 (Page 33) - ಅಂತರರಾಷ್ಟ್ರೀಯ ದೊಡ್ಡ ಬೆಕ್ಕುಗಳ ಒಕ್ಕೂಟ (IBCA) ಶೃಂಗಸಭೆ [STATE PRIORITY]</div>
+
+        <!-- Q20 -->
+        <div class="question-card" id="q-card-20">
+          <div class="q-text">20. [ಕೇಂದ್ರ/ರಾಜ್ಯ ಆದ್ಯತೆ] ಭಾರತದ ಮೊದಲ ಅಂತರರಾಷ್ಟ್ರೀಯ ದೊಡ್ಡ ಬೆಕ್ಕುಗಳ ಮೈತ್ರಿ ಶೃಂಗಸಭೆಯನ್ನು 2024ರ ಫೆಬ್ರವರಿಯಲ್ಲಿ ಕರ್ನಾಟಕದ ಯಾವ ನಗರದಲ್ಲಿ ಉದ್ಘಾಟಿಸಲಾಗಿತ್ತು?</div>
+          <div class="options-grid" data-qid="20" data-ans="A">
+            <button class="option-btn" onclick="checkAnswer(20, 'A', this)">A) ಬೆಂಗಳೂರು (ಹೊಸಕೋಟೆ)</button>
+            <button class="option-btn" onclick="checkAnswer(20, 'B', this)">B) ಮೈಸೂರು</button>
+            <button class="option-btn" onclick="checkAnswer(20, 'C', this)">C) ಮಂಗಳೂರು</button>
+            <button class="option-btn" onclick="checkAnswer(20, 'D', this)">D) ಶಿವಮೊಗ್ಗ</button>
+          </div>
+          <div class="feedback-box" id="fb-20"></div>
+        </div>
+
+        <!-- Q21 -->
+        <div class="question-card" id="q-card-21">
+          <div class="q-text">21. ಅಂತರರಾಷ್ಟ್ರೀಯ ದೊಡ್ಡ ಬೆಕ್ಕುಗಳ ಒಕ್ಕೂಟದ (IBCA) ಪ್ರಥಮ ಸಭೆಯು 2025 ಜೂನ್ 18 ರಂದು ಎಲ್ಲಿ ನಡೆಯಿತು?</div>
+          <div class="options-grid" data-qid="21" data-ans="B">
+            <button class="option-btn" onclick="checkAnswer(21, 'A', this)">A) ಜಿನೀವಾ</button>
+            <button class="option-btn" onclick="checkAnswer(21, 'B', this)">B) ನವದೆಹಲಿ</button>
+            <button class="option-btn" onclick="checkAnswer(21, 'C', this)">C) ನೈರೋಬಿ</button>
+            <button class="option-btn" onclick="checkAnswer(21, 'D', this)">D) ಲಂಡನ್</button>
+          </div>
+          <div class="feedback-box" id="fb-21"></div>
+        </div>
+
+        <!-- Q22 -->
+        <div class="question-card" id="q-card-22">
+          <div class="q-text">22. IBCA ಸಂರಕ್ಷಿಸುವ 7 ಪ್ರಮುಖ ದೊಡ್ಡ ಬೆಕ್ಕುಗಳ ಜಾತಿಯಲ್ಲಿ ಕೆಳಗಿನವುಗಳಲ್ಲಿ ಯಾವುದು ಸೇರಿಲ್ಲ?</div>
+          <div class="options-grid" data-qid="22" data-ans="D">
+            <button class="option-btn" onclick="checkAnswer(22, 'A', this)">A) ಹುಲಿ (Tiger)</button>
+            <button class="option-btn" onclick="checkAnswer(22, 'B', this)">B) ಸಿಂಹ (Lion)</button>
+            <button class="option-btn" onclick="checkAnswer(22, 'C', this)">C) ಚಿರತೆ (Leopard)</button>
+            <button class="option-btn" onclick="checkAnswer(22, 'D', this)">D) ಕಪ್ಪು ಕರಡಿ (Black Bear)</button>
+          </div>
+          <div class="feedback-box" id="fb-22"></div>
+        </div>
+      </div>
+
+      <!-- ANSWER KEY SECTION (EXPLANATIONS IN KANNADA) -->
+      <div class="answer-key-section">
+        <h2>ಉತ್ತರಗಳ ವಿವರಣೆ (Answer Key with Explanations)</h2>
+        <div class="ak-item"><b>Q1: A</b> - ಮೇಜರ್ ಅಭಿಲಾಷಾ ಬರಾಕ್ ಅವರು ಲೆಬನಾನ್‌ನಲ್ಲಿ ಸೇವೆಯನ್ನು ಗುರುತಿಸಿ UN ಮಿಲಿಟರಿ ಜೆಂಡರ್ ಅಡ್ವೋಕೇಟ್ ಪ್ರಶಸ್ತಿ ಪಡೆದಿದ್ದಾರೆ.</div>
+        <div class="ak-item"><b>Q2: C</b> - 4ನೇ SCO ಕೈಗಾರಿಕಾ ಸಚಿವರ ಸಭೆಯು ಕಿರ್ಗಿಸ್ತಾನದ ಬಿಷ್ಕೆಕ್‌ನಲ್ಲಿ ನಡೆಯಿತು.</div>
+        <div class="ak-item"><b>Q3: B</b> - ಗಡಿ ಪ್ರದೇಶದ ಅಸಹಜ ಜನಸಂಖ್ಯೆ ಬದಲಾವಣೆ ಅಧ್ಯಯನಕ್ಕೆ ನ್ಯಾ. ಪ್ರಕಾಶ್ ಪ್ರಭಾಕರ್ ನಾವಲೇಕರ್ ಸಮಿತಿ ರಚಿಸಲಾಗಿದೆ.</div>
+        <div class="ak-item"><b>Q4: A</b> - 2025ರ ಆಗಸ್ಟ್ 15ರ ಸ್ವಾತಂತ್ರ್ಯ ದಿನಾಚರಣೆ ಭಾಷಣದಲ್ಲಿ ಪ್ರಧಾನಿ ಮೋದಿ ಈ ಬಗ್ಗೆ ಘೋಷಿಸಿದ್ದರು.</div>
+        <div class="ak-item"><b>Q5: C</b> - ಉತ್ತರಾಖಂಡ ಮತ್ತು ಗುಜರಾತ್ ನಂತರ ಅಸ್ಸಾಂ ದೇಶದಲ್ಲೇ UCC ಜಾರಿಗೆ ತಂದ 3ನೇ ರಾಜ್ಯವಾಗಿದೆ.</div>
+        <div class="ak-item"><b>Q6: B</b> - ಭಾರತೀಯ ಸಂವಿಧಾನದ ವಿಧಿ 44 ರಾಜ್ಯ ನಿರ್ದೇಶಕ ತತ್ವಗಳಲ್ಲಿ ಏಕರೂಪ ನಾಗರಿಕ ಸಂಹಿತೆಗೆ ಸಂಬಂಧಿಸಿದೆ.</div>
+        <div class="ak-item"><b>Q7: C</b> - ಕರ್ನಾಟಕ ಸರ್ಕಾರವು ಕಾರ್ಮಿಕರ ಕನಿಷ್ಠ ವೇತನವನ್ನು ಸರಾಸರಿ ಶೇಕಡಾ 60% ರಷ್ಟು ಹೆಚ್ಚಿಸಲು ಅಧಿಸೂಚನೆ ಹೊರಡಿಸಿದೆ.</div>
+        <div class="ak-item"><b>Q8: A</b> - ವಲಯ-1 (Zone-1) ಎಂದರೆ ಗ್ರೇಟರ್ ಬೆಂಗಳೂರು ಪ್ರಾಧಿಕಾರದ ವ್ಯಾಪ್ತಿಗೆ ಬರುವ ಪ್ರದೇಶಗಳು.</div>
+        <div class="ak-item"><b>Q9: B</b> - ಪ್ರಧಾನಿ ಮೋದಿ 5 ದೇಶಗಳ ಪ್ರವಾಸದ ಮೊದಲ ಭಾಗವಾಗಿ UAE ದೇಶಕ್ಕೆ ಭೇಟಿ ನೀಡಿದ್ದರು.</div>
+        <div class="ak-item"><b>Q10: A</b> - UAE ವಾಯುಪಡೆಯ F-16 ಯುದ್ಧ ವಿಮಾನಗಳು ಮೋದಿಯವರ ವಿಮಾನಕ್ಕೆ ಬೆಂಗಾವಲಾಗಿ ಬಂದು ಗೌರವಿಸಿದವು.</div>
+        <div class="ak-item"><b>Q11: D</b> - ಸ್ವೀಡನ್ ಪ್ರಧಾನಿ ಮೋದಿ ಅವರಿಗೆ 'ರಾಯಲ್ ಆರ್ಡರ್ ಆಫ್ ದಿ ಪೋಲಾರ್ ಸ್ಟಾರ್' ಪ್ರಶಸ್ತಿ ನೀಡಿತು.</div>
+        <div class="ak-item"><b>Q12: A</b> - ನಾರ್ವೇಜಿಯನ್ ಆರ್ಡರ್ ಆಫ್ ಮೆರಿಟ್ ಪ್ರಶಸ್ತಿಯನ್ನು ಸ್ವೀಕರಿಸಿದ ಮೊದಲ ಭಾರತೀಯ ಪ್ರಧಾನಿ ನರೇಂದ್ರ ಮೋದಿ.</div>
+        <div class="ak-item"><b>Q13: B</b> - ಕೃಷಿ ಕ್ಷೇತ್ರದಲ್ಲಿನ ನಾಯಕತ್ವಕ್ಕಾಗಿ FAO ಸಂಸ್ಥೆಯು ಮೋದಿಯವರಿಗೆ 'ಅಗ್ರಿಕೋಲ ಪ್ರಶಸ್ತಿ' ನೀಡಿದೆ.</div>
+        <div class="ak-item"><b>Q14: C</b> - ವಿಶ್ವಸಂಸ್ಥೆಯ ಆಹಾರ ಮತ್ತು ಕೃಷಿ ಸಂಸ್ಥೆಯ (FAO) ಪ್ರಧಾನ ಕಚೇರಿಯು ಇಟಲಿಯ ರೋಮ್ ನಗರದಲ್ಲಿದೆ.</div>
+        <div class="ak-item"><b>Q15: A</b> - 3ನೇ ಭಾರತ-ನಾರ್ಡಿಕ್ ಶೃಂಗಸಭೆಯು ನಾರ್ವೇ ದೇಶದ ಓಸ್ಲೋದಲ್ಲಿ ಜರುಗಿತು.</div>
+        <div class="ak-item"><b>Q16: D</b> - ನಾರ್ವೇ, ಸ್ವೀಡನ್, ಡೆನ್ಮಾರ್ಕ್, ಫಿನ್ಲ್ಯಾಂಡ್ ಮತ್ತು ಐಸ್ಲ್ಯಾಂಡ್ ನಾರ್ಡಿಕ್ ದೇಶಗಳು; ಜರ್ಮನಿ ಇದರಲ್ಲಿಲ್ಲ.</div>
+        <div class="ak-item"><b>Q17: B</b> - 99.82% ಸಾಕ್ಷರತೆಯೊಂದಿಗೆ ಸಿಕ್ಕಿಂ ಭಾರತದ 5ನೇ ಸಂಪೂರ್ಣ ಸಾಕ್ಷರ ರಾಜ್ಯ ಎಂದು ಘೋಷಿತವಾಗಿದೆ.</div>
+        <div class="ak-item"><b>Q18: A</b> - ರಾಷ್ಟ್ರಪತಿ ದ್ರೌಪದಿ ಮುರ್ಮು ಅವರು ಸಿಕ್ಕಿಂ ಪೊಲೀಸ್ ಪಡೆಗೆ ಅತ್ಯುನ್ನತ 'ಪ್ರೆಸಿಡೆಂಟ್ಸ್ ಕಲರ್' ಪ್ರಧಾನ ಮಾಡಿದರು.</div>
+        <div class="ak-item"><b>Q19: C</b> - ULLAS ಎಂದರೆ Understanding of Lifelong Learning for All in Society.</div>
+        <div class="ak-item"><b>Q20: A</b> - ಭಾರತದ ಮೊದಲ IBCA ಶೃಂಗಸಭೆಯು ಕರ್ನಾಟಕದ ಬೆಂಗಳೂರು (ಹೊಸಕೋಟೆ) ಯಲ್ಲಿ ಉದ್ಘಾಟನೆಯಾಗಿತ್ತು.</div>
+        <div class="ak-item"><b>Q21: B</b> - IBCA ಯ ಮೊದಲ ಅಧಿಕೃತ ಸಭೆಯು 2025 ಜೂನ್ 18 ರಂದು ನವದೆಹಲಿಯಲ್ಲಿ ಜರುಗಿತು.</div>
+        <div class="ak-item"><b>Q22: D</b> - IBCA 7 ಪ್ರಮುಖ ಬೆಕ್ಕು ಜಾತಿಗಳನ್ನು (ಹುಲಿ, ಸಿಂಹ, ಚಿರತೆ, ಹಿಮಚಿರತೆ, ಪೂಮಾ, ಜಾಗ್ವಾರ್, ಚೀತಾ) ಸಂರಕ್ಷಿಸುತ್ತದೆ.</div>
+      </div>
+
+    </main>
+
+    <!-- Sidebar Right Controls (SSC CBT style) -->
+    <aside class="sidebar">
+      <div>
+        <h3>ಪ್ರಶ್ನೆಗಳ ಪಟ್ಟಿ (Question Palette)</h3>
+        <div class="palette-grid" id="palette">
+          <!-- Palette buttons dynamically created via JS -->
+        </div>
+      </div>
+      <div class="control-btns">
+        <button class="action-btn btn-reset" onclick="resetQuiz()">ಮರುಹೊಂದಿಸಿ (Reset Quiz)</button>
+        <button class="action-btn btn-submit" onclick="submitQuiz()">ಪರೀಕ್ಷೆ ಮುಕ್ತಾಯಗೊಳಿಸಿ (Submit)</button>
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    const totalQuestions = 22;
+    let score = 0;
+    let answered = new Set();
+
+    // Initialize Question Palette
+    window.onload = function() {
+      const palette = document.getElementById('palette');
+      for (let i = 1; i <= totalQuestions; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'palette-btn';
+        btn.id = `pal-${i}`;
+        btn.innerText = i;
+        btn.onclick = () => scrollToQuestion(i);
+        palette.appendChild(btn);
+      }
+      startTimer(3600); // 60 mins timer
+    };
+
+    // Smooth Scroll targeting Question ID safely without freezing scroll
+    function scrollToQuestion(qid) {
+      const el = document.getElementById(`q-card-${qid}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    // Checking Correct/Wrong Answer
+    function checkAnswer(qid, selectedOpt, elem) {
+      const card = document.getElementById(`q-card-${qid}`);
+      const optionsGroup = card.querySelector('.options-grid');
+      const correctAns = optionsGroup.dataset.ans;
+      const feedback = document.getElementById(`fb-${qid}`);
+      const palBtn = document.getElementById(`pal-${qid}`);
+
+      // Disable all options in this question once picked
+      const buttons = optionsGroup.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.style.cursor = 'default';
+      });
+
+      if (selectedOpt === correctAns) {
+        elem.classList.add('correct');
+        feedback.style.display = 'block';
+        feedback.style.backgroundColor = '#d4edda';
+        feedback.style.color = '#155724';
+        feedback.innerHTML = '✔ ಸರಿಯಾದ ಉತ್ತರ!';
+        if (!answered.has(qid)) score++;
+      } else {
+        elem.classList.add('wrong');
+        // highlight correct one
+        buttons.forEach(btn => {
+          if (btn.innerText.startsWith(correctAns)) {
+            btn.classList.add('correct');
+          }
+        });
+        feedback.style.display = 'block';
+        feedback.style.backgroundColor = '#f8d7da';
+        feedback.style.color = '#721c24';
+        feedback.innerHTML = `✖ ತಪ್ಪು ಉತ್ತರ. ಸರಿಯಾದ ಉತ್ತರ: <b>${correctAns}</b>`;
+      }
+
+      answered.add(qid);
+      palBtn.classList.add('answered');
+      document.getElementById('score-display').innerText = `${score} / ${totalQuestions}`;
+    }
+
+    // Reset Quiz state
+    function resetQuiz() {
+      score = 0;
+      answered.clear();
+      document.getElementById('score-display').innerText = `0 / ${totalQuestions}`;
+      
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('correct', 'wrong', 'selected');
+        btn.style.cursor = 'pointer';
+      });
+
+      const feedbacks = document.querySelectorAll('.feedback-box');
+      feedbacks.forEach(fb => fb.style.display = 'none');
+
+      const palBtns = document.querySelectorAll('.palette-btn');
+      palBtns.forEach(btn => btn.classList.remove('answered'));
+
+      document.getElementById('viewport').scrollTop = 0;
+    }
+
+    // Submit Quiz Alert
+    function submitQuiz() {
+      alert(`ಪರೀಕ್ಷೆ ಮುಕ್ತಾಯಗೊಂಡಿದೆ!\nನಿಮ್ಮ ಒಟ್ಟು ಅಂಕಗಳು: ${score} / ${totalQuestions}`);
+    }
+
+    // Countdown Timer logic
+    function startTimer(duration) {
+      let timer = duration, minutes, seconds;
+      const display = document.getElementById('timer');
+      setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          timer = 0;
+          submitQuiz();
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
