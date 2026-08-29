@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka PC & SSC CBT Exam Simulator (Pages 12-21)</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --primary-dark: #003d80;
+            --secondary: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        header {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 1.1rem;
+        }
+
+        .timer-box {
+            background-color: #ffffff;
+            color: #d9534f;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 1px solid #d9534f;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Question Area */
+        .quiz-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            overflow-y: auto; /* Prevents freeze / ensures independent scroll */
+            padding: 20px;
+            height: 100%;
+        }
+
+        .page-badge {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+
+        .question-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background-color: #fff;
+            border: 2px solid #cecece;
+            border-radius: 6px;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-btn:hover {
+            background-color: #f0f4f8;
+            border-color: var(--primary);
+        }
+
+        .option-btn.selected {
+            background-color: #e7f1ff;
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback-box.show {
+            display: block;
+        }
+
+        .feedback-box.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback-box.wrong {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn-prev, .btn-next { background-color: var(--primary); color: white; }
+        .btn-review { background-color: var(--warning); color: #333; }
+        .btn-clear { background-color: var(--gray); color: white; }
+        .btn-submit { background-color: var(--secondary); color: white; }
+        .btn-reset { background-color: var(--danger); color: white; }
+
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        /* Sidebar Palette */
+        .sidebar {
+            width: 320px;
+            background-color: #f8f9fa;
+            border-left: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .sidebar-header {
+            padding: 15px;
+            background: #e9ecef;
+            font-weight: bold;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        .badge-unanswered { background-color: #6c757d; }
+        .badge-answered { background-color: var(--secondary); }
+        .badge-review { background-color: var(--warning); color: #333; }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .palette-btn {
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .palette-btn.current { border: 2px solid var(--primary); }
+        .palette-btn.answered { background-color: var(--secondary); color: white; border-color: var(--secondary); }
+        .palette-btn.review { background-color: var(--warning); color: black; border-color: var(--warning); }
+
+        /* Result View & Explanations */
+        .answer-key-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .key-item {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #ccc;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 200px; border-left: none; border-top: 2px solid #ccc; }
+            .quiz-container { height: calc(100% - 200px); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Karnataka PC & SSC CBT Exam Portal (Pages 12 - 21)</h1>
+        <div class="timer-box" id="timer">Time Left: 25:00</div>
+    </header>
+
+    <div class="main-container">
+        <!-- Main Question Area -->
+        <div class="quiz-container">
+            <div id="quiz-view">
+                <span class="page-badge" id="page-badge">Page 12</span>
+                <div class="question-title" id="question-text">Loading question...</div>
+                
+                <div class="options-container" id="options-box">
+                    <!-- Options Dynamic Injection -->
+                </div>
+
+                <div class="feedback-box" id="feedback-box"></div>
+            </div>
+
+            <!-- Score View -->
+            <div id="result-view" style="display: none;">
+                <h2>ಪರೀಕ್ಷಾ ಫಲಿತಾಂಶ (Test Summary)</h2>
+                <br>
+                <p id="score-text" style="font-size: 1.2rem; font-weight: bold;"></p>
+                <br>
+                <div class="answer-key-section" id="answer-key-content">
+                    <h3>ಉತ್ತರ ಸೂಚಿ ಮತ್ತು ವಿವರಣೆ (Answer Key & Explanations)</h3>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div>
+                    <button class="btn btn-prev" id="btn-prev" onclick="navigate(-1)">Previous</button>
+                    <button class="btn btn-next" id="btn-next" onclick="navigate(1)">Next</button>
+                    <button class="btn btn-review" id="btn-review" onclick="toggleReview()">Mark for Review</button>
+                    <button class="btn btn-clear" onclick="clearOption()">Clear Response</button>
+                </div>
+                <div>
+                    <button class="btn btn-submit" onclick="submitExam()">Submit Test</button>
+                    <button class="btn btn-reset" onclick="resetExam()">Reset Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Palette Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">Question Palette</div>
+            <div class="legend">
+                <div class="legend-item"><span class="badge badge-unanswered"></span> Unanswered</div>
+                <div class="legend-item"><span class="badge badge-answered"></span> Answered</div>
+                <div class="legend-item"><span class="badge badge-review"></span> Review</div>
+            </div>
+            <div class="palette-grid" id="palette-grid">
+                <!-- Dynamic Palette -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Page 12 (Karnataka Priority: Swaminathan & Kadamba)
+            {
+                page: "Page 12 (Karnataka Priority)",
+                q: "ಭಾರತೀಯ ನೌಕಾಪಡೆಯ 27ನೇ ಮುಖ್ಯಸ್ಥರಾಗಿ ನೇಮಕಗೊಂಡ ಬೆಂಗಳೂರು ಮೂಲದ ವೈಸ್ ಅಡ್ಮಿರಲ್ ಯಾರು?",
+                options: ["ದಿನೇಶ್ ಕೆ. ತ್ರಿಪಾಠಿ", "ಕೆ. ಸ್ವಾಮಿನಾಥನ್ (K. Swaminathan)", "ಆರ್. ಹರಿಕುಮಾರ್", "ಕರ್ಂಬೀರ್ ಸಿಂಗ್"],
+                ans: 1,
+                exp: "ಬೆಂಗಳೂರು ಮೂಲದ ವೈಸ್ ಅಡ್ಮಿರಲ್ ಕೆ. ಸ್ವಾಮಿನಾಥನ್ ನೌಕಾಪಡೆಯ 27ನೇ ಮುಖ್ಯಸ್ಥರಾಗಿ ನೇಮಕಗೊಂಡಿದ್ದಾರೆ."
+            },
+            {
+                page: "Page 12 (Karnataka Priority)",
+                q: "ಕರ್ನಾಟಕದ ಕಾರವಾರದಲ್ಲಿರುವ ಪ್ರಸಿದ್ಧ ನೌಕಾನೆಲೆಯ ಹೆಸರೇನು?",
+                options: ["INS ಟ್ವಿಜ್ರಾಜ್", "INS ಕಾದಂಬ (Kadamba Naval Base)", "INS ಗರುಡ", "INS ಶಿವಾಜಿ"],
+                ans: 1,
+                exp: "ಕಾರವಾರದಲ್ಲಿರುವ ಕಾದಂಬ ನೌಕಾನೆಲೆಯು ಭಾರತದ ಪ್ರಮುಖ ಮತ್ತು ಏಷ್ಯಾದ ಅತಿದೊಡ್ಡ ನೌಕಾನೆಲೆಗಳಲ್ಲಿ ಒಂದಾಗಿದೆ."
+            },
+            {
+                page: "Page 12",
+                q: "ಭಾರತೀಯ ನೌಕಾಪಡೆಯ ಕಮಾಂಡಿಂಗ್-ಇನ್-ಚೀಫ್ (Supreme Commander) ಯಾರು?",
+                options: ["ಪ್ರಧಾನಮಂತ್ರಿ", "ರಕ್ಷಣಾ ಸಚಿವರು", "ಭಾರತದ ರಾಷ್ಟ್ರಪತಿ (President of India)", "ಸಿಡಿಎಸ್ (CDS)"],
+                ans: 2,
+                exp: "ಭಾರತದ ರಾಷ್ಟ್ರಪತಿಗಳು ಮೂರೂ ಸಶಸ್ತ್ರ ಪಡೆಗಳ ಮಹಾದಂಡನಾಯಕರಾಗಿದ್ದಾರೆ."
+            },
+
+            // Page 13
+            {
+                page: "Page 13",
+                q: "ಭಾರತದ 3ನೇ ಮಹಾದಂಡನಾಯಕ (Chief of Defence Staff - CDS) ಆಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
+                options: ["ಜನರಲ್ ಬಿಪಿನ್ ರಾವತ್", "ಜನರಲ್ ಅನಿಲ್ ಚೌಹಾಣ್", "ಎನ್.ಎಸ್. ರಾಜಾಸುಬ್ರಮಣಿ (N.S. Rajasubramani)", "ಜನರಲ್ ಮನೋಜ್ ಪಾಂಡೆ"],
+                ans: 2,
+                exp: "ಎನ್.ಎಸ್. ರಾಜಾಸುಬ್ರಮಣಿ ಅವರು ಭಾರತದ 3ನೇ ಸಿಡಿಎಸ್ (CDS) ಆಗಿ ನೇಮಕಗೊಂಡಿದ್ದಾರೆ."
+            },
+            {
+                page: "Page 13",
+                q: "ಭಾರತದ ಮೊದಲ ಸಿಡಿಎಸ್ (CDS) ಯಾರು?",
+                options: ["ಅನಿಲ್ ಚೌಹಾಣ್", "ಜನರಲ್ ಬಿಪಿನ್ ರಾವತ್", "ಎನ್.ಎಸ್. ರಾಜಾಸುಬ್ರಮಣಿ", "ಸಾಮ್ ಮಾನೆಕ್ಷಾ"],
+                ans: 1,
+                exp: "ಜನರಲ್ ಬಿಪಿನ್ ರಾವತ್ ಅವರು ಭಾರತದ ಪ್ರಥಮ ಚೀಫ್ ಆಫ್ ಡಿಫೆನ್ಸ್ ಸ್ಟಾಫ್ (CDS) ಆಗಿದ್ದರು."
+            },
+
+            // Page 14
+            {
+                page: "Page 14",
+                q: "ಇತ್ತೀಚೆಗೆ ಪ್ರಧಾನಿ ನರೇಂದ್ರ ಮೋದಿಯವರು ವಿದೇಶಿ ವಿನಿಮಯ ರಕ್ಷಿಸಲು ಯಾವ ಸೂತ್ರವನ್ನು ಪರಿಚಯಿಸಿದರು?",
+                options: ["ಮಿಷನ್ ಶಕ್ತಿ", "ಮಿತವ್ಯಯದ ಸೂತ್ರ (Frugality Formula)", "ಆತ್ಮನಿರ್ಭರ ಶಕ್ತಿ", "ಡಿಜಿಟಲ್ ಕ್ರಾಂತಿ"],
+                ans: 1,
+                exp: "ವಿದೇಶಿ ವಿನಿಮಯ ಮೀಸಲು ಹೆಚ್ಚಿಸಲು ಪ್ರಧಾನಿಯವರು 'ಮಿತವ್ಯಯದ ಸೂತ್ರ'ಕ್ಕೆ ಕರೆ ನೀಡಿದರು."
+            },
+            {
+                page: "Page 14",
+                q: "ಭಾರತವು ವಿದೇಶಗಳಿಂದ ಅತಿ ಹೆಚ್ಚು ಆಮದು ಮಾಡಿಕೊಳ್ಳುವ ದುಬಾರಿ ವಸ್ತು ಯಾವುದು?",
+                options: ["ಕಚ್ಚಾ ತೈಲ (Crude Oil)", "ಗೋಧಿ", "ಕಬ್ಬಿಣ", "ಪ್ಲಾಸ್ಟಿಕ್"],
+                ans: 0,
+                exp: "ಭಾರತದ ವಿದೇಶಿ ವಿನಿಮಯದ ಪ್ರಮುಖ ಭಾಗವು ಕಚ್ಚಾ ತೈಲದ ಆಮದಿಗೆ ವೆಚ್ಚವಾಗುತ್ತದೆ."
+            },
+
+            // Page 15
+            {
+                page: "Page 15",
+                q: "ಭಾರತದ ವಿದೇಶಿ ವಿನಿಮಯ ಮೀಸಲನ್ನು (Forex Reserves) ನಿರ್ವಹಿಸುವ ಸಂಸ್ಥೆ ಯಾವುದು?",
+                options: ["ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ", "ಭಾರತೀಯ ರಿಸರ್ವ್ ಬ್ಯಾಂಕ್ (RBI)", "ಹಣಕಾಸು ಸಚಿವಾಲಯ", "ಸೆಬಿ (SEBI)"],
+                ans: 1,
+                exp: "ಭಾರತೀಯ ರಿಸರ್ವ್ ಬ್ಯಾಂಕ್ (RBI) ದೇಶದ ವಿದೇಶಿ ವಿನಿಮಯ ಸಂಗ್ರಹವನ್ನು ಕಾಯ್ದುಕೊಳ್ಳುತ್ತದೆ."
+            },
+            {
+                page: "Page 15",
+                q: "ನಾಣ್ಯಗಳ ಅಧ್ಯಯನವನ್ನು ಏನೆಂದು ಕರೆಯುತ್ತಾರೆ?",
+                options: ["ಎಪಿಗ್ರಫಿ", "ನ್ಯೂಮಿಸ್ಮ್ಯಾಟಿಕ್ಸ್ (Numismatics)", "ಹೆರಾಲ್ಡ್ರಿ", "ಆರ್ಕಿಯಾಲಜಿ"],
+                ans: 1,
+                exp: "ನಾಣ್ಯಗಳು ಮತ್ತು ನಾಣ್ಯಗಳ ಇತಿಹಾಸದ ಅಧ್ಯಯನಕ್ಕೆ 'ನ್ಯೂಮಿಸ್ಮ್ಯಾಟಿಕ್ಸ್' ಎನ್ನಲಾಗುತ್ತದೆ."
+            },
+
+            // Page 16
+            {
+                page: "Page 16",
+                q: "ಜನಸಂಖ್ಯೆ ಹೆಚ್ಚಳ ಉತ್ತೇಜನಕ್ಕಾಗಿ 3ನೇ ಮತ್ತು 4ನೇ ಮಗುವಿಗೆ ನಗದು ಪ್ರೋತ್ಸಾಹ ಧನ ಘೋಷಿಸಿದ ರಾಜ್ಯ ಯಾವುದು?",
+                options: ["ಕರ್ನಾಟಕ", "ಆಂಧ್ರಪ್ರದೇಶ (Andhra Pradesh)", "ತಮಿಳುನಾಡು", "ಮಹಾರಾಷ್ಟ್ರ"],
+                ans: 1,
+                exp: "ಆಂಧ್ರಪ್ರದೇಶದ ಸಿಎಂ ಚಂದ್ರಬಾಬು ನಾಯ್ಡು ಜನಸಂಖ್ಯಾ ದರ ಹೆಚ್ಚಿಸಲು ಈ ಯೋಜನೆ ಘೋಷಿಸಿದರು."
+            },
+            {
+                page: "Page 16",
+                q: "ಸ್ಥಳೀಯ ಪಂಚಾಯತ್ ಚುನಾವಣೆ ಸ್ಪರ್ಧೆಗೆ '2 ಕ್ಕಿಂತ ಹೆಚ್ಚು ಮಕ್ಕಳಿರಬಾರದು' ಎಂಬ ನಿಯಮ ರದ್ದುಗೊಳಿಸಿದ ರಾಜ್ಯ ಯಾವುದು?",
+                options: ["ತೆಲಂಗಾಣ", "ಆಂಧ್ರಪ್ರದೇಶ", "ಕೇರಳ", "ಗುಜರಾತ್"],
+                ans: 1,
+                exp: "ಆಂಧ್ರಪ್ರದೇಶ ಮತ್ತು ತೆಲಂಗಾಣ ರಾಜ್ಯಗಳು ಈ ನಿರ್ಬಂಧಿತ ಕಾಯ್ದೆಗೆ ತಿದ್ದುಪಡಿ ತಂದಿವೆ."
+            },
+
+            // Page 17 (Karnataka Priority: Anekal Stadium)
+            {
+                page: "Page 17 (Karnataka Priority)",
+                q: "ಕರ್ನಾಟಕದ 2ನೇ ಅಂತಾರಾಷ್ಟ್ರೀಯ ಕ್ರಿಕೆಟ್ ಕ್ರೀಡಾಂಗಣಕ್ಕೆ ಶಂಕುಸ್ಥಾಪನೆ ನೆರವೇರಿಸಿದ ಸ್ಥಳ ಯಾವುದು?",
+                options: ["ಹುಬ್ಬಳ್ಳಿ", "ಆನೆಕಲ್ (ಸೂರ್ಯ ನಗರ, ಬೆಂಗಳೂರು)", "ಮೈಸೂರು", "ಮಂಗಳೂರು"],
+                ans: 1,
+                exp: "ಬೆಂಗಳೂರು ಗ್ರಾಮಾಂತರ/ನಗರ ವ್ಯಾಪ್ತಿಯ ಆನೆಕಲ್ ತಾಲೂಕಿನ ಸೂರ್ಯ ನಗರದಲ್ಲಿ 2ನೇ ಅಂತಾರಾಷ್ಟ್ರೀಯ ಕ್ರೀಡಾಂಗಣಕ್ಕೆ ಶಂಕುಸ್ಥಾಪನೆ ಮಾಡಲಾಯಿತು."
+            },
+            {
+                page: "Page 17 (Karnataka Priority)",
+                q: "ಆನೆಕಲ್‌ನ ನೂತನ ಅಂತಾರಾಷ್ಟ್ರೀಯ ಕ್ರಿಕೆಟ್ ಕ್ರೀಡಾಂಗಣವನ್ನು ನಿರ್ಮಿಸುತ್ತಿರುವ ಸಂಸ್ಥೆ ಯಾವುದು?",
+                options: ["ಕರ್ನಾಟಕ ಗೃಹ ಮಂಡಳಿ (KHB)", "ಬಿಡಿಎ (BDA)", "ಬಿಬಿಎಂಪಿ (BBMP)", "ಕೆಎಸ್‍ಸಿಎ (KSCA)"],
+                ans: 0,
+                exp: "ಕರ್ನಾಟಕ ಗೃಹ ಮಂಡಳಿ (KHB) ಸುಮಾರು 943.46 ಕೋಟಿ ರೂ. ವೆಚ್ಚದಲ್ಲಿ ಈ ಕ್ರೀಡಾಂಗಣ ನಿರ್ಮಿಸುತ್ತಿದೆ."
+            },
+
+            // Page 18
+            {
+                page: "Page 18",
+                q: "2026ನೇ ಸಾಲಿನ ಅಂತಾರಾಷ್ಟ್ರೀಯ ಬೂಕರ್ ಪ್ರಶಸ್ತಿ (International Booker Prize) ಗೆದ್ದ ಕೃತಿ ಯಾವುದು?",
+                options: ["ಟಾಂಬ್ ಆಫ್ ಸ್ಯಾಂಡ್", "ತೈವಾನ್ ಟ್ರಾವೆಲಾಗ್ (Taiwan Travelogue)", "ಹ್ಯಾಟ್ ಲ್ಯಾಂಡ್ಸ್", "ಟೈಮ್ ಷೆಲ್ಟರ್"],
+                ans: 1,
+                exp: "ಯಾಂಗ್ ಚುವಾಂಗ್-ಹುಯಿ ಅವರ 'ತೈವಾನ್ ಟ್ರಾವೆಲಾಗ್' ಕೃತಿಗೆ 2026ರ ಅಂತಾರಾಷ್ಟ್ರೀಯ ಬೂಕರ್ ಲಭಿಸಿದೆ."
+            },
+            {
+                page: "Page 18",
+                q: "ಅಂತಾರಾಷ್ಟ್ರೀಯ ಬೂಕರ್ ಪ್ರಶಸ್ತಿ ಪಟ್ಟಿಗೆ ನಾಮನಿರ್ದೇಶನಗೊಂಡಿದ್ದ ಪ್ರಸಿದ್ಧ ಕನ್ನಡ ಸಾಹಿತಿ ಯಾರು?",
+                options: ["ಕುಂ. ವೀರಭದ್ರಪ್ಪ", "ಯು.ಆರ್. ಅನಂತಮೂರ್ತಿ (U.R. Ananthamurthy)", "ಚಂದ್ರಶೇಖರ ಕಂಬಾರ", "ಎಸ್.ಎಲ್. ಭೈರಪ್ಪ"],
+                ans: 1,
+                exp: "2013 ರಲ್ಲಿ ಡಾ. ಯು.ಆರ್. ಅನಂತಮೂರ್ತಿ ಅವರು ಈ ಪ್ರಶಸ್ತಿಯ ಅಂತಿಮ ಪಟ್ಟಿಗೆ ಆಯ್ಕೆಯಾಗಿದ್ದರು."
+            },
+
+            // Page 19 (Karnataka Priority: BWSSB Award)
+            {
+                page: "Page 19 (Karnataka Priority)",
+                q: "ವಿಶ್ವದ 5 ಅಗ್ರ ನೀರು ಪೂರೈಕೆ ಸಂಸ್ಥೆಗಳ ಪಟ್ಟಿಯಲ್ಲಿ ಸಾಲು ಪಡೆದು 'ಯುಟಿಲಿಟಿ ಆಫ್ ದಿ ಇಯರ್' ಪ್ರಶಸ್ತಿ ಗೆದ್ದ ಸಂಸ್ಥೆ ಯಾವುದು?",
+                options: ["ದೆಹಲಿ ಜಲ್ ಬೋರ್ಡ್", "ಬೆಂಗಳೂರು ಜಲಮಂಡಳಿ (BWSSB)", "ಮುಂಬೈ ಮುನಿಸಿಪಲ್ ಕಾರ್ಪೊರೇಶನ್", "ಚೆನ್ನೈ ಮೆಟ್ರೋ ವಾಟರ್"],
+                ans: 1,
+                exp: "ಬೆಂಗಳೂರು ನೀರು ಸರಬರಾಜು ಮತ್ತು ಒಳಚರಂಡಿ ಮಂಡಳಿ (BWSSB) ವಿಶ್ವದ ಟಾಪ್-5 ಸಂಸ್ಥೆಗಳಲ್ಲಿ ಒಂದಾಗಿ ಪ್ರಶಸ್ತಿ ಪಡೆದಿದೆ."
+            },
+            {
+                page: "Page 19 (Karnataka Priority)",
+                q: "ದೇಶದ ಮೊದಲ 'ರಾಷ್ಟ್ರೀಯ AI & ಡಿಜಿಟಲ್ ವಾಟರ್ ಶೃಂಗಸಭೆ 2026' ಎಲ್ಲಿ ನಡೆಯಿತು?",
+                options: ["ಬೆಂಗಳೂರು", "ಹೈದರಾಬಾದ್", "ನವದೆಹಲಿ", "ಪುಣೆ"],
+                ans: 0,
+                exp: "ಬೆಂಗಳೂರಿನಲ್ಲಿ ರಾಷ್ಟ್ರೀಯ ಎಐ ಮತ್ತು ಡಿಜಿಟಲ್ ಜಲಶೃಂಗ ಸಭೆಯನ್ನು ಬಿಡಬ್ಲ್ಯೂಎಸ್‍ಎಸ್‍ಬಿ ಆಯೋಜಿಸಿತು."
+            },
+
+            // Page 20
+            {
+                page: "Page 20",
+                q: "ಇತ್ತೀಚೆಗೆ ಕೇಂದ್ರ ಸರ್ಕಾರ ಬಿಡುಗಡೆ ಮಾಡಿದ 'ರಾಷ್ಟ್ರೀಯ ಕುಟುಂಬ ಆರೋಗ್ಯ ಸಮೀಕ್ಷೆ' ಆವೃತ್ತಿ ಯಾವುದು?",
+                options: ["NFHS - 4", "NFHS - 5", "NFHS - 6", "NFHS - 7"],
+                ans: 2,
+                exp: "ಆರೋಗ್ಯ ಮತ್ತು ಕುಟುಂಬ ಕಲ್ಯಾಣ ಸಚಿವಾಲಯವು NFHS-6 ವರದಿಯನ್ನು ಬಿಡುಗಡೆ ಮಾಡಿದೆ."
+            },
+            {
+                page: "Page 20",
+                q: "NFHS-6 ವರದಿಯ ಪ್ರಕಾರ ಭಾರತದ ಒಟ್ಟು ಫಲವತ್ತತೆ ದರ (Total Fertility Rate - TFR) ಎಷ್ಟಿದೆ?",
+                options: ["2.5", "2.0", "1.8", "2.2"],
+                ans: 1,
+                exp: "NFHS-6 ವರದಿಯ ಪ್ರಕಾರ ಭಾರತದ ಪ್ರಸ್ತುತ TFR ದರ 2.0 ನಲ್ಲಿದೆ."
+            },
+
+            // Page 21
+            {
+                page: "Page 21",
+                q: "NFHS-6 ವರದಿಯ ಪ್ರಕಾರ 12 ರಿಂದ 23 ತಿಂಗಳ ಮಗುವಿನಲ್ಲಿ ಪೂರ್ಣ ಲಸಿಕೆ ವ್ಯಾಪ್ತಿ ಶೇಕಡಾ ಎಷ್ಟಕ್ಕೆ ಏರಿಕೆಯಾಗಿದೆ?",
+                options: ["75.2%", "87.1%", "95.6%", "65.0%"],
+                ans: 1,
+                exp: "ಮಕ್ಕಳ ಲಸಿಕಾ ವ್ಯಾಪ್ತಿಯು ಶೇ. 83.8 ರಿಂದ ಶೇ. 87.1 ಕ್ಕೆ ಹೆಚ್ಚಳವಾಗಿದೆ."
+            },
+            {
+                page: "Page 21",
+                q: "NFHS-6 ಪ್ರಕಾರ ಭಾರತದಲ್ಲಿ ಇಂಟರ್ನೆಟ್ ಬಳಸುವ ಮಹಿಳೆಯರ ಪ್ರಮಾಣ ಶೇಕಡಾ ಎಷ್ಟಕ್ಕೆ ತಲುಪಿದೆ?",
+                options: ["33.3%", "64.3%", "78.6%", "50.0%"],
+                ans: 1,
+                exp: "ಇಂಟರ್ನೆಟ್ ಬಳಸುವ ಮಹಿಳೆಯರ ಪ್ರಮಾಣ ಶೇ. 33.3 ರಿಂದ ಶೇ. 64.3 ಕ್ಕೆ ದ್ವಿಗುಣಗೊಂಡಿದೆ."
+            }
+        ];
+
+        let currentIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let reviewStatus = new Array(questions.length).fill(false);
+        let timerInterval;
+
+        function initQuiz() {
+            renderPalette();
+            loadQuestion(0);
+            startTimer(25 * 60); // 25 Minutes
+        }
+
+        function loadQuestion(index) {
+            currentIndex = index;
+            const q = questions[index];
+
+            document.getElementById('page-badge').innerText = q.page;
+            document.getElementById('question-text').innerText = `${index + 1}. ${q.q}`;
+            
+            const optionsBox = document.getElementById('options-box');
+            optionsBox.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn ${userAnswers[index] === idx ? 'selected' : ''}`;
+                btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}`;
+                btn.onclick = () => selectOption(idx);
+                optionsBox.appendChild(btn);
+            });
+
+            // Feedback Logic
+            const feedbackBox = document.getElementById('feedback-box');
+            if (userAnswers[index] !== null) {
+                feedbackBox.classList.add('show');
+                if (userAnswers[index] === q.ans) {
+                    feedbackBox.className = "feedback-box show correct";
+                    feedbackBox.innerText = "ಸರಿ ಉತ್ತರ! (Correct Answer)";
+                } else {
+                    feedbackBox.className = "feedback-box show wrong";
+                    feedbackBox.innerText = `ತಪ್ಪು ಉತ್ತರ. ಸರಿ ಉತ್ತರ: ${String.fromCharCode(65 + q.ans)}. ${q.options[q.ans]}`;
+                }
+            } else {
+                feedbackBox.className = "feedback-box";
+                feedbackBox.innerText = "";
+            }
+
+            document.getElementById('btn-prev').disabled = index === 0;
+            document.getElementById('btn-next').disabled = index === questions.length - 1;
+            
+            updatePalette();
+        }
+
+        function selectOption(optIndex) {
+            userAnswers[currentIndex] = optIndex;
+            loadQuestion(currentIndex);
+        }
+
+        function clearOption() {
+            userAnswers[currentIndex] = null;
+            loadQuestion(currentIndex);
+        }
+
+        function toggleReview() {
+            reviewStatus[currentIndex] = !reviewStatus[currentIndex];
+            updatePalette();
+        }
+
+        function navigate(direction) {
+            const target = currentIndex + direction;
+            if (target >= 0 && target < questions.length) {
+                loadQuestion(target);
+            }
+        }
+
+        function renderPalette() {
+            const grid = document.getElementById('palette-grid');
+            grid.innerHTML = '';
+            questions.forEach((_, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'palette-btn';
+                btn.innerText = idx + 1;
+                btn.onclick = () => loadQuestion(idx);
+                grid.appendChild(btn);
+            });
+            updatePalette();
+        }
+
+        function updatePalette() {
+            const btns = document.querySelectorAll('.palette-btn');
+            btns.forEach((btn, idx) => {
+                btn.className = 'palette-btn';
+                if (idx === currentIndex) btn.classList.add('current');
+                if (reviewStatus[idx]) {
+                    btn.classList.add('review');
+                } else if (userAnswers[idx] !== null) {
+                    btn.classList.add('answered');
+                }
+            });
+        }
+
+        function startTimer(seconds) {
+            let remain = seconds;
+            timerInterval = setInterval(() => {
+                let m = Math.floor(remain / 60);
+                let s = remain % 60;
+                document.getElementById('timer').innerText = `Time Left: ${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+                if (remain <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+                remain--;
+            }, 1000);
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            let score = 0;
+            questions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.ans) score++;
+            });
+
+            document.getElementById('quiz-view').style.display = 'none';
+            document.getElementById('result-view').style.display = 'block';
+            document.getElementById('score-text').innerText = `ನಿಮ್ಮ ಅಂಕಗಳು (Your Score): ${score} / ${questions.length}`;
+
+            // Render Explanations
+            const keyContent = document.getElementById('answer-key-content');
+            keyContent.innerHTML = '<h3>ಉತ್ತರ ಸೂಚಿ ಮತ್ತು ವಿವರಣೆ (Answer Key & Explanations)</h3>';
+            questions.forEach((q, idx) => {
+                const div = document.createElement('div');
+                div.className = 'key-item';
+                div.innerHTML = `
+                    <strong>Q${idx + 1} [${q.page}]:</strong> ${q.q}<br>
+                    <strong>ಸರಿ ಉತ್ತರ:</strong> ${String.fromCharCode(65 + q.ans)}. ${q.options[q.ans]}<br>
+                    <small style="color: #555;">💡 <em>${q.exp}</em></small>
+                `;
+                keyContent.appendChild(div);
+            });
+        }
+
+        function resetExam() {
+            userAnswers.fill(null);
+            reviewStatus.fill(false);
+            document.getElementById('quiz-view').style.display = 'block';
+            document.getElementById('result-view').style.display = 'none';
+            clearInterval(timerInterval);
+            startTimer(25 * 60);
+            loadQuestion(0);
+        }
+
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
