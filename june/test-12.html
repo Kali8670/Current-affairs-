@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka PC & SSC CBT Exam Portal</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { margin: 0; padding: 0; background-color: #f0f2f5; }
+        
+        /* Top Navigation Header */
+        .top-bar {
+            background-color: #0d2366;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .timer-box {
+            background-color: #ffffff;
+            color: #d9534f;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Layout Container */
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 15px auto;
+            gap: 15px;
+            padding: 0 10px;
+        }
+
+        /* Left Side: Question Paper Box */
+        .question-container {
+            flex: 2;
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            min-width: 300px;
+        }
+        .part-title {
+            color: #0d2366;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #0d2366;
+            padding-bottom: 5px;
+        }
+        .question-text {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+        }
+        .options-list li {
+            margin-bottom: 12px;
+        }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+        .option-btn:hover { background: #e9ecef; }
+        .option-btn input { margin-right: 12px; transform: scale(1.2); }
+
+        /* Action Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .btn-prev { background: #6c757d; color: white; }
+        .btn-next { background: #0d6efd; color: white; }
+        .btn-mark { background: #ffc107; color: black; }
+        .btn-refresh { background: #dc3545; color: white; }
+        .btn-submit { background: #198754; color: white; }
+
+        /* Right Side: Palette Box */
+        .palette-container {
+            flex: 1;
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            min-width: 260px;
+        }
+        .palette-header {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 4px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .dot-grey { background: #ced4da; }
+        .dot-green { background: #198754; }
+        .dot-yellow { background: #ffc107; }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .p-btn {
+            padding: 8px 0;
+            border: 1px solid #ccc;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+        }
+        .p-btn.answered { background: #198754; color: white; border-color: #198754; }
+        .p-btn.review { background: #ffc107; color: black; border-color: #ffc107; }
+        .p-btn.active { border: 2px solid #0d2366; }
+
+        /* Result Panel */
+        #resultBox {
+            display: none;
+            background: #d1e7dd;
+            color: #0f5132;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div>Karnataka PC & SSC CBT Exam Portal</div>
+    <div class="timer-box">Time Left: <span id="timer">60:00</span></div>
+</div>
+
+<div class="main-container">
+    <!-- Left Side: Question Display -->
+    <div class="question-container">
+        <div class="part-title" id="partTitle">PART 1</div>
+        <div class="question-text" id="qText">Loading question...</div>
+        
+        <ul class="options-list" id="optionsList"></ul>
+
+        <div class="nav-buttons">
+            <button class="btn btn-prev" onclick="prevQuestion()">Previous</button>
+            <button class="btn btn-mark" onclick="markReview()">Mark for Review</button>
+            <button class="btn btn-next" onclick="nextQuestion()">Next</button>
+        </div>
+
+        <div style="margin-top:20px; display:flex; justify-content:space-between;">
+            <button class="btn btn-refresh" onclick="resetAndShuffle()">Refresh / Retest</button>
+            <button class="btn btn-submit" onclick="submitExam()">Submit Test</button>
+        </div>
+
+        <div id="resultBox"></div>
+    </div>
+
+    <!-- Right Side: Question Palette Grid -->
+    <div class="palette-container">
+        <div class="palette-header">Question Palette</div>
+        <div class="legend">
+            <div class="legend-item"><span class="dot dot-grey"></span> Unanswered</div>
+            <div class="legend-item"><span class="dot dot-green"></span> Answered</div>
+            <div class="legend-item"><span class="dot dot-yellow"></span> Review</div>
+        </div>
+
+        <div class="palette-grid" id="paletteGrid"></div>
+    </div>
+</div>
+
+<script>
+// Array of 75 Questions (Part 1: 1 to 38, Part 2: 39 to 75)
+const baseQuestions = [
+    // PART 1 (Page 1 based facts)
+    { q: "1. 2026 ರ 'ಶಾಂಗ್ರಿ-ಲಾ ಸಂವಾದ' (Shangri-La Dialogue) ಭದ್ರತಾ ಶೃಂಗಸಭೆಯು ಎಲ್ಲಿ ಜರುಗಿತು?", opts: ["ನವದೆಹಲಿ", "ಸಿಂಗಾಪುರ", "ಮ್ಯೂನಿಚ್", "ಟೋಕಿಯೋ"], ans: 1 },
+    { q: "2. ಪುದುಚೇರಿಯ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಯಾರು ಅಧಿಕಾರ ಸ್ವೀಕರಿಸಿದ್ದಾರೆ?", opts: ["ಎನ್. ರಂಗಸ್ವಾಮಿ", "ಡಿ.ಕೆ. ಶಿವಕುಮಾರ್", "ಹಿಮಂತ ಬಿಸ್ವಾ ಶರ್ಮಾ", "ಸುವೇಂದು ಅಧಿಕಾರಿ"], ans: 0 },
+    { q: "3. ಕರ್ನಾಟಕದ ನೂತನ ಉಪಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಯಾರು ಕರ್ತವ್ಯ ನಿರ್ವಹಿಸುತ್ತಿದ್ದಾರೆ?", opts: ["ಡಿ.ಕೆ. ಶಿವಕುಮಾರ್", "ಸಿದ್ದರಾಮಯ್ಯ", "ಎನ್. ರಂಗಸ್ವಾಮಿ", "ಪ್ರವೀಣ್ ಸೂದ್"], ans: 0 },
+    { q: "4. ಅಸ್ಸಾಂನ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿರುವವರು ಯಾರು?", opts: ["ಹಿಮಂತ ಬಿಸ್ವಾ ಶರ್ಮಾ", "ಸುವೇಂದು ಅಧಿಕಾರಿ", "ರಂಗಸ್ವಾಮಿ", "ಪ್ರವೀಣ್ ಸೂದ್"], ans: 0 },
+    { q: "5. ಭಾರತೀಯ ನೌಕಾಪಡೆಯ 27ನೇ ಮುಖ್ಯಸ್ಥರಾಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?", opts: ["ದಿನೇಶ್ ತ್ರಿಪಾಠಿ", "ಕೃಷ್ಣಸ್ವಾಮಿ ಸ್ವಾಮಿನಾಥನ್", "ಎನ್.ಎಸ್. ರಾಜಾ ಸುಬ್ರಮಣಿ", "ಉಪೇಂದ್ರ ದ್ವಿವೇದಿ"], ans: 1 },
+    { q: "6. ಭಾರತೀಯ ಸೇನಾ ಪಡೆಗಳ ಉಪ ಮುಖ್ಯಸ್ಥರಾಗಿ (VCOAS) ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?", opts: ["ಎನ್.ಎಸ್. ರಾಜಾ ಸುಬ್ರಮಣಿ", "ಉಪೇಂದ್ರ ದ್ವಿವೇದಿ", "ಕೃಷ್ಣಸ್ವಾಮಿ ಸ್ವಾಮಿನಾಥನ್", "ಅನಿಲ್ ಚೌಹಾಣ್"], ans: 0 },
+    { q: "7. ಸಿಬಿಐ (CBI) ನಿರ್ದೇಶಕರಾಗಿ 1 ವರ್ಷದ ಸೇವಾ ಅವಧಿ ವಿಸ್ತರಣೆ ಪಡೆದವರು ಯಾರು?", opts: ["ಪ್ರವೀಣ್ ಸೂದ್", "ಎನ್. ವಿ. ರಮಣ", "ಎನ್. ಎನ್. ಪಿ. ಎನ್. ದೇಸಾಯಿ", "ಅಲೋಕ್ ವರ್ಮಾ"], ans: 0 },
+    { q: "8. ಜಾಗತಿಕವಾಗಿ 'ಯುಟಿಲಿಟಿ ಆಫ್ ದಿ ಇಯರ್' ಪ್ರಶಸ್ತಿಯಲ್ಲಿ 5ನೇ ಸ್ಥಾನ ಪಡೆದ ಬೆಂಗಳೂರಿನ ಸಂಸ್ಥೆ ಯಾವುದು?", opts: ["BWSSB (ಬೆಂಗಳೂರು ಜಲಮಂಡಳಿ)", "BESCOM", "BMTC", "BDA"], ans: 0 },
+    { q: "9. ಚಂದ್ರಯಾನ-3 ಮಿಷನ್‌ಗಾಗಿ ಅಮೆರಿಕದ 'ಗಾಡಾರ್ಡ್ ಆಸ್ಟ್ರೋನಾಟಿಕ್ಸ್ ಪ್ರಶಸ್ತಿ' ಪಡೆದ ಸಂಸ್ಥೆ ಯಾವುದು?", opts: ["ISRO", "DRDO", "HAL", "BARC"], ans: 0 },
+    { q: "10. ಏಕರೂಪ ನಾಗರಿಕ ಸಂಹಿತೆ (UCC) ಜಾರಿಗೆ ತಂದ ದೇಶದ 3ನೇ ರಾಜ್ಯ ಯಾವುದು?", opts: ["ಅಸ್ಸಾಂ", "ಉತ್ತರಾಖಂಡ್", "ಗುಜರಾತ್", "ಗೋವಾ"], ans: 0 },
+    { q: "11. ರಾಷ್ಟ್ರೀಯ ಕುಟುಂಬ ಆರೋಗ್ಯ ಸಮೀಕ್ಷೆ (NFHS)-6 ರ ವರದಿ ಬಿಡುಗಡೆಯಾದ ವರ್ಷ ಯಾವುದು?", opts: ["2023-24", "2021-22", "2020-21", "2025-26"], ans: 0 },
+    { q: "12. ದೇಶದ ಮೊದಲ ಮೀಸಲಾದ 'ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ (AI) ಸಚಿವಾಲಯ' ರಚನೆ ಮಾಡಿದ ರಾಜ್ಯ ಯಾವುದು?", opts: ["ಕೇರಳ", "ಕರ್ನಾಟಕ", "ತಮಿಳುನಾಡು", "ಮಹಾರಾಷ್ಟ್ರ"], ans: 0 },
+    { q: "13. ರಾಷ್ಟ್ರೀಯ ಪಂಚಾಯತಿ ಪ್ರಶಸ್ತಿಗಳು-2025 ರಲ್ಲಿ ದೇಶದಲ್ಲೇ ಪ್ರಥಮ ಸ್ಥಾನ ಪಡೆದ 'ಮುದ್ರಾಡಿ ಗ್ರಾಮ ಪಂಚಾಯತಿ' ಎಲ್ಲಿದೆ?", opts: ["ಉಡುಪಿ ಜಿಲ್ಲೆ (ಕಾರ್ಕಳ ತಾ||)", "ದಕ್ಷಿಣ ಕನ್ನಡ", "ಶಿವಮೊಗ್ಗ", "ಉತ್ತರ ಕನ್ನಡ"], ans: 0 },
+    { q: "14. ರಾಜ್ಯ ಕೀಟವಾಗಿ 'ತುಡುವೆ ಜೇನು' ಮತ್ತು ಉಭಯವಾಸಿಯಾಗಿ 'ಮಲೆನಾಡಿನ ಮರಗಂಟಿ ಕಪ್ಪೆ' ಘೋಷಿಸಿದ ರಾಜ್ಯ ಯಾವುದು?", opts: ["ಕರ್ನಾಟಕ", "ಕೇರಳ", "ತಮಿಳುನಾಡು", "ಗೋವಾ"], ans: 0 },
+    { q: "15. ಅರಬ್ ಜಗತ್ತಿನ ಏಕೈಕ ಅಣುಸ್ಥಾವರವಾದ 'ಬರಾಕಾ' (Barakah) ಎಲ್ಲಿದೆ?", opts: ["UAE (ಸಂಯುಕ್ತ ಅರಬ್ ಎಮಿರೇಟ್ಸ್)", "ಸೌದಿ ಅರೇಬಿಯಾ", "ಖತಾರ್", "ಒಮಾನ್"], ans: 0 },
+    { q: "16. 'ಮಿಷನ್ ಕ್ವೀನ್ ಪೈನಾಪಲ್' ಯೋಜನೆಗೆ ಚಾಲನೆ ನೀಡಿದ ರಾಜ್ಯ ಯಾವುದು?", opts: ["ತ್ರಿಪುರ", "ಅಸ್ಸಾಂ", "ಮೇಘಾಲಯ", "ಮಣಿಪುರ"], ans: 0 },
+    { q: "17. DRDO ಸುಧಾರಿತ 'MIRV ಅಗ್ನಿ' ಕ್ಷಿಪಣಿ ಪರೀಕ್ಷೆಯ ಹೆಸರು ಏನು?", opts: ["ದಿವ್ಯಾಸ್ತ್ರ", "ಅಸ್ತ್ರ-2", "ಪ್ರಳಯ್", "ರುದ್ರಮ್-II"], ans: 0 },
+    { q: "18. ಭಾರತದ 18ನೇ ರೈಲ್ವೆ ವಲಯ 'ದಕ್ಷಿಣ ಕರಾವಳಿ ರೈಲ್ವೆ ವಲಯ'ದ ಪ್ರಧಾನ ಕಚೇರಿ ಎಲ್ಲಿದೆ?", opts: ["ವಿಶಾಖಪಟ್ಟಣಂ", "ವಿಜಯವಾಡ", "ಚೆನ್ನೈ", "ಹುಬ್ಬಳ್ಳಿ"], ans: 0 },
+    { q: "19. ಐಪಿಎಲ್ (IPL) 19ನೇ ಆವೃತ್ತಿಯ ಚಾಂಪಿಯನ್ ಆದ ತಂಡ ಯಾವುದು?", opts: ["RCB", "CSK", "KKR", "MI"], ans: 0 },
+    { q: "20. 3ನೇ ಭಾರತ-ನಾರ್ಡಿಕ್ ಶೃಂಗಸಭೆ ಎಲ್ಲಿ ಜರುಗಿತು?", opts: ["ಓಸ್ಲೋ (Oslo)", "ಸ್ಟಾಕ್‌ಹೋಮ್", "ಹೆಲ್ಸಿಂಕಿ", "ಕೋಪನ್‌ಹೇಗನ್"], ans: 0 },
+    { q: "21. ರಾಷ್ಟ್ರೀಯ ಅಥ್ಲೆಟಿಕ್ ಫೆಡರೇಷನ್‌ನಲ್ಲಿ ರಾಷ್ಟ್ರೀಯ ದಾಖಲೆ ಬರೆದ ಕ್ರೀಡಾಪಟು ಯಾರು?", opts: ["ಗುರುಬಿಂದರ್ ಸಿಂಗ್", "ನೀರಜ್ ಚೋಪ್ರಾ", "ಅವಿನಾಶ್ ಸಾಬಳೆ", "ಮಹೇಶ್ ಭೂಪತಿ"], ans: 0 },
+    { q: "22. PM SVANidhi ಯೋಜನೆಯು ಎಷ್ಟು ವರ್ಷಗಳನ್ನು ಪೂರ್ಣಗೊಳಿಸಿದೆ?", opts: ["6 ವರ್ಷಗಳು", "4 ವರ್ಷಗಳು", "5 ವರ್ಷಗಳು", "3 ವರ್ಷಗಳು"], ans: 0 },
+    { q: "23. 'ಕೆಎಸ್‌ಎ ಪ್ರೆಸ್' ವತಿಯಿಂದ ವಿಶ್ವಸಂಸ್ಥೆಯ ಪ್ರಧಾನ ಕಾರ್ಯದರ್ಶಿ ಆಯ್ಕೆ ಪ್ರಕ್ರಿಯೆ ಯಾವಾಗ?", opts: ["2026", "2025", "2027", "2024"], ans: 0 },
+    { q: "24. ಪಶ್ಚಿಮ ಬಂಗಾಳದ ಪ್ರತಿಪಕ್ಷ ನಾಯಕರಾಗಿ ಕರ್ತವ್ಯ ನಿರ್ವಹಿಸುತ್ತಿರುವವರು ಯಾರು?", opts: ["ಸುವೇಂದು ಅಧಿಕಾರಿ", "ಮಮತಾ ಬ್ಯಾನರ್ಜಿ", "ಅಭಿಷೇಕ್ ಬ್ಯಾನರ್ಜಿ", "ಫಿರ್ಹಾದ್ ಹಕೀಮ್"], ans: 0 },
+    { q: "25. ಕರ್ನಾಟಕ ಪೊಲೀಸ್ ಇಲಾಖೆಯ ಪೊಲೀಸ್ ಕಾನ್‌ಸ್ಟೇಬಲ್ ಸಿವಿಲ್ ಹುದ್ದೆಗಳ ಒಟ್ಟು ಸಂಖ್ಯೆ ಎಷ್ಟು?", opts: ["3395+596", "4000", "2500", "1500"], ans: 0 },
+    { q: "26. ಕರ್ನಾಟಕ ರಾಜ್ಯ ಮಾನವ ಹಕ್ಕುಗಳ ಆಯೋಗದ ಅಧ್ಯಕ್ಷರು ಯಾರು?", opts: ["ಎನ್. ಎನ್. ಪಿ. ಎನ್. ದೇಸಾಯಿ", "ಪ್ರವೀಣ್ ಸೂದ್", "ಪಿ. ವಿಶ್ವನಾಥ ಶೆಟ್ಟಿ", "ಸಂತೋಷ್ ಹೆಗ್ಡೆ"], ans: 0 },
+    { q: "27. 'ವಿಶ್ವ ಪತ್ರಿಕಾ ಸ್ವಾತಂತ್ರ್ಯ ದಿನ'ವನ್ನು ಯಾವಾಗ ಆಚರಿಸಲಾಗುತ್ತದೆ?", opts: ["ಮೇ 03", "ಮೇ 08", "ಮೇ 11", "ಮೇ 31"], ans: 0 },
+    { q: "28. 'ವಿಶ್ವ ರೆಡ್ ಕ್ರಾಸ್ ದಿನ' ಆಚರಿಸುವ ದಿನಾಂಕ ಯಾವುದು?", opts: ["ಮೇ 08", "ಮೇ 03", "ಮೇ 21", "ಮೇ 22"], ans: 0 },
+    { q: "29. 'ರಾಷ್ಟ್ರೀಯ ತಂತ್ರಜ್ಞಾನ ದಿನ'ವನ್ನು ಯಾವಾಗ ಆಚರಿಸಲಾಗುತ್ತದೆ?", opts: ["ಮೇ 11", "ಮೇ 18", "ಮೇ 21", "ಮೇ 31"], ans: 0 },
+    { q: "30. 'ಅಂತರರಾಷ್ಟ್ರೀಯ ವಸ್ತುಸಂಗ್ರಹಾಲಯ ದಿನ' ದಿನಾಂಕ ಯಾವುದು?", opts: ["ಮೇ 18", "ಮೇ 11", "ಮೇ 03", "ಮೇ 08"], ans: 0 },
+    { q: "31. 'ರಾಷ್ಟ್ರೀಯ ಭಯೋತ್ಪಾದನಾ ವಿರೋಧಿ ದಿನ' ಎಂದು ಯಾವ ದಿನ ಆಚರಿಸಲಾಗುತ್ತದೆ?", opts: ["ಮೇ 21", "ಮೇ 31", "ಮೇ 22", "ಮೇ 18"], ans: 0 },
+    { q: "32. 'ಅಂತರರಾಷ್ಟ್ರೀಯ ಜೈವಿಕ ವೈವಿಧ್ಯತಾ ದಿನ' ಯಾವುದು?", opts: ["ಮೇ 22", "ಮೇ 31", "ಮೇ 08", "ಮೇ 03"], ans: 0 },
+    { q: "33. 'ವಿಶ್ವ ತಂಬಾಕು ರಹಿತ ದಿನ' ಎಂದು ಆಚರಿಸಲಾಗುವ ದಿನಾಂಕ ಯಾವುದು?", opts: ["ಮೇ 31", "ಮೇ 22", "ಮೇ 11", "ಮೇ 03"], ans: 0 },
+    { q: "34. ಕರ್ನಾಟಕದ ಉಡುಪಿ/ಕಾರ್ಕಳ ಪ್ರದೇಶದ ಯಾವ ಪಂಚಾಯಿತಿ ಪ್ರಶಸ್ತಿ ಗಳಿಸಿದೆ?", opts: ["ಮುದ್ರಾಡಿ ಗ್ರಾ.ಪಂ.", "ಕಾರ್ಕಳ ಗ್ರಾ.ಪಂ.", "ಹೆಬ್ರಿ ಗ್ರಾ.ಪಂ.", "ಸೋಮವಾರಪೇಟೆ"], ans: 0 },
+    { q: "35. ಭವ್ಯ ಸೂರ್ಯವಂಶಿ IPL ನಲ್ಲಿ ಗಳಿಸಿದ ರನ್ ಸಂಖ್ಯೆ ಎಷ್ಟು?", opts: ["776 Runs", "500 Runs", "650 Runs", "800 Runs"], ans: 0 },
+    { q: "36. ಶ್ರೇಯಾಂಕ ಪಾಟೀಲ್ ತೆಗೆದುಕೊಂಡ ವಿಕೆಟ್ ಸಂಖ್ಯೆ ಎಷ್ಟು?", opts: ["29 Wkts", "20 Wkts", "15 Wkts", "35 Wkts"], ans: 0 },
+    { q: "37. 'K-Smart' ಅಪ್ಲಿಕೇಶನ್ ಬಿಡುಗಡೆ ಮಾಡಿದ ರಾಜ್ಯ ಯಾವುದು?", opts: ["ಕೇರಳ", "ಕರ್ನಾಟಕ", "ತಮಿಳುನಾಡು", "ಆಂಧ್ರಪ್ರದೇಶ"], ans: 0 },
+    { q: "38. ವಿಶ್ವಾಮಿತ್ರ ಮತ್ತು ದಕ್ಷಿಣ ರೈಲ್ವೆ ವಲಯ ಎಲ್ಲಿದೆ?", opts: ["ವಿಶಾಖಪಟ್ಟಣಂ", "ಬೆಂಗಳೂರು", "ವಿಜಯವಾಡ", "ಚೆನ್ನೈ"], ans: 0 },
+
+    // PART 2 (Page 2 based facts & General Knowledge)
+    { q: "39. ಪ್ರಧಾನಿ ಮೋದಿಯವರ 5 ರಾಷ್ಟ್ರಗಳ ವಿದೇಶಿ ಪ್ರವಾಸದಲ್ಲಿ ಯುಎಇ ಜೊತೆ ಎಷ್ಟು ಒಪ್ಪಂದಗಳಾದವು?", opts: ["17 ಒಪ್ಪಂದಗಳು", "10 ಒಪ್ಪಂದಗಳು", "5 ಒಪ್ಪಂದಗಳು", "25 ಒಪ್ಪಂದಗಳು"], ans: 0 },
+    { q: "40. ಪ್ರಧಾನಿ ಮೋದಿಯವರಿಗೆ ಕೃಷಿ ಕ್ಷೇತ್ರದಲ್ಲಿನ ಕೊಡುಗೆಗಾಗಿ ಸಿಕ್ಕ ಪ್ರಶಸ್ತಿ ಯಾವುದು?", opts: ["ಅಗ್ರಿಕೋಲ್ ಮೆಡಲ್", "ಗ್ರ್ಯಾಂಡ್ ಕ್ರಾಸ್", "ರಾಯಲ್ ಆರ್ಡರ್", "ನೋಬೆಲ್ ಪ್ರಶಸ್ತಿ"], ans: 0 },
+    { q: "41. ನಾರ್ವೆ ದೇಶದ ಅತ್ಯುನ್ನತ ನಾಗರಿಕ ಪ್ರಶಸ್ತಿ ಯಾವುದು?", opts: ["ಗ್ರ್ಯಾಂಡ್ ಕ್ರಾಸ್ ಆಫ್ ದಿ ರಾಯಲ್ ನಾರ್ವೇಜಿಯನ್ ಆರ್ಡರ್ ಆಫ್ ಮೆರಿಟ್", "ಅಗ್ರಿಕೋಲ್", "ರಾಯಲ್ ಆರ್ಡರ್ ಆಫ್ ದಿ ಪೋಲಾರ್ ಸ್ಟಾರ್", "ಪದ್ಮವಿಭೂಷಣ"], ans: 0 },
+    { q: "42. ಸ್ವೀಡನ್ ದೇಶದ ಅತ್ಯುನ್ನತ ಪ್ರಶಸ್ತಿ ಯಾವುದು?", opts: ["ರಾಯಲ್ ಆರ್ಡರ್ ಆಫ್ ದಿ ಪೋಲಾರ್ ಸ್ಟಾರ್", "ಅಗ್ರಿಕೋಲ್ ಮೆಡಲ್", "ಗ್ರ್ಯಾಂಡ್ ಕ್ರಾಸ್", "ನೈಟ್ ಹುಡ್"], ans: 0 },
+    { q: "43. ವಿಶ್ವಸಂಸ್ಥೆಯ ಮಿಲಿಟರಿ ಲಿಂಗ ವಕೀಲ ಪ್ರಶಸ್ತಿ ಪಡೆದ ಭಾರತೀಯ ಶಾಂತಿ ಪಾಲಕಿ ಯಾರು?", opts: ["ಮೇಜರ್ ಅಭಿಲಾಷಾ ಬರಾಕ್", "ಮೇಜರ್ ರಾಧಿಕಾ ಸೇನ್", "ಕ್ಯಾಪ್ಟನ್ ದೀಪಿಕಾ ಮಿಶ್ರಾ", "ಪುನೀತಾ ಅರೋರಾ"], ans: 0 },
+    { q: "44. ಅಸಹಜ ಜನಸಂಖ್ಯೆಗೆ ಕಾರಣ ಪತ್ತೆ ಹಚ್ಚಲು ರಚಿಸಿದ ಸಮಿತಿಯ ಮುಖ್ಯಸ್ಥರು ಯಾರು?", opts: ["ನ್ಯಾಯಮೂರ್ತಿ ಪ್ರಕಾಶ್ ನಾವಲೇಕರ್", "ನ್ಯಾಯಮೂರ್ತಿ ಸಿ.ಆರ್. ಕುಮಾರ್", "ಪ್ರವೀಣ್ ಸೂದ್", "ಎನ್.ವಿ. ರಮಣ"], ans: 0 },
+    { q: "45. ಜಾಗತಿಕ ಅರ್ಥ ಪ್ರಶಸ್ತಿ-2026 ಪಡೆದ ಭಾರತೀಯ ವಿದ್ಯಾರ್ಥಿಗಳು ಯಾರು?", opts: ["ಎವಾನ್ ಚಾವ್ಧಾರಿಯಾ, ರಿಯಾನಾ ಅಗರ್ವಾಲ್, ಅರ್ಯಾನಾ ಮೆಹ್ತಾ", "ರೋಹಿತ್, ರಾಹುಲ್, ಸಚಿನ್", "ಸ್ನೇಹಾ, ಪ್ರಿಯಾ, ಪೂಜಾ", "ಅಖಿಲ್, ವಿನಯ್, ವರುಣ್"], ans: 0 },
+    { q: "46. 79ನೇ ಕಾನ್ಸ್ ಚಲನಚಿತ್ರೋತ್ಸವ ಪ್ರಶಸ್ತಿ-2026 ಎಲ್ಲಿ ಜರುಗಿತು?", opts: ["ಫ್ರಾನ್ಸ್ (Cannes)", "ಇಟಲಿ", "ಜರ್ಮನಿ", "ಸ್ವಿಟ್ಜರ್ಲ್ಯಾಂಡ್"], ans: 0 },
+    { q: "47. 79ನೇ ಕಾನ್ಸ್ ಚಲನಚಿತ್ರೋತ್ಸವದ ಅತ್ಯುತ್ತಮ ಚಿತ್ರ ಪ್ರಶಸ್ತಿ ಪಡೆದ ಸಿನಿಮಾ ಯಾವುದು?", opts: ["ಪಾಮ್ ಡಿ'ಓರ್ (What D'or) - ಕ್ರಿಶ್ಚಿಯನ್ ಮುಂಗಿಯು", "ಆಸ್ಕರ್", "ಅವತಾರ್", "ಒಪನ್ ಹೈಮರ್"], ans: 0 },
+    { q: "48. ಭಾರತದ ಮೊದಲ ಸಂಪೂರ್ಣ ಜಲಜನಕ (Hydrogen) ರೈಲು ಚಾಲನೆಗೆ ಒಪ್ಪಿಗೆ ನೀಡಿದ ಮಾರ್ಗ ಯಾವುದು?", opts: ["ಹರಿಯಾಣದ ಜಿಂದ್ - ಸೋನಿಪತ್ ಮಾರ್ಗ", "ಬೆಂಗಳೂರು - ಮೈಸೂರು", "ದೆಹಲಿ - ಮುಂಬೈ", "ಅಹಮದಾಬಾದ್ - ಸೂರತ್"], ans: 0 },
+    { q: "49. ಪ್ರಸ್ತುತ ಸುಪ್ರೀಂ ಕೋರ್ಟ್‌ನಲ್ಲಿರುವ ನ್ಯಾಯಾಧೀಶರ ಒಟ್ಟು ಸಂಖ್ಯೆ ಎಷ್ಟು?", opts: ["1 ಸಿಜೆಐ + 37 ನ್ಯಾಯಾಧೀಶರು", "1 ಸಿಜೆಐ + 33 ನ್ಯಾಯಾಧೀಶರು", "1 ಸಿಜೆಐ + 30 ನ್ಯಾಯಾಧೀಶರು", "1 ಸಿಜೆಐ + 25 ನ್ಯಾಯಾಧೀಶರು"], ans: 0 },
+    { q: "50. ಭಾರತದ 100ನೇ ರಾಮ್‌ಸರ್ ತಾಣವಾಗಿ ಘೋಷಣೆಯಾದ 'ಜೈ ಪ್ರಕಾಶ್ ನಾರಾಯಣ್ ಪಕ್ಷಿಧಾಮ' ಎಲ್ಲಿದೆ?", opts: ["ಉತ್ತರ ಪ್ರದೇಶ (UP)", "ಮಧ್ಯಪ್ರದೇಶ", "ಕರ್ನಾಟಕ", "ಬಿಹಾರ"], ans: 0 },
+    { q: "51. ಡಿಜಿಟಲ್ ಅಧಿಕಾರತ್ವದಲ್ಲಿ ಭಾರತ ವಿಶ್ವದಲ್ಲೇ ಎಷ್ಟನೇ ಸ್ಥಾನದಲ್ಲಿದೆ?", opts: ["5ನೇ ಸ್ಥಾನ (ಎಐ ಸಾಮರ್ಥ್ಯದಲ್ಲಿ 4ನೇ)", "1ನೇ ಸ್ಥಾನ", "10ನೇ ಸ್ಥಾನ", "2ನೇ ಸ್ಥಾನ"], ans: 0 },
+    { q: "52. ಭಾರತದ ರಾಷ್ಟ್ರಪತಿಗಳಿಂದ 'ರಾಷ್ಟ್ರಪತಿ ಬಣ್ಣ' (President's Colour) ಪ್ರಧಾನ ಪಡೆದ ಪೊಲೀಸ್ ಪಡೆ ಯಾವುದು?", opts: ["ಸಿಕ್ಕಿಂ ಪೊಲೀಸ್", "ಕರ್ನಾಟಕ ಪೊಲೀಸ್", "ದೆಹಲಿ ಪೊಲೀಸ್", "ಕೇರಳ ಪೊಲೀಸ್"], ans: 0 },
+    { q: "53. ದೇಶದ ಮೊದಲ ತೆರೆದ ನೌಕಾ ಸಂಗ್ರಹಾಲಯ 'ಐಎನ್‌ಎಸ್ ಶೌರ್ಯ ವಾಟಿಕಾ' ಎಲ್ಲಿದೆ?", opts: ["ಲಖನೌ (ಯು.ಪಿ.)", "ಮುಂಬೈ", "ಕೊಚ್ಚಿ", "ವಿಶಾಖಪಟ್ಟಣಂ"], ans: 0 },
+    { q: "54. 'ವಿಕಸಿತ ವೈಬ್ರೆಂಟ್ ವಿಲೇಜ್ ಪ್ರೋಗ್ರಾಂ-2026' ಉದ್ದೇಶವೇನು?", opts: ["ಗಡಿ ಗ್ರಾಮಗಳ ಸಮಗ್ರ ಅಭಿವೃದ್ಧಿ", "ನಗರಗಳ ನವೀಕರಣ", "ರೈಲ್ವೆ ಅಭಿವೃದ್ಧಿ", "ಶಿಕ್ಷಣ ಉಚಿತ"], ans: 0 },
+    { q: "55. ಭಾರತ ಮತ್ತು ಯುಎಇ ನಿರ್ಣಾಯಕ ಖನಿಜಗಳ ಪೂರೈಕೆ ಒಪ್ಪಂದದ ಹೆಸರು ಏನು?", opts: ["Critical Minerals / GSCO", "FDI Deal", "Quad Summit", "UCC Deal"], ans: 0 },
+    { q: "56. 'ಕ್ವಾಡ್' (QUAD) ವಿದೇಶಾಂಗ ಸಚಿವರ ಶೃಂಗಸಭೆ ಎಲ್ಲಿ ಜರುಗಿತು?", opts: ["ನವದೆಹಲಿ", "ಟೋಕಿಯೋ", "ಕ್ಯಾನ್ಬೆರಾ", "ವಾಷಿಂಗ್ಟನ್"], ans: 0 },
+    { q: "57. ದೇಶೀಯ ತಂತ್ರಜ್ಞಾನದ 'ರುದ್ರಂ-II' (Rudram-II) ಎಂದರೇನು?", opts: ["ಕ್ಷಿಪಣಿ (Missile) ಪರೀಕ್ಷೆ", "ಜಲಬಂಧನ", "ರಡಾರ್ ವ್ಯವಸ್ಥೆ", "ಯುದ್ಧನೌಕೆ"], ans: 0 },
+    { q: "58. ಫಿನ್‌ಲ್ಯಾಂಡ್‌ನಲ್ಲಿ ವಿಶ್ವದ ಮೊದಲ ಅಣುತ್ಯಾಜ್ಯ ಕಸದ ಬುಟ್ಟಿ ನಿರ್ಮಿಸಿದ ಸ್ಥಳ ಯಾವುದು?", opts: ["ಓಂಕಾಳೋ (Onkalo)", "ಹೆಲ್ಸಿಂಕಿ", "ಟಂಪರೆ", "ಎಸ್ಪೋ"], ans: 0 },
+    { q: "59. ವಿದೇಶಿ ನೇರ ಹೂಡಿಕೆ (FDI) ಯಲ್ಲಿ ಪ್ರಥಮ ಸ್ಥಾನದಲ್ಲಿರುವ ರಾಜ್ಯ ಯಾವುದು?", opts: ["ಮಹಾರಾಷ್ಟ್ರ (ಕರ್ನಾಟಕ 2ನೇ ಸ್ಥಾನ)", "ಕರ್ನಾಟಕ", "ಗುಜರಾತ್", "ತಮಿಳುನಾಡು"], ans: 0 },
+    { q: "60. FDI ಹೂಡಿಕೆಯಲ್ಲಿ ಕರ್ನಾಟಕ ಎಷ್ಟನೇ ಸ್ಥಾನದಲ್ಲಿದೆ?", opts: ["2ನೇ ಸ್ಥಾನ", "1ನೇ ಸ್ಥಾನ", "3ನೇ ಸ್ಥಾನ", "5ನೇ ಸ್ಥಾನ"], ans: 0 },
+    { q: "61. ಬ್ರಹ್ಮೋಸ್ ಕ್ಷಿಪಣಿ ಖರೀದಿ ಒಪ್ಪಂದ ಮಾಡಿಕೊಂಡ 3ನೇ ದೇಶ ಯಾವುದು?", opts: ["ವಿಯೆಟ್ನಾಂ", "ಫಿಲಿಪೈನ್ಸ್", "ಇಂಡೋನೇಷ್ಯಾ", "ಮಲೇಶಿಯಾ"], ans: 0 },
+    { q: "62. ಸ್ವೀಡನ್ ಶಸ್ತ್ರಾಸ್ತ್ರ ವ್ಯವಸ್ಥೆ 'ಸಾಬ್' (SAAB) ಹಾರಾಟ ಯಶಸ್ವಿಯಾದ ಸಂಸ್ಥೆ ಯಾವುದು?", opts: ["DRDO", "ISRO", "HAL", "BEL"], ans: 0 },
+    { q: "63. 'ಖಂಜರ್-11 2026' (Khanjar-11) ವ್ಯಾಯಾಮ ಯಾವ ದೇಶಗಳ ನಡುವೆ ನಡೆಯಿತು?", opts: ["ಭಾರತ ಮತ್ತು ಕಿರ್ಗಿಸ್ತಾನ್", "ಭಾರತ ಮತ್ತು ಉಜ್ಬೇಕಿಸ್ತಾನ್", "ಭಾರತ ಮತ್ತು ಕಝಕಿಸ್ತಾನ್", "ಭಾರತ ಮತ್ತು ಒಮಾನ್"], ans: 0 },
+    { q: "64. 'ವಿಂಬ್ಯಾಕ್ಸ್-II 2026' (VINBAX-II) ಸೇನಾ ಅಭ್ಯಾಸ ಯಾವ ದೇಶಗಳ ನಡುವೆ ನಡೆಯಿತು?", opts: ["ಭಾರತ ಮತ್ತು ಕಾಂಬೋಡಿಯಾ", "ಭಾರತ ಮತ್ತು ವಿಯೆಟ್ನಾಂ", "ಭಾರತ ಮತ್ತು ಲಾವೋಸ್", "ಭಾರತ ಮತ್ತು ಥೈಲ್ಯಾಂಡ್"], ans: 0 },
+    { q: "65. 'VB-G-Ram-G' ಪೋರ್ಟಲ್ ಯಾವ ಯೋಜನೆಗೆ ಸಂಬಂಧಿಸಿದೆ?", opts: ["PM-AJAY ಯೋಜನೆ", "PM-SVANidhi", "K-Smart", "MGNREGA"], ans: 0 },
+    { q: "66. ಪ್ರಗತಿ-2026 ಬಹುರಾಷ್ಟ್ರೀಯ ವ್ಯಾಯಾಮ ಎಲ್ಲಾಯಿತು?", opts: ["ಮೇಘಾಲಯದ ಉಮ್ರೋಯ್", "ರಾಜಸ್ಥಾನ", "ಲಡಾಖ್", "ಅಂಡಮಾನ್"], ans: 0 },
+    { q: "67. IBCA ಯ ಪೂರ್ಣ ರೂಪವೇನು?", opts: ["International Big Cat Alliance", "Indian Banking Cooperation Association", "International Board of Cricket Affairs", "Indian Biological Center Association"], ans: 0 },
+    { q: "68. 'ಸಾಂಗ್ವಿ-ಲಾ ಸಂವಾದ-2026' ಎಲ್ಲಾಯಿತು?", opts: ["ಸಿಂಗಾಪುರ", "ಮಲೇಷಿಯಾ", "ಥೈಲ್ಯಾಂಡ್", "ಇಂಡೋನೇಷ್ಯಾ"], ans: 0 },
+    { q: "69. 2026ರ ಅಂತರರಾಷ್ಟ್ರೀಯ ದೊಡ್ಡ ಬೆಕ್ಕುಗಳ ಒಕ್ಕೂಟದ (IBCA) ಶೃಂಗಸಭೆ ಎಲ್ಲಿ ನಡೆಯಿತು?", opts: ["ನವದೆಹಲಿ", "ಮೈಸೂರು", "ಭೋಪಾಲ್", "ಬೆಂಗಳೂರು"], ans: 0 },
+    { q: "70. ಭಾರತೀಯ ಮೂಲದ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಬಿಡುಗಡೆಯಾದ ಪ್ರಶಸ್ತಿಯ ಹೆಸರು ಏನು?", opts: ["ಜಾಗತಿಕ ಅರ್ಥ ಪ್ರಶಸ್ತಿ-2026", "ನೋಬೆಲ್ ಪ್ರಶಸ್ತಿ", "ಪುಲಿಟ್ಜರ್ ಪ್ರಶಸ್ತಿ", "ಆಸ್ಕರ್"], ans: 0 },
+    { q: "71. ಕರ್ನಾಟಕ ಪೊಲೀಸ್ ಇಲಾಖೆಯಲ್ಲಿ ಎಷ್ಟು ಹುದ್ದೆಗಳ ನೇಮಕಾತಿ ನಡೆದಿದೆ?", opts: ["3395 + 596", "5000", "2000", "1000"], ans: 0 },
+    { q: "72. ದೇಶದ ಮೊದಲ ಸಚಿವಾಲಯ AI ಗಾಗಿ ಎಲ್ಲಿದೆ?", opts: ["ಕೇರಳ", "ಕರ್ನಾಟಕ", "ಗುಜರಾತ್", "ದೆಹಲಿ"], ans: 0 },
+    { q: "73. ಭಾರತದ 18ನೇ ರೈಲ್ವೆ ವಲಯದ ಪ್ರಧಾನ ಕಚೇರಿ ಎಲ್ಲಿದೆ?", opts: ["ವಿಶಾಖಪಟ್ಟಣಂ", "ವಿಜಯವಾಡ", "ಚೆನ್ನೈ", "ಕೊಲ್ಕತ್ತಾ"], ans: 0 },
+    { q: "74. ಅಂತರರಾಷ್ಟ್ರೀಯ ಜೈವಿಕ ವೈವಿಧ್ಯ ದಿನ ಆಚರಿಸುವುದು ಯಾವಾಗ?", opts: ["ಮೇ 22", "ಮೇ 31", "ಮೇ 03", "ಮೇ 11"], ans: 0 },
+    { q: "75. ವಿಶ್ವ ತಂಬಾಕು ರಹಿತ ದಿನವನ್ನು ಮೇ ತಿಂಗಳ ಯಾವ ದಿನದಂದು ಆಚರಿಸಲಾಗುತ್ತದೆ?", opts: ["ಮೇ 31", "ಮೇ 01", "ಮೇ 15", "ಮೇ 20"], ans: 0 }
+];
+
+let questions = [];
+let currentIndex = 0;
+let userAnswers = {};
+let reviewStatus = {};
+
+function shuffleArray(array) {
+    let arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function initExam() {
+    questions = shuffleArray(baseQuestions);
+    currentIndex = 0;
+    userAnswers = {};
+    reviewStatus = {};
+    document.getElementById('resultBox').style.display = 'none';
+    renderPalette();
+    loadQuestion(0);
+}
+
+function renderPalette() {
+    const grid = document.getElementById('paletteGrid');
+    grid.innerHTML = '';
+    questions.forEach((_, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'p-btn';
+        btn.id = `palette-btn-${idx}`;
+        btn.innerText = idx + 1;
+        btn.onclick = () => jumpToQuestion(idx);
+        grid.appendChild(btn);
+    });
+    updatePaletteStatus();
+}
+
+function updatePaletteStatus() {
+    questions.forEach((_, idx) => {
+        const btn = document.getElementById(`palette-btn-${idx}`);
+        btn.className = 'p-btn';
+        if (idx === currentIndex) btn.classList.add('active');
+        if (reviewStatus[idx]) {
+            btn.classList.add('review');
+        } else if (userAnswers[idx] !== undefined) {
+            btn.classList.add('answered');
+        }
+    });
+}
+
+function loadQuestion(index) {
+    currentIndex = index;
+    const q = questions[index];
+    
+    // Set Part Title
+    document.getElementById('partTitle').innerText = index < 38 ? "PART 1: General Knowledge & Current Affairs" : "PART 2: National & International Affairs";
+    document.getElementById('qText').innerText = `${index + 1}. ${q.q.replace(/^\d+\.\s*/, '')}`;
+
+    const optsContainer = document.getElementById('optionsList');
+    optsContainer.innerHTML = '';
+
+    const labels = ["A", "B", "C", "D"];
+    q.opts.forEach((opt, oIdx) => {
+        const li = document.createElement('li');
+        const checked = userAnswers[index] === oIdx ? 'checked' : '';
+        li.innerHTML = `
+            <label class="option-btn">
+                <input type="radio" name="opt" value="${oIdx}" ${checked} onchange="selectOption(${index}, ${oIdx})">
+                <b>${labels[oIdx]}.</b> &nbsp; ${opt}
+            </label>
+        `;
+        optsContainer.appendChild(li);
+    });
+
+    updatePaletteStatus();
+}
+
+function selectOption(qIdx, optIdx) {
+    userAnswers[qIdx] = optIdx;
+    updatePaletteStatus();
+}
+
+function markReview() {
+    reviewStatus[currentIndex] = !reviewStatus[currentIndex];
+    updatePaletteStatus();
+}
+
+function nextQuestion() {
+    if (currentIndex < questions.length - 1) {
+        loadQuestion(currentIndex + 1);
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        loadQuestion(currentIndex - 1);
+    }
+}
+
+function jumpToQuestion(index) {
+    loadQuestion(index);
+}
+
+function resetAndShuffle() {
+    if (confirm("Are you sure you want to restart and reshuffle all 75 questions?")) {
+        initExam();
+    }
+}
+
+function submitExam() {
+    let score = 0;
+    let answered = Object.keys(userAnswers).length;
+
+    questions.forEach((q, idx) => {
+        if (userAnswers[idx] === q.ans) {
+            score++;
+        }
+    });
+
+    const resBox = document.getElementById('resultBox');
+    resBox.style.display = 'block';
+    resBox.innerHTML = `
+        Exam Submitted Successfully!<br>
+        Total Questions: 75<br>
+        Answered: ${answered} / 75<br>
+        Your Final Score: <span style="color:#0d2366; font-size:22px;">${score} / 75</span>
+    `;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+// Timer functionality
+let timeInSeconds = 3600; // 60 minutes
+setInterval(() => {
+    if (timeInSeconds > 0) {
+        timeInSeconds--;
+        let m = Math.floor(timeInSeconds / 60);
+        let s = timeInSeconds % 60;
+        document.getElementById('timer').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+}, 1000);
+
+// Initialize on page load
+initExam();
+</script>
+
+</body>
+</html>
