@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka PC & SSC Exam Mock Test - Spardha Vijetha June 2026</title>
+    <style>
+        :root {
+            --primary-blue: #003366;
+            --secondary-blue: #0066cc;
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+            --light-bg: #f4f7fa;
+            --border-color: #dcdcdc;
+            --text-dark: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif, 'Tunga', 'Kedage';
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--secondary-blue);
+            flex-shrink: 0;
+            height: 60px;
+        }
+
+        header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-box {
+            background: #ffffff;
+            color: #d9534f;
+            padding: 4px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid #d9534f;
+            font-size: 1.05rem;
+        }
+
+        .app-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .page-header {
+            background: #e9ecef;
+            padding: 8px 20px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: var(--primary-blue);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .question-scroll-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #111;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .option-item:hover {
+            background-color: #f0f4f8;
+            border-color: var(--secondary-blue);
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-green) !important;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .option-item.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger-red) !important;
+            color: #721c24;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .feedback-box.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback-box.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .footer-controls {
+            padding: 10px 20px;
+            background: #e9ecef;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            height: 55px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary { background-color: var(--secondary-blue); color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-danger { background-color: var(--danger-red); color: white; }
+
+        .sidebar {
+            width: 320px;
+            background: #f8f9fa;
+            border-left: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .palette-header {
+            padding: 10px;
+            background: #e2e6ea;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .score-board {
+            padding: 10px;
+            background: #ffffff;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .palette-container {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .palette-group-title {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #555;
+            margin: 10px 0 5px 0;
+            text-transform: uppercase;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .btn-qnum {
+            height: 36px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .btn-qnum.active {
+            border: 2px solid var(--primary-blue);
+            box-shadow: 0 0 5px rgba(0,51,102,0.4);
+        }
+
+        .btn-qnum.answered-correct {
+            background-color: var(--success-green);
+            color: white;
+            border-color: var(--success-green);
+        }
+
+        .btn-qnum.answered-wrong {
+            background-color: var(--danger-red);
+            color: white;
+            border-color: var(--danger-red);
+        }
+
+        .palette-footer {
+            padding: 12px;
+            border-top: 1px solid var(--border-color);
+            background: #ffffff;
+            flex-shrink: 0;
+            display: flex;
+            gap: 8px;
+        }
+
+        .answer-key-section {
+            display: none;
+            padding: 20px;
+            background: #ffffff;
+            height: 100%;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .answer-key-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .answer-key-item strong {
+            color: var(--primary-blue);
+        }
+
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 220px; }
+            .main-panel { height: calc(100% - 220px); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Karnataka PC & SSC CBT Exam Mock Test (Spardha Vijetha June 2026)</h1>
+        <div class="header-info">
+            <span>Time Left:</span>
+            <div class="timer-box" id="timer">30:00</div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <div class="main-panel" id="quizPanel">
+            <div class="page-header" id="pageTitle">Cover Page Questions</div>
+            
+            <div class="question-scroll-area">
+                <div class="q-text" id="questionText">Loading Question...</div>
+                <ul class="options-list" id="optionsList"></ul>
+                <div class="feedback-box" id="feedbackBox"></div>
+            </div>
+
+            <div class="footer-controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="navigate(-1)">Previous</button>
+                <button class="btn btn-danger" onclick="resetQuiz()">Retest / Refresh</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="navigate(1)">Next</button>
+            </div>
+        </div>
+
+        <div class="main-panel answer-key-section" id="answerKeyPanel">
+            <h2>Answer Key & Explanations (ಉತ್ತರಗಳು ಮತ್ತು ವಿವರಣೆ)</h2>
+            <br>
+            <div id="answerKeyContent"></div>
+            <br>
+            <button class="btn btn-primary" onclick="toggleAnswerKey(false)">Back to Test</button>
+        </div>
+
+        <div class="sidebar">
+            <div class="palette-header">Question Palette</div>
+            <div class="score-board">
+                Score: <span id="score">0</span> / <span id="totalQuestions">0</span>
+            </div>
+            <div class="palette-container" id="paletteContainer"></div>
+            <div class="palette-footer">
+                <button class="btn btn-danger" style="flex:1;" onclick="resetQuiz()">Retest</button>
+                <button class="btn btn-primary" style="flex:1;" onclick="toggleAnswerKey(true)">Answer Key</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            // COVER PAGE - KARNATAKA STATE PRIORITY
+            {
+                id: 1,
+                page: "Cover Page",
+                question: "ಕರ್ನಾಟಕ ಪೋಲೀಸ್ ಇಲಾಖೆಯಲ್ಲಿ ಪೊಲೀಸ್ ಕಾನ್‌ಸ್ಟೇಬಲ್ (ಸಿವಿಲ್) ಹುದ್ದೆಗಳ ಒಟ್ಟು ನೇಮಕಾತಿ ಸಂಖ್ಯೆ ಎಷ್ಟು?",
+                options: ["A) 3,395 + 596", "B) 2,500 + 400", "C) 4,000 + 200", "D) 3,000 + 500"],
+                correct: 0,
+                explanation: "ಸ್ಪರ್ಧಾ ವಿಜೇತ ಮುಖಪುಟದಲ್ಲಿ ತಿಳಿಸಿದಂತೆ 3,395 + 596 ಪೊಲೀಸ್ ಕಾನ್‌ಸ್ಟೇಬಲ್ (ಸಿವಿಲ್) ಹುದ್ದೆಗಳ ನೇಮಕಾತಿ ಪ್ರಕಟಣೆ ನೀಡಲಾಗಿದೆ."
+            },
+            {
+                id: 2,
+                page: "Cover Page",
+                question: "‘ಯುಟಿಲಿಟಿ ಆಫ್ ದಿ ಇಯರ್’ ಪ್ರಶಸ್ತಿ ಪಡೆದ ‘ವಿಶ್ವದ-5 ಅಗ್ರ ಸಂಸ್ಥೆಗಳಲ್ಲಿ’ ಸ್ಥಾನ ಪಡೆದ ಕರ್ನಾಟಕದ ಸಂಸ್ಥೆ ಯಾವುದು?",
+                options: ["A) ಬೆಂಗಳೂರು ಜಲಮಂಡಳಿ (BWSSB)", "B) ಕೆಎಸ್ಆರ್‌ಟಿಸಿ (KSRTC)", "C) ಬೆಸ್ಕಾಂ (BESCOM)", "D) ಕೆಪಿಟಿಸಿಎಲ್ (KPTCL)"],
+                correct: 0,
+                explanation: "ಬೆಂಗಳೂರು ಜಲಮಂಡಳಿ (BWSSB) ವಿಶ್ವದ 5 ಅಗ್ರ ಸಂಸ್ಥೆಗಳಲ್ಲಿ ಸ್ಥಾನ ಪಡೆದು ಯುಟಿಲಿಟಿ ಆಫ್ ದಿ ಇಯರ್ ಪ್ರಶಸ್ತಿ ಗಳಿಸಿದೆ."
+            },
+            {
+                id: 3,
+                page: "Cover Page",
+                question: "ರಾಷ್ಟ್ರೀಯ ಪಂಚಾಯತಿ ಪ್ರಶಸ್ತಿಗಳು-2025 ರ ಮುದ್ರಾಡಿ ಗ್ರಾಮ ಪಂಚಾಯತಿ ದೇಶದಲ್ಲೇ ಪ್ರಥಮ ಸ್ಥಾನ ಪಡೆದಿದೆ. ಇದು ಕರ್ನಾಟಕದ ಯಾವ ತಾಲೂಕಿನಲ್ಲಿದೆ?",
+                options: ["A) ಉಡುಪಿ ಜಿ, ಕಾರ್ಕಳ ತಾ॥", "B) ಮಂಗಳೂರು ಜಿ, ಪುತ್ತೂರು ತಾ॥", "C) ಶಿವಮೊಗ್ಗ ಜಿ, ಸಾಗರ ತಾ॥", "D) ಚಿಕ್ಕಮಗಳೂರು ಜಿ, ತಾರೀಕೆರೆ ತಾ॥"],
+                correct: 0,
+                explanation: "ರಾಷ್ಟ್ರೀಯ ಪಂಚಾಯತಿ ಪ್ರಶಸ್ತಿ 2025 ರಲ್ಲಿ ಉಡುಪಿ ಜಿಲ್ಲೆಯ ಕಾರ್ಕಳ ತಾಲೂಕಿನ ಮುದ್ರಾಡಿ ಗ್ರಾಮ ಪಂಚಾಯತಿ ದೇಶಕ್ಕೇ ಪ್ರಥಮ ಸ್ಥಾನ ಪಡೆದಿದೆ."
+            },
+            {
+                id: 4,
+                page: "Cover Page",
+                question: "ಕರ್ನಾಟಕದ ಮಲೆನಾಡಿನ ಮರಗಂಟಿ ಕಪ್ಪೆ ಮತ್ತು ರಾಜ್ಯಕೀಟ ತುಡುವೆ ಜೇನಿಗೆ ಅಧಿಕೃತ ಘೋಷಣೆ ದೊರೆತಿದೆ. ಇವು ಯಾವ ಪ್ರದೇಶಕ್ಕೆ ಸೇರಿವೆ?",
+                options: ["A) ಮಲೆನಾಡು ಮತ್ತು ರಾಜ್ಯ ಉಭಯವಾಸಿ", "B) ಕರಾವಳಿ ತೀರ", "C) ಬಯಲು ಸೀಮೆ", "D) ಉತ್ತರ ಕರ್ನಾಟಕ"],
+                correct: 0,
+                explanation: "ರಾಜ್ಯಕೀಟ ತುಡುವೆ ಜೇನು ಮತ್ತು ರಾಜ್ಯ ಉಭಯವಾಸಿ ಮಲೆನಾಡಿನ ಮರಗಂಟಿ ಕಪ್ಪೆಗೆ ವಿಶೇಷ ಸ್ಥಾನಮಾನ ಪ್ರಕಟಿಸಲಾಗಿದೆ."
+            },
+            {
+                id: 5,
+                page: "Cover Page",
+                question: "ಕರ್ನಾಟಕದ ನೂತನ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಮುಖಪುಟದಲ್ಲಿ ಉಲ್ಲೇಖಗೊಂಡವರು ಯಾರು?",
+                options: ["A) ಡಿ.ಕೆ. ಶಿವಕುಮಾರ್", "B) ಎನ್. ರಂಗಸ್ವಾಮಿ", "C) ಹಿಮಂತ ಬಿಸ್ವ ಶರ್ಮಾ", "D) ಸುಖವಿಂದರ್ ಸಿಂಗ್ ಸುಖು"],
+                correct: 0,
+                explanation: "ಮುಖಪುಟದಲ್ಲಿ ಕರ್ನಾಟಕದ ನೂತನ ಪ್ರಮುಖ ನಾಯಕರಾಗಿ ಡಿ.ಕೆ. ಶಿವಕುಮಾರ್ ಅವರ ಹೆಸರನ್ನು ಪ್ರಮುಖವಾಗಿ ನೀಡಲಾಗಿದೆ."
+            },
+
+            // COVER PAGE - NATIONAL & GENERAL APPOINTMENTS / NEWS
+            {
+                id: 6,
+                page: "Cover Page",
+                question: "ಭಾರತೀಯ ನೌಕಾಪಡೆಯ 27ನೇ ಮುಖ್ಯಸ್ಥರಾಗಿ ನೇಮಕಗೊಂಡವರು ಯಾರು?",
+                options: ["A) ಕೃಷ್ಣಸ್ವಾಮಿನಾಥನ್", "B) ಎನ್.ಎಸ್. ರಾಜಾಸುಬ್ರಮಣಿ", "C) ಪ್ರವೀಣ್ ಸೂದ್", "D) ರಂಗಸ್ವಾಮಿ"],
+                correct: 0,
+                explanation: "ಕೃಷ್ಣಸ್ವಾಮಿನಾಥನ್ ಅವರು ಭಾರತೀಯ ನೌಕಾಪಡೆಯ 27ನೇ ಮುಖ್ಯಸ್ಥರಾಗಿ ಆಯ್ಕೆಯಾಗಿದ್ದಾರೆ."
+            },
+            {
+                id: 7,
+                page: "Cover Page",
+                question: "ಸೇನಾ ಪಡೆಗಳ ಮುಖ್ಯಸ್ಥ (CDS) ರಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿರುವವರು ಯಾರು?",
+                options: ["A) ಎನ್.ಎಸ್. ರಾಜಾಸುಬ್ರಮಣಿ", "B) ಅನಿಲ್ ಚೌಹಾಣ್", "C) ಮನೋಜ್ ಪಾಂಡೆ", "D) ವಿ.ಆರ್. ಚೌಧರಿ"],
+                correct: 0,
+                explanation: "ಎನ್.ಎಸ್. ರಾಜಾಸುಬ್ರಮಣಿ ಅವರು ಸೇನಾ ಪಡೆಗಳ ಪ್ರಮುಖ ನಾಯಕತ್ವದ ಶೀರ್ಷಿಕೆಯಲ್ಲಿ ಉಲ್ಲೇಖಗೊಂಡಿದ್ದಾರೆ."
+            },
+            {
+                id: 8,
+                page: "Cover Page",
+                question: "ಕೇಂದ್ರ ಮಾನವ ಹಕ್ಕುಗಳ ಆಯೋಗದ ಅಧ್ಯಕ್ಷರಾಗಿ ನಿಯೋಜಿತಗೊಂಡವರು ಯಾರು?",
+                options: ["A) ವಿ. ನಾಥನ್ ದಾಸನ್", "B) ಪ್ರವೀಣ್ ಸೂದ್", "C) ಸುಬೋಧ್ ಕುಮಾರ್", "D) ಅಮಿತಾಭ್ ಕಾಂತ್"],
+                correct: 0,
+                explanation: "ವಿ. ನಾಥನ್ ದಾಸನ್ ಅವರು ಮಾನವ ಹಕ್ಕುಗಳ ಆಯೋಗದ ಮುಖ್ಯಸ್ಥರಾಗಿ ಉಲ್ಲೇಖಿತರಾಗಿದ್ದಾರೆ."
+            },
+            {
+                id: 9,
+                page: "Cover Page",
+                question: "ಚಂದ್ರಯಾನ-3 ಮಿಷನ್‌ಗೆ ಅಮೆರಿಕದ ಗಾರ್ಡನ್ ಅಸೋಸಿಯೇಟಿಕ್ಸ್ ಪ್ರಶಸ್ತಿ ನೀಡಿ ಗೌರವಿಸಲಾಗಿದೆ. ಇದು ಯಾವ ಸಂಸ್ಥೆಗೆ ಸಂಬಂಧಿಸಿದೆ?",
+                options: ["A) ISRO (ಇಸ್ರೋ)", "B) NASA", "C) DRDO", "D) HAL"],
+                correct: 0,
+                explanation: "ಭಾರತದ ಚಂದ್ರಯಾನ-3 ಸಾಹಸಕ್ಕೆ ಅಮೆರಿಕದ ಪ್ರಷ್ಠಿತ ಗಾರ್ಡನ್ ಅಸೋಸಿಯೇಟಿಕ್ಸ್ ಪ್ರಶಸ್ತಿ ಲಭಿಸಿದೆ."
+            },
+            {
+                id: 10,
+                page: "Cover Page",
+                question: "ಏಕರೂಪ ನಾಗರಿಕ ಸಂಹಿತೆ (UCC) ಜಾರಿಗೆ ತಂದ ದೇಶದ 3ನೇ ರಾಜ್ಯ ಯಾವುದು?",
+                options: ["A) ಅಸ್ಸಾಂ", "B) ಗೋವಾ", "C) ಉತ್ತರಾಖಂಡ", "D) ಗುಜರಾತ್"],
+                correct: 0,
+                explanation: "ಉತ್ತರಾಖಂಡ ಮತ್ತು ಗೋವಾ ನಂತರ ಏಕರೂಪ ನಾಗರಿಕ ಸಂಹಿತೆ (UCC) ಜಾರಿಗೆ ತಂದ 3ನೇ ರಾಜ್ಯ ಅಸ್ಸಾಂ."
+            },
+            {
+                id: 11,
+                page: "Cover Page",
+                question: "ದೇಶದ ಮೊದಲ ಮೀಸಲಾದ 'ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ (AI) ಸಚಿವಾಲಯ' ಪ್ರಾರಂಭಿಸಿದ ರಾಜ್ಯ ಯಾವುದು?",
+                options: ["A) ಕೇರಳ", "B) ಕರ್ನಾಟಕ", "C) ತೆಲಂಗಾಣ", "D) ತಮಿಳುನಾಡು"],
+                correct: 0,
+                explanation: "ದೇಶದಲ್ಲೇ ಪ್ರಥಮ ಬಾರಿಗೆ ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ (AI) ಗಾಗಿ ಪ್ರತ್ಯೇಕ ಸಚಿವಾಲಯವನ್ನು ಕೇರಳ ರಾಜ್ಯ ಪ್ರಾರಂಭಿಸಿದೆ."
+            },
+            {
+                id: 12,
+                page: "Cover Page",
+                question: "ಅರಬ್ ಜಗತ್ತಿನ ಏಕೈಕ ಅಣುಸ್ಥಾವರ 'ಬರಕಾಹ್' ಅಣುವಿದ್ಯುತ್ ಸ್ಥಾವರ ಎಲ್ಲಿದೆ?",
+                options: ["A) ಯುಎಇ (UAE)", "B) ಸೌದಿ ಅರೇಬಿಯಾ", "C) ಕತಾರ್", "D) ಕುವೈತ್"],
+                correct: 0,
+                explanation: "ಅರಬ್ ಜಗತ್ತಿನ ಏಕೈಕ ಕಾರ್ಯಾಚರಣೆಯಲ್ಲಿರುವ ಬರಕಾಹ್ ಅಣುವಿದ್ಯುತ್ ಸ್ಥಾವರ ಯುಎಇ ನಲ್ಲಿದೆ."
+            },
+            {
+                id: 13,
+                page: "Cover Page",
+                question: "ಭಾರತದ 18ನೇ ರೈಲ್ವೆ ವಲಯವಾದ 'ದಕ್ಷಿಣ ಕರಾವಳಿ ರೈಲ್ವೆ ವಲಯ'ದ ಪ್ರಧಾನ ಕಚೇರಿ ಎಲ್ಲಿದೆ?",
+                options: ["A) ವಿಶಾಖಪಟ್ಟಣಂ (ಆಂಧ್ರಪ್ರದೇಶ)", "B) ವಿಜಯವಾಡ", "C) ಭುವನೇಶ್ವರ", "D) ಚೆನ್ನೈ"],
+                correct: 0,
+                explanation: "ದಕ್ಷಿಣ ಕರಾವಳಿ ರೈಲ್ವೆ ವಲಯದ ಪ್ರಧಾನ ಕಛೇರಿ ಆಂಧ್ರಪ್ರದೇಶದ ವಿಶಾಖಪಟ್ಟಣಂನಲ್ಲಿದೆ."
+            },
+            {
+                id: 14,
+                page: "Cover Page",
+                question: "PM SVANidhi (ಸ್ವನಿಧಿ) ಯೋಜನೆಯು ಎಷ್ಟು ವರ್ಷಗಳನ್ನು ಪೂರ್ಣಗೊಳಿಸಿದೆ?",
+                options: ["A) 6 ವರ್ಷ (2026 ಕ್ಕೆ)", "B) 4 ವರ್ಷ", "C) 5 ವರ್ಷ", "D) 3 ವರ್ಷ"],
+                correct: 0,
+                explanation: "ಪ್ರಧಾನಮಂತ್ರಿ ಸ್ವನಿಧಿ ಯೋಜನೆಯು 6 ವರ್ಷಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಳಿಸಿದೆ."
+            },
+            {
+                id: 15,
+                page: "Cover Page",
+                question: "DRDO ಅಭಿವೃದ್ಧಿಪಡಿಸಿದ ಸುಧಾರಿತ MIRV ಅಗ್ನಿ ಕ್ಷಿಪಣಿ ಪರೀಕ್ಷೆ ಯಾವುದು?",
+                options: ["A) ದಿವ್ಯಾಸ್ತ್ರ", "B) ರುದ್ರಮ್-II", "C) ಅಸ್ತ್ರ", "D) ಪ್ರಳಯ್"],
+                correct: 0,
+                explanation: "DRDO ಯ ಸುಧಾರಿತ MIRV ತಂತ್ರಜ್ಞಾನದ ಅಗ್ನಿ ಕ್ಷಿಪಣಿ ಪರೀಕ್ಷೆಯ ಹೆಸರು ದಿವ್ಯಾಸ್ತ್ರ."
+            },
+            {
+                id: 16,
+                page: "Cover Page",
+                question: "19ನೇ ಆವೃತ್ತಿಯ ಐಪಿಎಲ್ ಚಾಂಪಿಯನ್ ಆಗಿ ಹೊರಹೊಮ್ಮಿದ ತಂಡ ಯಾವುದು?",
+                options: ["A) ಆರ್‌ಸಿಬಿ (RCB)", "B) ಸಿಎಸ್‌ಕೆ (CSK)", "C) ಮುಂಬೈ ಇಂಡಿಯನ್ಸ್", "D) ಕೆಕೆಆರ್ (KKR)"],
+                correct: 0,
+                explanation: "ಆರ್‌ಸಿಬಿ (RCB) ತಂಡವು 19ನೇ ಆವೃತ್ತಿಯ ಐಪಿಎಲ್ ಚಾಂಪಿಯನ್ ಕಿರೀಟವನ್ನು ಮುಡಿಗೇರಿಸಿಕೊಂಡಿದೆ."
+            },
+
+            // PAGE 1 - HIGHLIGHTS & INTERNATIONAL NEWS
+            {
+                id: 17,
+                page: "Page 1",
+                question: "2025ರ ವಿಶ್ವಸಂಸ್ಥೆ ಮಿಲಿಟರಿ ಲಿಂಗ ಲಿಂಗ ವಕೀಲ ಪ್ರಶಸ್ತಿ ಪಡೆದ ಭಾರತೀಯ ಶಾಂತಿ ಪಾಲಕಿ ಯಾರು?",
+                options: ["A) ಮೇಜರ್ ರಾಧಿಕಾ ಸೇನ್", "B) ಕಾಂಚನ್ ಚೌಧರಿ", "C) ಪುನಿತಾ ಅರೋರಾ", "D) ಪದ್ಮಾವತಿ ಬಂದೋಪಾಧ್ಯಾಯ"],
+                correct: 0,
+                explanation: "ಮೇಜರ್ ರಾಧಿಕಾ ಸೇನ್ ಅವರು ಯುಎನ್ ಮಿಲಿಟರಿ ಜಂಡರ್ ಅಡ್ವೋಕೇಟ್ ಪ್ರಶಸ್ತಿ ಪಡೆದಿದ್ದಾರೆ."
+            },
+            {
+                id: 18,
+                page: "Page 1",
+                question: "ಪ್ರಧಾನಿ ಮೋದಿ ಅವರಿಗೆ ಫಿಜಿ ದೇಶದ ಅತ್ಯುನ್ನತ ಪುರಸ್ಕಾರ 'ಕಂಪ್ಯಾನಿಯನ್ ಆಫ್ ದಿ ಆರ್ಡರ್ ಆಫ್ ಫಿಜಿ' ಯನ್ನು ಯಾವ ಹೆಸರು ನೀಡಲಾಗಿದೆ?",
+                options: ["A) ‘ಅಗ್ರಿಕೋಲ್ ಮೆಡಲ್’", "B) ‘ಗ್ರಾಂಡ್ ಕ್ರಾಸ್’", "C) ‘ದಿ ಆರ್ಡರ್ ಆಫ್ ಮೆರಿಟ್’", "D) ‘ರಾಯಲ್ ನಾರ್ವೇಜಿಯನ್’"],
+                correct: 0,
+                explanation: "ಎಫ್‌ಎಒ ನ ಅತ್ಯುನ್ನತ ಪುರಸ್ಕಾರ ‘ಅಗ್ರಿಕೋಲ್ ಮೆಡಲ್’ ಅನ್ನು ಪ್ರಧಾನಿ ಮೋದಿಯವರಿಗೆ ನೀಡಲಾಗಿದೆ."
+            },
+            {
+                id: 19,
+                page: "Page 1",
+                question: "ನಾರ್ವೇ ದೇಶದ ಅತ್ಯುನ್ನತ ನಾಗರಿಕ ಪ್ರಶಸ್ತಿ ಯಾವುದು?",
+                options: ["A) ‘ಗ್ರಾಂಡ್ ಕ್ರಾಸ್ ಆಫ್ ದಿ ರಾಯಲ್ ನಾರ್ವೇಜಿಯನ್ ಆರ್ಡರ್ ಆಫ್ ಮೆರಿಟ್’", "B) ರಾಯಲ್ ಆಡರ್ ಆಫ್ ದಿ ಪೋಲಾರ್ ಸ್ಟಾರ್", "C) ಅಗ್ರಿಕೋಲ್ ಮೆಡಲ್", "D) ಆರ್ಡರ್ ಆಫ್ ಜಾಯೆದ್"],
+                correct: 0,
+                explanation: "ನಾರ್ವೇಯ ಅತ್ಯುನ್ನತ ಪ್ರಶಸ್ತಿ 'ಗ್ರಾಂಡ್ ಕ್ರಾಸ್ ಆಫ್ ದಿ ರಾಯಲ್ ನಾರ್ವೇಜಿಯನ್ ಆರ್ಡರ್ ಆಫ್ ಮೆರಿಟ್'."
+            },
+            {
+                id: 20,
+                page: "Page 1",
+                question: "ಸ್ವೀಡನ್ ದೇಶದ ಅತ್ಯುನ್ನತ ಪ್ರಶಸ್ತಿ ಯಾವುದು?",
+                options: ["A) ‘ರಾಯಲ್ ಆರ್ಡರ್ ಆಫ್ ದಿ ಪೋಲಾರ್ ಸ್ಟಾರ್’", "B) ಅಗ್ರಿಕೋಲ್ ಮೆಡಲ್", "C) ನಾರ್ವೇಜಿಯನ್ ಮೆರಿಟ್", "D) ಲೀಜನ್ ಆಫ್ ಆನರ್"],
+                correct: 0,
+                explanation: "ಸ್ವೀಡನ್ ದೇಶದ ಅತ್ಯುನ್ನತ ನಾಗರಿಕ ಗೌರವ ‘ರಾಯಲ್ ಆರ್ಡರ್ ಆಫ್ ದಿ ಪೋಲಾರ್ ಸ್ಟಾರ್’."
+            },
+            {
+                id: 21,
+                page: "Page 1",
+                question: "ದೇಶದ ಮೊದಲ ಸಂಪೂರ್ಣ ಜಲಜನಕ (Hydrogen) ರೈಲು ಚಾಲನೆಗೆ ಒಪ್ಪಿಗೆ ನೀಡಿದ ಮಾರ್ಗ ಯಾವುದು?",
+                options: ["A) ಹರಿಯಾಣದ ಜಿಂದ್ - ಸೋನಿಪತ್ ಮಾರ್ಗ", "B) ಬೆಂಗಳೂರು - ಮೈಸೂರು", "C) ದೆಹಲಿ - ಆಗ್ರಾ", "D) ಮುಂಬೈ - ಪುಣೆ"],
+                correct: 0,
+                explanation: "ಹರಿಯಾಣದ ಜಿಂದ್ - ಸೋನಿಪತ್ ಮಾರ್ಗದಲ್ಲಿ ದೇಶದ ಮೊದಲ ಹೈಡ್ರೋಜನ್ ರೈಲು ಸಂಚಾರ ಪ್ರಾರಂಭವಾಗಲಿದೆ."
+            },
+            {
+                id: 22,
+                page: "Page 1",
+                question: "ಸುಪ್ರೀಂ ಕೋರ್ಟ್‌ನ ನ್ಯಾಯಾಧೀಶರ ಸಂಖ್ಯೆ 4 ಹೆಚ್ಚಿಸಿ ರಾಷ್ಟ್ರಪತಿಗಳ ಸುಗ್ರೀವಾಜ್ಞೆ ಹೊರಡಿಸಿದ ನಂತರ ಸುಪ್ರೀಂ ಕೋರ್ಟ್‌ನಲ್ಲಿರುವ ಒಟ್ಟು ನ್ಯಾಯಾಧೀಶರ ಸಂಖ್ಯೆ ಎಷ್ಟು?",
+                options: ["A) 1 ಸಿಜೆಐ + 37 ನ್ಯಾಯಾಧೀಶರು", "B) 1 ಸಿಜೆಐ + 33 ನ್ಯಾಯಾಧೀಶರು", "C) 1 ಸಿಜೆಐ + 30 ನ್ಯಾಯಾಧೀಶರು", "D) 1 ಸಿಜೆಐ + 34 ನ್ಯಾಯಾಧೀಶರು"],
+                correct: 0,
+                explanation: "ಸುಪ್ರೀಂ ಕೋರ್ಟ್‌ನಲ್ಲಿ ಪ್ರಸ್ತುತ 1 ಸಿಜೆಐ (ಮುಖ್ಯ ನ್ಯಾಯಮೂರ್ತಿ) + 37 ನ್ಯಾಯಾಧೀಶರಿದ್ದಾರೆ."
+            },
+            {
+                id: 23,
+                page: "Page 1",
+                question: "ಭಾರತದ 100ನೇ ರಾಮ್‌ಸಾರ್ ತಾಣ 'ಜೈ ಪ್ರಕಾಶ್ ನಾರಾಯಣ್ ಪಕ್ಷಿಧಾಮ' ಎಲ್ಲಿದೆ?",
+                options: ["A) ಉತ್ತರ ಪ್ರದೇಶ (UP)", "B) ಮಧ್ಯಪ್ರದೇಶ", "C) ಬಿಹಾರ", "D) ರಾಜಸ್ಥಾನ"],
+                correct: 0,
+                explanation: "ಉತ್ತರ ಪ್ರದೇಶದಲ್ಲಿರುವ ಜೈ ಪ್ರಕಾಶ್ ನಾರಾಯಣ್ ಪಕ್ಷಿಧಾಮವು ಭಾರತದ 100ನೇ ರಾಮ್‌ಸಾರ್ ತಾಣವಾಗಿ ಹೊರಹೊಮ್ಮಿದೆ."
+            },
+            {
+                id: 24,
+                page: "Page 1",
+                question: "ಭಾರತದ ರಾಷ್ಟ್ರಪತಿಗಳಿಂದ ಸಿಕ್ಕಿಂ ಪೊಲೀಸ್‌ಗೆ ನೀಡಲಾದ ಗೌರವ ಪ್ರಶಸ್ತಿ ಯಾವುದು?",
+                options: ["A) 'ಭಾರತದ ಪೊಲೀಸ್ ಬಣ್ಣ' (President's Colour)", "B) ಶೌರ್ಯ ಚಕ್ರ", "C) ವೀರ ಚಕ್ರ", "D) ಮಹಾವೀರ ಚಕ್ರ"],
+                correct: 0,
+                explanation: "ಸಿಕ್ಕಿಂ ಪೋಲೀಸ್‌ಗೆ ಭಾರತದ ರಾಷ್ಟ್ರಪತಿಗಳಿಂದ ‘ಭಾರತದ ಪೊಲೀಸ್ ಬಣ್ಣ’ (President's Colour) ಪ್ರದಾನ ಮಾಡಲಾಗಿದೆ."
+            },
+            {
+                id: 25,
+                page: "Page 1",
+                question: "ತೆರೆದ ನೌಕಾ ಸಂಗ್ರಹಾಲಯ 'ಸೌ ನೌ ಸೇನಾ ಶೌರ್ಯ ವಾಟಿಕಾ' ಎಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾಗಿದೆ?",
+                options: ["A) ಲಕ್ನೋ (ಯು.ಪಿ)", "B) ವಿಶಾಖಪಟ್ಟಣಂ", "C) ಮುಂಬೈ", "D) ಕೊಚ್ಚಿ"],
+                correct: 0,
+                explanation: "ಉತ್ತರ ಪ್ರದೇಶದ ಲಕ್ನೋದಲ್ಲಿ 'ಸೌ ನೌ ಸೇನಾ ಶೌರ್ಯ ವಾಟಿಕಾ' ಎಂಬ ತೆರೆದ ನೌಕಾ ಸಂಗ್ರಹಾಲಯ ನಿರ್ಮಿಸಲಾಗಿದೆ."
+            },
+            {
+                id: 26,
+                page: "Page 1",
+                question: "79ನೇ ಕ್ಯಾನೆಸ್ ಚಲನಚಿತ್ರೋತ್ಸವ ಪ್ರಶಸ್ತಿ-2026 ರಲ್ಲಿ ಅತ್ಯುತ್ತಮ ಚಿತ್ರ ಪ್ರಶಸ್ತಿ ಪಡೆದ 'ರಾಮ್ ಡಿ ಒರ್' (Palme d'Or) ಚಿತ್ರ ಯಾವುದು?",
+                options: ["A) ಆಲ್ ವಿ ಇಮ್ಯಾಜಿನ್ ಆಸ್ ಲೈಟ್", "B) ದ ಸಬ್‌ಸ್ಟ್ಯಾನ್ಸ್", "C) ಎಮಿನಿಯಾ", "D) ಅನಟಮಿ ಆಫ್ ಎ ಫಾಲ್"],
+                correct: 0,
+                explanation: "ಕ್ಯಾನೆಸ್ ಚಲನಚಿತ್ರೋತ್ಸವದಲ್ಲಿ 'ರಾಮ್ ಡಿ ಒರ್' ಅತ್ಯುತ್ತಮ ಚಿತ್ರ ಪ್ರಶಸ್ತಿಯನ್ನು ಮುಡಿಗೇರಿಸಿಕೊಂಡಿದೆ."
+            },
+            {
+                id: 27,
+                page: "Page 1",
+                question: "ವಿಕಸಿತ್ ವೈಬ್ರೆಂಟ್ ವಿಲೇಜ್ ಪ್ರೋಗ್ರಾಂ (Viksit Vibrant Village Program) ಯಾವ ವರ್ಷಕ್ಕೆ ಸಂಬಂಧಿಸಿದೆ?",
+                options: ["A) 2026", "B) 2024", "C) 2025", "D) 2030"],
+                correct: 0,
+                explanation: "ಗಡಿ ಗ್ರಾಮಗಳ ಅಭಿವೃದ್ಧಿಗಾಗಿ 'ವಿಕಸಿತ್ ವೈಬ್ರೆಂಟ್ ವಿಲೇಜ್ ಪ್ರೋಗ್ರಾಂ-2026' ಅನುಷ್ಠಾನದಲ್ಲಿದೆ."
+            },
+            {
+                id: 28,
+                page: "Page 1",
+                question: "ಸ್ವದೇಶಿ ತಂತ್ರಜ್ಞಾನದ ರೇಡಾರ್ 'ರುದ್ರಮ್-II' (Rudram-II) ಪರೀಕ್ಷೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನಡೆಸಿದ ಸಂಸ್ಥೆ ಯಾವುದು?",
+                options: ["A) DRDO", "B) ISRO", "C) HAL", "D) BEL"],
+                correct: 0,
+                explanation: "DRDO ಸಂಸ್ಥೆಯು ಸ್ವದೇಶಿ ವಿನ್ಯಾಸದ ರೇಡಾರ್ ವಿರೋಧಿ ಕ್ಷಿಪಣಿ ರುದ್ರಮ್-II ಪರೀಕ್ಷಿಸಿದೆ."
+            },
+            {
+                id: 29,
+                page: "Page 1",
+                question: "ಫಿನ್‌ಲ್ಯಾಂಡ್‌ನಲ್ಲಿ ವಿಶ್ವದ ಮೊದಲ ಪರಮಾಣು ತ್ಯಾಜ್ಯ ಸಂಗ್ರಹಗಾರ ಸ್ಥಾಪಿಸಲಾಗಿದೆ. ಅದರ ಹೆಸರೇನು?",
+                options: ["A) ಒಂಕಾಲೋ (Onkalo)", "B) ಬರಾಕಾ", "C) ಫುಕುಶಿಮಾ", "D) ಚೆರ್ನೋಬಿಲ್"],
+                correct: 0,
+                explanation: "ವಿಶ್ವದ ಪ್ರಥಮ ಭೂಗತ ಪರಮಾಣು ತ್ಯಾಜ್ಯ ಸಂಗ್ರಹಗಾರ 'ಒಂಕಾಲೋ' ಫಿನ್‌ಲ್ಯಾಂಡ್‌ನಲ್ಲಿ ಆರಂಭವಾಗಿದೆ."
+            },
+            {
+                id: 30,
+                page: "Page 1",
+                question: "ವಿದೇಶಾಂಗ ಭದ್ರತಾ ಶೃಂಗಸಭೆ 'ಶಾಂಗ್ರಿ-ಲಾ ಸಂವಾದ-2026' (Shangri-La Dialogue) ಎಲ್ಲಿ ನಡೆಯಿತು?",
+                options: ["A) ಸಿಂಗಾಪುರ", "B) ನವದೆಹಲಿ", "C) ಟೋಕಿಯೋ", "D) ಜಿನೀವಾ"],
+                correct: 0,
+                explanation: "ಪ್ರಖ್ಯಾತ ಶಾಂಗ್ರಿ-ಲಾ ಸಂವಾದ (Shangri-La Dialogue 2026) ಸಿಂಗಾಪುರದಲ್ಲಿ ನೆರವೇರಿತು."
+            },
+            {
+                id: 31,
+                page: "Page 1",
+                question: "ಮೇ 03 ರಂದು ಆಚರಿಸಲಾಗುವ ಪ್ರಮುಖ ದಿನ ಯಾವುದು?",
+                options: ["A) ವಿಶ್ವ ಪತ್ರಿಕಾ ಸ್ವಾತಂತ್ರ್ಯ ದಿನ", "B) ವಿಶ್ವ ರೆಡ್ ಕ್ರಾಸ್ ದಿನ", "C) ರಾಷ್ಟ್ರೀಯ ತಂತ್ರಜ್ಞಾನ ದಿನ", "D) ವಿಶ್ವ ತಂಬಾಕು ರಹಿತ ದಿನ"],
+                correct: 0,
+                explanation: "ಮೇ 3 ರಂದು ಪ್ರತಿವರ್ಷ 'ವಿಶ್ವ ಪತ್ರಿಕಾ ಸ್ವಾತಂತ್ರ್ಯ ದಿನ'ವನ್ನು ಆಚರಿಸಲಾಗುತ್ತದೆ."
+            },
+            {
+                id: 32,
+                page: "Page 1",
+                question: "ಮೇ 08 ರಂದು ಆಚರಿಸಲಾಗುವ ದಿನ ಯಾವುದು?",
+                options: ["A) ವಿಶ್ವ ರೆಡ್ ಕ್ರಾಸ್ ದಿನ", "B) ವಿಶ್ವ ಪತ್ರಿಕಾ ಸ್ವಾತಂತ್ರ್ಯ ದಿನ", "C) ಅಂತರರಾಷ್ಟ್ರೀಯ ದಾದಿಯರ ದಿನ", "D) ಜೈವಿಕ ವೈವಿಧ್ಯತೆ ದಿನ"],
+                correct: 0,
+                explanation: "ಮೇ 8 ರಂದು ವಿಶ್ವ ರೆಡ್ ಕ್ರಾಸ್ ದಿನವನ್ನು ಆಚರಿಸಲಾಗುತ್ತದೆ."
+            },
+            {
+                id: 33,
+                page: "Page 1",
+                question: "ಮೇ 22 ರಂದು ಆಚರಿಸಲಾಗುವ ಪ್ರಮುಖ ಅಂತರರಾಷ್ಟ್ರೀಯ ದಿನ ಯಾವುದು?",
+                options: ["A) ಅಂತರರಾಷ್ಟ್ರೀಯ ಜೀವ ವೈವಿಧ್ಯತೆ ದಿನ", "B) ರಾಷ್ಟ್ರೀಯ ತಂತ್ರಜ್ಞಾನ ದಿನ", "C) ಭಯೋತ್ಪಾದನಾ ವಿರೋಧಿ ದಿನ", "D) ವಿಶ್ವ ತಂಬಾಕು ರಹಿತ ದಿನ"],
+                correct: 0,
+                explanation: "ಮೇ 22 ರಂದು 'ಅಂತರರಾಷ್ಟ್ರೀಯ ಜೀವ ವೈವಿಧ್ಯತೆ ದಿನ'ವನ್ನು ಆಚರಿಸಲಾಗುತ್ತದೆ."
+            },
+            {
+                id: 34,
+                page: "Page 1",
+                question: "ಮೇ 31 ರಂದು ಆಚರಿಸಲಾಗುವ ಆರೋಗ್ಯ ಸಂಬಂಧಿತ ದಿನ ಯಾವುದು?",
+                options: ["A) ವಿಶ್ವ ತಂಬಾಕು ರಹಿತ ದಿನ", "B) ವಿಶ್ವ ಪರಿಸರ ದಿನ", "C) ವಿಶ್ವ ಆರೋಗ್ಯ ದಿನ", "D) ವಿಶ್ವ ಮಲೇರಿಯಾ ದಿನ"],
+                correct: 0,
+                explanation: "ಮೇ 31 ರಂದು 'ವಿಶ್ವ ತಂಬಾಕು ರಹಿತ ದಿನ' (World No Tobacco Day) ವನ್ನು ಆಚರಿಸಲಾಗುತ್ತದೆ."
+            }
+        ];
+
+        let currentIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let currentScore = 0;
+        let timerInterval = null;
+        let secondsLeft = 30 * 60;
+
+        const questionText = document.getElementById("questionText");
+        const optionsList = document.getElementById("optionsList");
+        const feedbackBox = document.getElementById("feedbackBox");
+        const pageTitle = document.getElementById("pageTitle");
+        const paletteContainer = document.getElementById("paletteContainer");
+        const scoreDisplay = document.getElementById("score");
+        const totalQuestionsDisplay = document.getElementById("totalQuestions");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const timerDisplay = document.getElementById("timer");
+
+        function startApp() {
+            totalQuestionsDisplay.textContent = quizData.length;
+            renderPalette();
+            loadQuestion(0);
+            initTimer();
+            buildAnswerKey();
+        }
+
+        function renderPalette() {
+            paletteContainer.innerHTML = "";
+            let currentGroup = "";
+            let currentGrid = null;
+
+            quizData.forEach((item, idx) => {
+                if (item.page !== currentGroup) {
+                    currentGroup = item.page;
+                    const groupHeader = document.createElement("div");
+                    groupHeader.className = "palette-group-title";
+                    groupHeader.textContent = currentGroup;
+                    paletteContainer.appendChild(groupHeader);
+
+                    currentGrid = document.createElement("div");
+                    currentGrid.className = "palette-grid";
+                    paletteContainer.appendChild(currentGrid);
+                }
+
+                const btn = document.createElement("button");
+                btn.className = "btn-qnum";
+                btn.id = `palette-btn-${idx}`;
+                btn.textContent = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+                currentGrid.appendChild(btn);
+            });
+        }
+
+        function loadQuestion(index) {
+            currentIndex = index;
+            const item = quizData[index];
+
+            pageTitle.textContent = `${item.page} - Question ${index + 1} of ${quizData.length}`;
+            questionText.textContent = `${index + 1}. ${item.question}`;
+            
+            optionsList.innerHTML = "";
+            feedbackBox.style.display = "none";
+
+            const existingAnswer = userAnswers[index];
+
+            item.options.forEach((optText, optIdx) => {
+                const li = document.createElement("li");
+                li.className = "option-item";
+
+                const isSelected = existingAnswer !== null && existingAnswer.selected === optIdx;
+
+                if (existingAnswer !== null) {
+                    if (optIdx === item.correct) {
+                        li.classList.add("correct");
+                    } else if (isSelected && optIdx !== item.correct) {
+                        li.classList.add("incorrect");
+                    }
+                }
+
+                li.innerHTML = `
+                    <input type="radio" name="option" value="${optIdx}" ${isSelected ? "checked" : ""} ${existingAnswer !== null ? "disabled" : ""}>
+                    <span>${optText}</span>
+                `;
+
+                if (existingAnswer === null) {
+                    li.onclick = () => selectOption(optIdx);
+                }
+
+                optionsList.appendChild(li);
+            });
+
+            if (existingAnswer !== null) {
+                feedbackBox.style.display = "block";
+                if (existingAnswer.isCorrect) {
+                    feedbackBox.className = "feedback-box correct";
+                    feedbackBox.innerHTML = `<strong>ಸರಿ! (Correct)</strong><br>${item.explanation}`;
+                } else {
+                    feedbackBox.className = "feedback-box incorrect";
+                    feedbackBox.innerHTML = `<strong>ತಪ್ಪು! (Incorrect)</strong><br>ಸರಿಯಾದ ಉತ್ತರ: <strong>${item.options[item.correct]}</strong><br>${item.explanation}`;
+                }
+            }
+
+            document.querySelectorAll(".btn-qnum").forEach((btn, i) => {
+                btn.classList.toggle("active", i === index);
+            });
+
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === quizData.length - 1;
+        }
+
+        function selectOption(optIdx) {
+            const item = quizData[currentIndex];
+            const isCorrect = optIdx === item.correct;
+
+            userAnswers[currentIndex] = {
+                selected: optIdx,
+                isCorrect: isCorrect
+            };
+
+            if (isCorrect) currentScore++;
+            scoreDisplay.textContent = currentScore;
+
+            const paletteBtn = document.getElementById(`palette-btn-${currentIndex}`);
+            if (isCorrect) {
+                paletteBtn.classList.add("answered-correct");
+            } else {
+                paletteBtn.classList.add("answered-wrong");
+            }
+
+            loadQuestion(currentIndex);
+        }
+
+        function navigate(dir) {
+            const nextIdx = currentIndex + dir;
+            if (nextIdx >= 0 && nextIdx < quizData.length) {
+                loadQuestion(nextIdx);
+            }
+        }
+
+        function jumpToQuestion(idx) {
+            loadQuestion(idx);
+        }
+
+        function initTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                let m = Math.floor(secondsLeft / 60);
+                let s = secondsLeft % 60;
+                timerDisplay.textContent = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time expired! Your Score: " + currentScore + "/" + quizData.length);
+                }
+            }, 1000);
+        }
+
+        // Complete Reset/Retest Handler
+        function resetQuiz() {
+            if (confirm("ಪರೀಕ್ಷೆಯನ್ನು ಮತ್ತೆ ಪ್ರಾರಂಭಿಸಲು ಇಷ್ಟಪಡುತ್ತೀರಾ? (Reset/Retest all questions?)")) {
+                userAnswers = new Array(quizData.length).fill(null);
+                currentScore = 0;
+                scoreDisplay.textContent = "0";
+                secondsLeft = 30 * 60;
+
+                document.querySelectorAll(".btn-qnum").forEach(btn => {
+                    btn.className = "btn-qnum";
+                });
+
+                toggleAnswerKey(false);
+                loadQuestion(0);
+                initTimer();
+            }
+        }
+
+        function toggleAnswerKey(show) {
+            document.getElementById("quizPanel").style.display = show ? "none" : "flex";
+            document.getElementById("answerKeyPanel").style.display = show ? "block" : "none";
+        }
+
+        function buildAnswerKey() {
+            const keyContainer = document.getElementById("answerKeyContent");
+            keyContainer.innerHTML = "";
+
+            quizData.forEach((item, idx) => {
+                const row = document.createElement("div");
+                row.className = "answer-key-item";
+                row.innerHTML = `
+                    <p><strong>Q${idx + 1} (${item.page}):</strong> ${item.question}</p>
+                    <p><strong>ಸರಿಯಾದ ಉತ್ತರ:</strong> ${item.options[item.correct]}</p>
+                    <p style="color: #444;"><strong>ವಿವರಣೆ:</strong> ${item.explanation}</p>
+                `;
+                keyContainer.appendChild(row);
+            });
+        }
+
+        window.onload = startApp;
+    </script>
+</body>
+</html>
