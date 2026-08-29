@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka PC & SSC Online CBT Practice Test</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --secondary: #0066cc;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --light-bg: #f4f7fa;
+            --border-color: #dcdcdc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif, 'Tunga', 'Kedage';
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* SSC Header */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--secondary);
+            flex-shrink: 0;
+        }
+
+        header h1 {
+            font-size: 1.2rem;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .timer-box {
+            background: #fff;
+            color: #d9534f;
+            padding: 5px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid #d9534f;
+            font-size: 1.1rem;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Left Content Area */
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid var(--border-color);
+            background: #fff;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .page-header {
+            background: #e9ecef;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .question-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto; /* Independent scrolling for question body */
+        }
+
+        .q-text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #111;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .option-item:hover {
+            background-color: #f0f4f8;
+            border-color: var(--secondary);
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        /* Feedback States */
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .option-item.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .feedback-box.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback-box.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Bottom Controls */
+        .footer-controls {
+            padding: 12px 20px;
+            background: #e9ecef;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary { background-color: var(--secondary); color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-danger { background-color: var(--danger); color: white; }
+
+        /* Right Palette Sidebar */
+        .sidebar {
+            width: 320px;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .palette-header {
+            padding: 12px;
+            background: #e2e6ea;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .score-board {
+            padding: 10px;
+            background: #fff;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .palette-container {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto; /* Independent scrolling for question palette */
+        }
+
+        .palette-group-title {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #555;
+            margin: 10px 0 5px 0;
+            text-transform: uppercase;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .btn-qnum {
+            height: 38px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-qnum.active {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 5px rgba(0,51,102,0.5);
+        }
+
+        .btn-qnum.answered-correct {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .btn-qnum.answered-wrong {
+            background-color: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .palette-footer {
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        /* Toggle Answer Key View */
+        .answer-key-section {
+            display: none;
+            padding: 20px;
+            background: #fff;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .answer-key-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .answer-key-item strong {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; height: 200px; }
+            .main-panel { height: calc(100% - 200px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Karnataka PC & SSC CBT Exam Mock Test</h1>
+        <div class="header-info">
+            <span>Time Remaining:</span>
+            <div class="timer-box" id="timer">15:00</div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="container">
+        <!-- Question Display Panel -->
+        <div class="main-panel" id="quizPanel">
+            <div class="page-header" id="pageTitle">Page 64 Questions</div>
+            
+            <div class="question-container">
+                <div class="q-text" id="questionText">Loading Question...</div>
+                
+                <ul class="options-list" id="optionsList">
+                    <!-- Options injected via JavaScript -->
+                </ul>
+
+                <div class="feedback-box" id="feedbackBox"></div>
+            </div>
+
+            <div class="footer-controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="navigate(-1)">Previous</button>
+                <button class="btn btn-danger" onclick="resetQuiz()">Reset Test</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="navigate(1)">Next</button>
+            </div>
+        </div>
+
+        <!-- Answer Key Panel (Hidden by Default) -->
+        <div class="main-panel answer-key-section" id="answerKeyPanel">
+            <h2>Answer Key & Explanations (ಉತ್ತರಗಳು ಮತ್ತು ವಿವರಣೆ)</h2>
+            <br>
+            <div id="answerKeyContent"></div>
+            <br>
+            <button class="btn btn-primary" onclick="toggleAnswerKey(false)">Back to Quiz</button>
+        </div>
+
+        <!-- Right Side Palette -->
+        <div class="sidebar">
+            <div class="palette-header">Question Palette</div>
+            
+            <div class="score-board">
+                Score: <span id="score">0</span> / <span id="totalQuestions">0</span>
+            </div>
+
+            <div class="palette-container" id="paletteContainer">
+                <!-- Grouped question buttons generated by JavaScript -->
+            </div>
+
+            <div class="palette-footer">
+                <button class="btn btn-primary" style="width: 100%;" onclick="toggleAnswerKey(true)">View Answer Key</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data based strictly on scanned images (Pages 64 to 73)
+        const quizData = [
+            // Page 64 (1000033417.jpg)
+            {
+                id: 1,
+                page: "Page 64",
+                question: "ಇತ್ತೀಚೆಗೆ ಗುಜರಾತ್‌ನ ಕಚ್ ಹುಲ್ಲುಗಾವಲು ಪ್ರದೇಶದಲ್ಲಿ ಜನಿಸಿದ 'ಗ್ರೇಟ್ ಇಂಡಿಯನ್ ಬಸ್ಟಾರ್ಡ್' ಮರಿಯ ವಿಶೇಷತೆ ಏನು?",
+                options: [
+                    "A) ಕೃತಕವಾಗಿ ಕೂಡುಹಾಕುವ ವ್ಯವಸ್ಥೆಯಿಂದ ಪಡೆಯಲಾಗಿದೆ",
+                    "B) ಕ್ಲೋನಿಂಗ್ ಮೂಲಕ ಜನಿಸಿದೆ",
+                    "C) ನೈಸರ್ಗಿಕವಾಗಿ ತಾಯಿಯಿಂದ ಜನಿಸಿದೆ",
+                    "D) ವಿದೇಶದಿಂದ ಆಮದು ಮಾಡಿಕೊಳ್ಳಲಾಗಿದೆ"
+                ],
+                correct: 0,
+                explanation: "ಗುಜರಾತ್‌ನ ಕಚ್ ಹುಲ್ಲುಗಾವಲಿನಲ್ಲಿ ಕೊನೆಯ 3 ಹೆಣ್ಣು ಬಸ್ಟಾರ್ಡ್‌ಗಳಿದ್ದು, ಮೊಟ್ಟೆಗಳನ್ನು ಕೃತಕವಾಗಿ ಕೂಡುಹಾಕುವ ವ್ಯವಸ್ಥೆ (Incubation) ಮೂಲಕ ಮರಿಯನ್ನು ಪಡೆಯಲಾಗಿದೆ."
+            },
+            {
+                id: 2,
+                page: "Page 64",
+                question: "ಉತ್ತರಾಖಂಡದ ಜಿಮ್ ಕಾರ್ಬೆಟ್ ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನವನದಲ್ಲಿ ಇತ್ತೀಚೆಗೆ ಕಂಡುಬಂದ ಅಪರೂಪದ ಪ್ರಸಂಗ ಯಾವುದು?",
+                options: [
+                    "A) ಅವಳಿ ಹುಲಿ ಮರಿಗಳ ಜನನ",
+                    "B) ಬಿಳಿ ಆನೆಗಳ ಆಗಮನ",
+                    "C) ಅವಳಿ ಆನೆ ಮರಿಗಳ ಜನನ",
+                    "D) ಕಪ್ಪು ಚಿರತೆ ಪತ್ತೆ"
+                ],
+                correct: 2,
+                explanation: "ಜಿಮ್ ಕಾರ್ಬೆಟ್ ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನವನದ ಹೆಗ್ಲಾನೆಯೊಂದರಲ್ಲಿ ಅವಳಿ ಆನೆ ಮರಿಗಳ ಜನನ ಅಪರೂಪದ ಪ್ರಸಂಗವಾಗಿ ವರದಿಯಾಗಿದೆ."
+            },
+            {
+                id: 3,
+                page: "Page 64",
+                question: "ತ್ರಿಪುರದಲ್ಲಿ ರೈತರ ಆದಾಯ ಹೆಚ್ಚಿಸಲು ಜಾರಿಗೆ ತರಲಾದ 'ಮಿಷನ್ ಕ್ವೀನ್ ಪೈನಾಪಲ್' ಯೋಜನೆಯ ಒಟ್ಟು ವೆಚ್ಚವೆಷ್ಟು?",
+                options: [
+                    "A) 100 ಕೋಟಿ ರೂ.",
+                    "B) 236 ಕೋಟಿ ರೂ.",
+                    "C) 500 ಕೋಟಿ ರೂ.",
+                    "D) 150 ಕೋಟಿ ರೂ."
+                ],
+                correct: 1,
+                explanation: "ತ್ರಿಪುರದಲ್ಲಿ ರೈತರ ಆದಾಯ ಹೆಚ್ಚಿಸಲು ₹236 ಕೋಟಿ ರೂ. ವೆಚ್ಚದ 'ಮಿಷನ್ ಕ್ವೀನ್ ಪೈನಾಪಲ್ ಯೋಜನೆ'ಗೆ ಚಾಲನೆ ನೀಡಲಾಗಿದೆ."
+            },
+
+            // Page 65 (1000033418.jpg)
+            {
+                id: 4,
+                page: "Page 65",
+                question: "ಭಾರತದ ಮೊದಲ ಖಾಸಗಿ ವೈದ್ಯಕೀಯ ವಸ್ತು ಸಂಗ್ರಹಾಲಯ (First Private Medical Museum) ಎಲ್ಲಿ ಉದ್ಘಾಟನೆಗೊಂಡಿದೆ?",
+                options: [
+                    "A) ಬೆಂಗಳೂರು",
+                    "B) ತಿರುವನಂತಪುರಂ (ಕೇರಳ)",
+                    "C) ಚೆನ್ನೈ",
+                    "D) ಹೈದರಾಬಾದ್"
+                ],
+                correct: 1,
+                explanation: "ಕೇರಳದ ತಿರುವನಂತಪುರಂನಲ್ಲಿ ಎ. ಶಿವಶಂಕರನ್ ಅವರು ಸ್ಥಾಪಿಸಿದ ದೇಶದ ಮೊದಲ ಖಾಸಗಿ ವೈದ್ಯಕೀಯ ವಸ್ತು ಸಂಗ್ರಹಾಲಯ ಉದ್ಘಾಟನೆಗೊಂಡಿದೆ."
+            },
+            {
+                id: 5,
+                page: "Page 65",
+                question: "ದೇಶದಲ್ಲೇ ಮೊದಲ ಬಾರಿಗೆ ಸಚಿವ ಸಂಪುಟ ದರ್ಜೆಯ 'ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ (AI) ಸಚಿವಾಲಯ' ರಚಿಸಿದ ರಾಜ್ಯ ಯಾವುದು?",
+                options: [
+                    "A) ಕರ್ನಾಟಕ",
+                    "B) ತೆಲಂಗಾಣ",
+                    "C) ಕೇರಳ",
+                    "D) ಮಹಾರಾಷ್ಟ್ರ"
+                ],
+                correct: 2,
+                explanation: "ಕೇರಳ ಸರ್ಕಾರವು ದೇಶದಲ್ಲೇ ಮೊದಲ ಬಾರಿಗೆ ಮೀಸಲಾದ ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ (AI) ಸಚಿವಾಲಯ/ಪೋರ್ಟ್‌ಫೋಲಿಯೋ ರಚಿಸಿದೆ."
+            },
+            {
+                id: 6,
+                page: "Page 65",
+                question: "ಕೇರಳ ರಾಜ್ಯ ಸರ್ಕಾರವು ಭ್ರಷ್ಟಾಚಾರ ಮುಕ್ತ ರಾಜ್ಯಕ್ಕಾಗಿ ಜಾರಿಗೆ ತಂದ ಯೋಜನೆಯ ಹೆಸರೇನು?",
+                options: [
+                    "A) ಪ್ರೊಜೆಕ್ಟ್ ಝೀರೋ (Project Zero)",
+                    "B) ಮಿಷನ್ ಕ್ಲೀನ್",
+                    "C) ಆಂಟಿ ಕಾಪ್",
+                    "D) ಶೂನ್ಯ ಭ್ರಷ್ಟಾಚಾರ"
+                ],
+                correct: 0,
+                explanation: "ಕೇರಳ ರಾಜ್ಯವನ್ನು ಭ್ರಷ್ಟಾಚಾರ ಮುಕ್ತಗೊಳಿಸಲು 'ಪ್ರೊಜೆಕ್ಟ್ ಝೀರೋ' (Project Zero) ಎಂಬ ಜೀರೋ ಟಾಲರೆನ್ಸ್ ನೀತಿಯನ್ನು ಜಾರಿಗೆ ತರಲಾಗಿದೆ."
+            },
+
+            // Page 66 (1000033419.jpg) - State Priority (Karnataka)
+            {
+                id: 7,
+                page: "Page 66",
+                question: "ವಿದೇಶಿ ನೇರ ಹೂಡಿಕೆ (FDI) ಸ್ವೀಕರಿಸುವಲ್ಲಿ ದೇಶದಲ್ಲಿ ಕರ್ನಾಟಕವು ಎಷ್ಟನೇ ಸ್ಥಾನದಲ್ಲಿದೆ?",
+                options: [
+                    "A) 1ನೇ ಸ್ಥಾನ",
+                    "B) 2ನೇ ಸ್ಥಾನ",
+                    "C) 3ನೇ ಸ್ಥಾನ",
+                    "D) 4ನೇ ಸ್ಥಾನ"
+                ],
+                correct: 1,
+                explanation: "FDI ಹೂಡಿಕೆಯಲ್ಲಿ ಮಹಾರಾಷ್ಟ್ರ 1ನೇ ಸ್ಥಾನದಲ್ಲಿದ್ದರೆ, ಕರ್ನಾಟಕವು 1.22 ಲಕ್ಷ ಕೋಟಿ ರೂ. ಹೂಡಿಕೆಯೊಂದಿಗೆ 2ನೇ ಸ್ಥಾನದಲ್ಲಿದೆ."
+            },
+            {
+                id: 8,
+                page: "Page 66",
+                question: "ದಕ್ಷಿಣ ಭಾರತದಲ್ಲೇ ಮೊದಲ ಬಾರಿಗೆ ಕಾಡುಕೋಣಗಳನ್ನು (Wild Buffaloes) ಸ್ಥಳಾಂತರ ಮಾಡುವ ಕಾರ್ಯಾಚರಣೆ ಕರ್ನಾಟಕದ ಯಾವ ಜಿಲ್ಲೆಯಲ್ಲಿ ನಡೆದಿದೆ?",
+                options: [
+                    "A) ಚಿಕ್ಕಮಗಳೂರು",
+                    "B) ಶಿವಮೊಗ್ಗ",
+                    "C) ಕೊಡಗು",
+                    "D) ಉತ್ತರ ಕನ್ನಡ"
+                ],
+                correct: 0,
+                explanation: "ಚಿಕ್ಕಮಗಳೂರಿನ ಎಸ್ಟೇಟ್ ಒಂದರಲ್ಲಿದ್ದ ಕಾಡುಕೋಣಗಳನ್ನು ಸೆರೆಹಿಡಿದು ಶಿವಮೊಗ್ಗದ ತ್ಯಾವರೆಕೊಪ್ಪಕ್ಕೆ ಸ್ಥಳಾಂತರಿಸಲಾಗಿದೆ."
+            },
+            {
+                id: 9,
+                page: "Page 66",
+                question: "ರಾಷ್ಟ್ರೀಯ ಎಐ (AI) ಮತ್ತು ಡಿಜಿಟಲ್ ವಾಟರ್ ಶೃಂಗಸಭೆ (National AI and Digital Water Summit) ಎಲ್ಲಿ ಜರುಗಿತು?",
+                options: [
+                    "A) ಮುಂಬೈ",
+                    "B) ನವದೆಹಲಿ",
+                    "C) ಬೆಂಗಳೂರು",
+                    "D) ಹೈದರಾಬಾದ್"
+                ],
+                correct: 2,
+                explanation: "ಬೆಂಗಳೂರು ಜಲಮಂಡಳಿ ವತಿಯಿಂದ ರಾಷ್ಟ್ರೀಯ ಎಐ ಮತ್ತು ಡಿಜಿಟಲ್ ವಾಟರ್ ಶೃಂಗಸಭೆಯನ್ನು ಬೆಂಗಳೂರಿನಲ್ಲಿ ಆಯೋಜಿಸಲಾಗಿತ್ತು."
+            },
+
+            // Page 67 (1000033420.jpg) - State Priority (Karnataka)
+            {
+                id: 10,
+                page: "Page 67",
+                question: "ಕರ್ನಾಟಕ ಸರ್ಕಾರವು ಯುನೆಸ್ಕೋ (UNESCO) ಜಾಗತಿಕ ಪಾರಂಪರಿಕ ತಾಣವೆಂದು ಘೋಷಿಸಲು ಪ್ರಸ್ತಾಪ ಸಲ್ಲಿಸಿರುವ ಸ್ಥಳ ಯಾವುದು?",
+                options: [
+                    "A) ಲಕ್ಕುಂಡಿ (ಗದಗ)",
+                    "B) ಬನವಾಸಿ (ಉತ್ತರ ಕನ್ನಡ)",
+                    "C) ಐಹೊಳೆ (ಬಾಗಲಕೋಟೆ)",
+                    "D) ಮಡಿಕೇರಿ (ಕೊಡಗು)"
+                ],
+                correct: 0,
+                explanation: "ಗದಗ ಜಿಲ್ಲೆಯ ಐತಿಹಾಸಿಕ ಲಕ್ಕುಂಡಿಯನ್ನು ಯುನೆಸ್ಕೋ ಜಾಗತಿಕ ಪಾರಂಪರಿಕ ತಾಣವಾಗಿಸಲು ರಾಜ್ಯ ಸರ್ಕಾರ ನಿರ್ಧರಿಸಿದೆ."
+            },
+            {
+                id: 11,
+                page: "Page 67",
+                question: "ಲಕ್ಕುಂಡಿಯಲ್ಲಿ ಯಾವ ರಾಜಮನೆತನಗಳ ವಾಸ್ತುಶಿಲ್ಪ ಶೈಲಿಯ ದೇವಾಲಯಗಳು ಮತ್ತು ಕಲ್ಯಾಣಿಗಳು ಕಂಡುಬರುತ್ತವೆ?",
+                options: [
+                    "A) ಕಲ್ಯಾಣ ಚಾಲುಕ್ಯ ಮತ್ತು ಹೊಯ್ಸಳ",
+                    "B) ವಿಜಯನಗರ ಮತ್ತು ಕಾದಂಬ",
+                    "C) ಗಂಗರು ಮತ್ತು ಚೋಳರು",
+                    "D) ಬಹುಮನಿ ಮತ್ತು ಆದಿಲ್ ಶಾಹಿ"
+                ],
+                correct: 0,
+                explanation: "ಲಕ್ಕುಂಡಿಯಲ್ಲಿ ಕಲ್ಯಾಣ ಚಾಲುಕ್ಯರು, ಕಳಚೂರಿಗಳು, ಸೇವಣರು ಮತ್ತು ಹೊಯ್ಸಳರ ಕಾಲದ ಅತ್ಯುತ್ತಮ ವಾಸ್ತುಶಿಲ್ಪಗಳು ಸಿಗುತ್ತವೆ."
+            },
+            {
+                id: 12,
+                page: "Page 67",
+                question: "ಇತ್ತೀಚಿನ ಅಧ್ಯಯನದ ಪ್ರಕಾರ 'ಉಷ್ಣದ ಒತ್ತಡ' (Heat Stress) ಯಾವ ಪ್ರಾಣಿಗಳ ಆಸ್ಪತ್ರೆ ದಾಖಲಾತಿ ಮತ್ತು ಮರಣಕ್ಕೆ ಕಾರಣವಾಗಿದೆ?",
+                options: [
+                    "A) ಕಂಗಾರೂ",
+                    "B) ಕೋಲಾ (Koala)",
+                    "C) ಪಾಂಡಾ",
+                    "D) ಪೆಂಗ್ವಿನ್"
+                ],
+                correct: 1,
+                explanation: "ಆಸ್ಟ್ರೇಲಿಯಾದ ಕೋಲಾ (Koala) ಪ್ರಾಣಿಗಳು ತಾಪಮಾನ ಏರಿಕೆಯಿಂದಾಗಿ ಉಷ್ಣದ ಒತ್ತಡಕ್ಕೆ ಒಳಗಾಗಿ ಸಾವನ್ನಪ್ಪುತ್ತಿವೆ ಎಂದು ಅಧ್ಯಯನ ತಿಳಿಸಿದೆ."
+            },
+
+            // Page 68 (1000033421.jpg)
+            {
+                id: 13,
+                page: "Page 68",
+                question: "ಉತ್ತರ ಪ್ರದೇಶದ ಬಲ್ಲಿಯಾ ಜಿಲ್ಲೆಯಲ್ಲಿರುವ ಯಾವ ಪಕ್ಷಿಧಾಮವನ್ನು ಭಾರತದ 100ನೇ ರಾಮ್‌ಸಾರ್ (Ramsar) ತಾಣವಾಗಿ ಘೋಷಿಸಲಾಗಿದೆ?",
+                options: [
+                    "A) ಸುಲ್ತಾನ್‌ಪುರ ಪಕ್ಷಿಧಾಮ",
+                    "B) ಜೈಪ್ರಕಾಶ್ ನಾರಾಯಣ್ ಪಕ್ಷಿಧಾಮ (ಸುರಾಹತಾಲ್)",
+                    "C) ಭರತ್‌ಪುರ ಪಕ್ಷಿಧಾಮ",
+                    "D) ರಂಗನತಿಟ್ಟು ಪಕ್ಷಿಧಾಮ"
+                ],
+                correct: 1,
+                explanation: "ಉತ್ತರ ಪ್ರದೇಶದ 'ಜೈಪ್ರಕಾಶ್ ನಾರಾಯಣ್ ಪಕ್ಷಿಧಾಮ'ವನ್ನು (ಸುರಾಹತಾಲ್) ಭಾರತದ 100ನೇ ರಾಮ್‌ಸಾರ್ ತಾಣವೆಂದು ಘೋಷಿಸಲಾಗಿದೆ."
+            },
+            {
+                id: 14,
+                page: "Page 68",
+                question: "ಅಪರೂಪದ 'ಅಲ್ಬಿನೋ ಹಾಗ್ ಜಿಂಕೆ' (White Albino Hog Deer) ಇತ್ತೀಚೆಗೆ ಯಾವ ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನವನದಲ್ಲಿ ಕಂಡುಬಂದಿದೆ?",
+                options: [
+                    "A) ಬಂಡೀಪುರ (ಕರ್ನಾಟಕ)",
+                    "B) ಕಾಜಿರಂಗ (ಅಸ್ಸಾಂ)",
+                    "C) ಗಿರ್ (ಗುಜರಾತ್)",
+                    "D) ಜಿಮ್ ಕಾರ್ಬೆಟ್ (ಉತ್ತರಾಖಂಡ)"
+                ],
+                correct: 1,
+                explanation: "ಅಸ್ಸಾಂನ ಕಾಜಿರಂಗ ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನವನದಲ್ಲಿ ಅಪರೂಪದ ಬಿಳಿ ಬಣ್ಣದ ಅಲ್ಬಿನೋ ಹಾಗ್ ಜಿಂಕೆ ಪತ್ತೆಯಾಗಿದೆ."
+            },
+            {
+                id: 15,
+                page: "Page 68",
+                question: "ರಾತ್ರಿ ವೇಳೆಯಲ್ಲಿ ಕೃತಕ ಬೆಳಕಿನ ಪ್ರಭಾವದಿಂದ ಆಹಾರ ಸೇವಿಸುವುದು ಕಂಡುಬಂದ 'ಬ್ರಾಹ್ಮಿಣಿ ಕೈಟ್' (Haliastur indus) ಎಲ್ಲಿ ಪತ್ತೆಯಾಗಿದೆ?",
+                options: [
+                    "A) ಮೈಸೂರು",
+                    "B) ತ್ರಿವೇಂಡ್ರಂ (ಕೇರಳ)",
+                    "C) ಗೋವಾ",
+                    "D) ಕೊಚ್ಚಿ"
+                ],
+                correct: 1,
+                explanation: "ಕೇರಳದ ತ್ರಿವೇಂಡ್ರಂನಲ್ಲಿ ಬ್ರಾಹ್ಮಿಣಿ ಕೈಟ್ (ಹಲಿಯಾಸ್ತೂರ್ ಸಿಂಧು) ಪಕ್ಷಿಯು ರಾತ್ರಿಯಲ್ಲೂ ಕೃತಕ ಬೆಳಕಿನಲ್ಲಿ ಬೇಟೆಯಾಡುವುದು ವರದಿಯಾಗಿದೆ."
+            },
+
+            // Page 69 (1000033422.jpg)
+            {
+                id: 16,
+                page: "Page 69",
+                question: "ಹವಾಮಾನ ನಿರೋಧಕ ಗುಣ ಹೊಂದಿರುವ, ಕಡಿಮೆ ಕೆಫೀನ್ ಪ್ರಮಾಣವಿರುವ ಯಾವ ಕಾಫಿ ತಳಿಗೆ ಇತ್ತೀಚೆಗೆ ಗಮನ ಕೇಂದ್ರೀಕರಿಸಲಾಗಿದೆ?",
+                options: [
+                    "A) ಅರೇಬಿಕಾ ಕಾಫಿ",
+                    "B) ರೊಬಸ್ಟಾ ಕಾಫಿ",
+                    "C) ಎಕ್ಸೆಲ್ಸಾ ಕಾಫಿ (Excelsa Coffee)",
+                    "D) ಲಿಬೇರಿಕಾ ಕಾಫಿ"
+                ],
+                correct: 2,
+                explanation: "ಎಕ್ಸೆಲ್ಸಾ ಕಾಫಿ (Coffea Dewevrei) ಹವಾಮಾನ ವೈಪರೀತ್ಯ ತಡೆಯುವ ಮತ್ತು ಕಡಿಮೆ ಕೆಫೀನ್ ಹೊಂದಿರುವ ಪ್ರಭೇದವಾಗಿದೆ."
+            },
+            {
+                id: 17,
+                page: "Page 69",
+                question: "ಏಷ್ಯಾಟಿಕ್ ಸಿಂಹಗಳ 2ನೇ ಆವಾಸಸ್ಥಾನವಾಗಿ ಅಭಿವೃದ್ಧಿಪಡಿಸಲಾಗುತ್ತಿರುವ 'ಬಾರ್ದ ವನ್ಯಜೀವಿ ಅಭಯಾರಣ್ಯ' ಯಾವ ರಾಜ್ಯದಲ್ಲಿದೆ?",
+                options: [
+                    "A) ರಾಜಸ್ಥಾನ",
+                    "B) ಮಧ್ಯಪ್ರದೇಶ",
+                    "C) ಗುಜರಾತ್",
+                    "D) ಮಹಾರಾಷ್ಟ್ರ"
+                ],
+                correct: 2,
+                explanation: "ಗುಜರಾತ್‌ನ ಸೌರಾಷ್ಟ್ರ ಕರಾವಳಿಯ ಬಾರ್ದ (Barda) ವನ್ಯಜೀವಿ ಅಭಯಾರಣ್ಯವನ್ನು ಏಷ್ಯಾವಿನ್ ಸಿಂಹಗಳ 2ನೇ ತಾಣವಾಗಿ ಅಭಿವೃದ್ಧಿಪಡಿಸಲಾಗುತ್ತಿದೆ."
+            },
+            {
+                id: 18,
+                page: "Page 69",
+                question: "ವೈಜ್ಞಾನಿಕ ವನ್ಯಜೀವಿ ಗಣತಿ ಆರಂಭಿಸಿರುವ 'ಬಿನ್ಸಾರ್ ವನ್ಯಜೀವಿ ಅಭಯಾರಣ್ಯ' (Binsar Wildlife Sanctuary) ಎಲ್ಲಿದೆ?",
+                options: [
+                    "A) ಉತ್ತರಾಖಂಡ",
+                    "B) ಹಿಮಾಚಲ ಪ್ರದೇಶ",
+                    "C) ಸಿಕ್ಕಿಂ",
+                    "D) ಜಮ್ಮು ಮತ್ತು ಕಾಶ್ಮೀರ"
+                ],
+                correct: 0,
+                explanation: "ಉತ್ತರಾಖಂಡದ ಆಲ್ಮೋರಾ ಜಿಲ್ಲೆಯ ಕುಮಾವ್ ಪ್ರದೇಶದಲ್ಲಿ ಬಿನ್ಸಾರ್ ವನ್ಯಜೀವಿ ಅಭಯಾರಣ್ಯವಿದೆ."
+            },
+
+            // Page 70 (1000033423.jpg) - State Priority (Karnataka)
+            {
+                id: 19,
+                page: "Page 70",
+                question: "ಸಿಬಿಐ (CBI) ನಿರ್ದೇಶಕರಾಗಿ ಸೇವಾ ಅವಧಿಯನ್ನು 1 ವರ್ಷ ವಿಸ್ತರಿಸಲ್ಪಟ್ಟ ಕರ್ನಾಟಕ ಕೆಡರ್‌ನ ಹಿರಿಯ ಐಪಿಎಸ್ ಅಧಿಕಾರಿ ಯಾರು?",
+                options: [
+                    "A) ಪ್ರವೀಣ್ ಸೂದ್",
+                    "B) ಅಲೋಕ್ ವರ್ಮಾ",
+                    "C) ಪ್ರವೀಣ್ ಸಿನ್ಹಾ",
+                    "D) ರಾಕೇಶ್ ಆಸ್ಥಾನಾ"
+                ],
+                correct: 0,
+                explanation: "ಕರ್ನಾಟಕ ಕೆಡರ್‌ನ ಐಪಿಎಸ್ ಅಧಿಕಾರಿಯಾದ ಪ್ರವೀಣ್ ಸೂದ್ ಅವರ ಸಿಬಿಐ ನಿರ್ದೇಶಕರ ಹುದ್ದೆಯ ಅವಧಿಯನ್ನು ಕೇಂದ್ರ ಸರ್ಕಾರ 1 ವರ್ಷ ವಿಸ್ತರಿಸಿದೆ."
+            },
+            {
+                id: 20,
+                page: "Page 70",
+                question: "ಸ್ಕಕಾಟ್‌ಲ್ಯಾಂಡ್ ಸಂಸತ್ತಿಗೆ ಆಯ್ಕೆಯಾದ ಮೊದಲ 'ಲಿಂಗರಹಿತ' (Non-binary) ಭಾರತೀಯ ವಲಸಿಗ ಯಾರು?",
+                options: [
+                    "A) ಮಹಮ್ಮದ್ ಜೀಶಾನ್",
+                    "B) ಸುಹಾಸ್ ಶೆಟ್ಟಿ",
+                    "C) ಅಜಯ್ ಕುಮಾರ್",
+                    "D) ರಾಜೇಶ್ ಶರ್ಮಾ"
+                ],
+                correct: 0,
+                explanation: "ತಮಿಳುನಾಡು ಮೂಲದ ಮಹಮ್ಮದ್ ಜೀಶಾನ್ ಸ್ಕಾಟ್‌ಲ್ಯಾಂಡ್ ಚುನಾವಣೆಯಲ್ಲಿ ಗೆದ್ದು 'ಲಿಂಗರಹಿತ' ಸದಸ್ಯರಾಗಿ ಆಯ್ಕೆಯಾಗಿದ್ದಾರೆ."
+            },
+
+            // Page 71 (1000033424.jpg)
+            {
+                id: 21,
+                page: "Page 71",
+                question: "ಅಸ್ಸಾಂನ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಸತತ 2ನೇ ಬಾರಿಗೆ ಪ್ರಮಾಣ ವಚನ ಸ್ವೀಕರಿಸಿದ ನಾಯಕ ಯಾರು?",
+                options: [
+                    "A) ಹಿಮಂತ ಬಿಸ್ವಾ ಶರ್ಮಾ",
+                    "B) ಸರ್ಬಾನಂದ ಸೋನೊವಾಲ್",
+                    "C) ತರುಣ್ ಗೊಗೋಯ್",
+                    "D) ಪೆಮಾ ಖಂಡು"
+                ],
+                correct: 0,
+                explanation: "ಹಿಮಂತ ಬಿಸ್ವಾ ಶರ್ಮಾ ಅವರು 2026ರಲ್ಲಿ ಅಸ್ಸಾಂನ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ 2ನೇ ಬಾರಿಗೆ ಪ್ರಮಾಣ ವಚನ ಸ್ವೀಕರಿಸಿದರು."
+            },
+            {
+                id: 22,
+                page: "Page 72",
+                question: "ಪುದುಚೇರಿಯ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ 5ನೇ ಬಾರಿಗೆ ಪ್ರಮಾಣ ವಚನ ಸ್ವೀಕರಿಸಿದ ಹಿರಿಯ ನಾಯಕ ಯಾರು?",
+                options: [
+                    "A) ವಿ. ನಾರಾಯಣಸಾಮಿ",
+                    "B) ಎನ್. ರಂಗಸಾಮಿ",
+                    "C) ಕೆ. ಲಕ್ಷ್ಮೀನಾರಾಯಣನ್",
+                    "D) ತಮಿಳಿಸೈ ಸೌಂದರರಾಜನ್"
+                ],
+                correct: 1,
+                explanation: "ಎಐಎನ್‌ಆರ್‌ಸಿ ಪಕ್ಷದ ಎನ್. ರಂಗಸಾಮಿ ಅವರು ಪುದುಚೇರಿಯ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ 5ನೇ ಬಾರಿಗೆ ಆಯ್ಕೆಯಾಗಿದ್ದಾರೆ."
+            },
+
+            // Page 72 (1000033425.jpg) - State Priority (Karnataka)
+            {
+                id: 23,
+                page: "Page 72",
+                question: "ಪಶ್ಚಿಮ ಬಂಗಾಳದ ಬಿಜೆಪಿ ಪಕ್ಷದ ಮೊದಲ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಪ್ರಮಾಣ ವಚನ ಸ್ವೀಕರಿಸಿದ ನಾಯಕ ಯಾರು?",
+                options: [
+                    "A) ಸುವೇಂದು ಅಧಿಕಾರಿ",
+                    "B) ದಿಲೀಪ್ ಘೋಷ್",
+                    "C) ಮಮತಾ ಬ್ಯಾನರ್ಜಿ",
+                    "D) ಮುಕುಲ್ ರಾಯ್"
+                ],
+                correct: 0,
+                explanation: "ಸುವೇಂದು ಅಧಿಕಾರಿ ಅವರು ಪಶ್ಚಿಮ ಬಂಗಾಳದ 9ನೇ ಮುಖ್ಯಮಂತ್ರಿಯಾಗಿ ಹಾಗೂ ಬಿಜೆಪಿ ಪಕ್ಷದ ಮೊದಲ ಸಿಎಂ ಆಗಿ ಪ್ರಮಾಣ ಸ್ವೀಕರಿಸಿದರು."
+            },
+            {
+                id: 24,
+                page: "Page 72",
+                question: "ಅಮೆರಿಕದ 'ಸೊಸೈಟಿ ಆಫ್ ಎಕ್ಸ್‌ಪೆರಿಮೆಂಟಲ್ ಟೆಸ್ಟ್ ಪೈಲಟ್ಸ್' (SETP) ಗೌರವ ಸದಸ್ಯತ್ವಕ್ಕೆ ಆಯ್ಕೆಯಾದ HAL ನ ಮುಖ್ಯ ಟೆಸ್ಟ್ ಪೈಲಟ್ ಯಾರು?",
+                options: [
+                    "A) ಗ್ರೂಪ್ ಕ್ಯಾಪ್ಟನ್ ಕೆ.ಕೆ. ವೇಣುಗೋಪಾಲ್",
+                    "B) ಅಭಿನಂದನ್ ವರ್ತಮಾನ್",
+                    "C) ರಾಕೇಶ್ ಶರ್ಮಾ",
+                    "D) ಭಾಸ್ಕರ್ ರಾವ್"
+                ],
+                correct: 0,
+                explanation: "ಬೆಂಗಳೂರಿನ ಹೆಚ್‌ಎಎಲ್ ಸಂಸ್ಥೆಯ ಗ್ರೂಪ್ ಕ್ಯಾಪ್ಟನ್ ಕೆ.ಕೆ. ವೇಣುಗೋಪಾಲ್ ಅವರು SETP ಗೌರವಕ್ಕೆ ಪಾತ್ರರಾದ ಭಾರತದ ಮೊದಲ ಟೆಸ್ಟ್ ಪೈಲಟ್."
+            },
+            {
+                id: 25,
+                page: "Page 72",
+                question: "ಕರ್ನಾಟಕ ಸರ್ಕಾರ ರಚಿಸಿರುವ 'ಕ್ವಾಂಟಮ್ ಕಾರ್ಯಪಡೆ'ಯ (Quantum Task Force) ಅಧ್ಯಕ್ಷರಾಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
+                options: [
+                    "A) ಪ್ರೊ. ಅರಿದಮ್ ಘೋಷ್",
+                    "B) ಸಿ.ಎನ್.ಆರ್. ರಾವ್",
+                    "C) ಕೆ. ಶಿವನ್",
+                    "D) ಎಂ. ಅಶ್ವಿನ್"
+                ],
+                correct: 0,
+                explanation: "ಐಐಎಸ್ಸಿ (IISc) ಭೌತವಿಜ್ಞಾನ ವಿಭಾಗದ ಪ್ರೊ. ಅರಿದಮ್ ಘೋಷ್ ಅವರನ್ನು ಕ್ವಾಂಟಮ್ ಕಾರ್ಯಪಡೆಯ ಅಧ್ಯಕ್ಷರನ್ನಾಗಿ ನೇಮಿಸಲಾಗಿದೆ."
+            },
+
+            // Page 73 (1000033426.jpg) - State Priority (Karnataka)
+            {
+                id: 26,
+                page: "Page 73",
+                question: "ಸುಪ್ರೀಂ ಕೋರ್ಟ್ ನೂತನ ನ್ಯಾಯಮೂರ್ತಿಗಳಾಗಿ ಪ್ರಮಾಣ ವಚನ ಸ್ವೀಕರಿಸಿದ ಒಟ್ಟು ನ್ಯಾಯಾಧೀಶರ ಸಂಖ್ಯೆ ಎಷ್ಟು?",
+                options: [
+                    "A) 3 ಮಂದಿ",
+                    "B) 5 ಮಂದಿ",
+                    "C) 7 ಮಂದಿ",
+                    "D) 2 ಮಂದಿ"
+                ],
+                correct: 1,
+                explanation: "ಸುಪ್ರೀಂ ಕೋರ್ಟ್‌ನ ನ್ಯಾಯಾಧೀಶರ ಸಂಖ್ಯೆಯನ್ನು ಹೆಚ್ಚಿಸಲು ನೂತನವಾಗಿ 5 ಮಂದಿ ನ್ಯಾಯಾಧೀಶರು ಪ್ರಮಾಣ ವಚನ ಸ್ವೀಕರಿಸಿದರು."
+            },
+            {
+                id: 27,
+                page: "Page 73",
+                question: "ಭಾರತದ ಮೊದಲ ಮಹಿಳಾ ಮುಖ್ಯ ನ್ಯಾಯಮೂರ್ತಿ (First Woman Chief Justice of India) ಆಗಲಿರುವ ಕರ್ನಾಟಕದ ನ್ಯಾಯಮೂರ್ತಿ ಯಾರು?",
+                options: [
+                    "A) ನ್ಯಾಯಮೂರ್ತಿ ಬಿ.ವಿ. ನಾಗರತ್ನ",
+                    "B) ನ್ಯಾಯಮೂರ್ತಿ ಇಂದೂ ಮಲ್ಹೋತ್ರಾ",
+                    "C) ನ್ಯಾಯಮೂರ್ತಿ ರುಮಾ ಪಾಲ್",
+                    "D) ನ್ಯಾಯಮೂರ್ತಿ ಫಾತಿಮಾ ಬೀವಿ"
+                ],
+                correct: 0,
+                explanation: "ಕರ್ನಾಟಕದವರಾದ ನ್ಯಾಯಮೂರ್ತಿ ಬಿ.ವಿ. ನಾಗರತ್ನ ಅವರು 2027ರಲ್ಲಿ ಭಾರತದ ಪ್ರಪ್ರಥಮ ಮಹಿಳಾ ಸಿಜೆಐ ಆಗಿ ಇತಿಹಾಸ ಸೃಷ್ಟಿಸಲಿದ್ದಾರೆ."
+            },
+            {
+                id: 28,
+                page: "Page 73",
+                question: "ನೀತಿ ಆಯೋಗದ (NITI Aayog) ನೂತನ ಉಪಾಧ್ಯಕ್ಷರಾಗಿ (Vice-Chairman) ಅಧಿಕಾರ ವಹಿಸಿಕೊಂಡ ಖ್ಯಾತ ಅರ್ಥಶಾಸ್ತ್ರಜ್ಞ ಯಾರು?",
+                options: [
+                    "A) ಡಾ. ಅಶೋಕ್ ಕುಮಾರ್ ಲಾಹಿರಿ",
+                    "B) ಸುಹಾನ್ ಬರಿಯಾರ್",
+                    "C) ರಾಜೀವ್ ಕುಮಾರ್",
+                    "D) ಅರವಿಂದ್ ಪನಗಾರಿಯಾ"
+                ],
+                correct: 0,
+                explanation: "ಖ್ಯಾತ ಅರ್ಥಶಾಸ್ತ್ರಜ್ಞ ಡಾ. ಅಶೋಕ್ ಕುಮಾರ್ ಲಾಹಿರಿ ಅವರು ನೀತಿ ಆಯೋಗದ ನೂತನ ಉಪಾಧ್ಯಕ್ಷರಾಗಿ ನೇಮಕಗೊಂಡಿದ್ದಾರೆ."
+            }
+        ];
+
+        // Quiz State Management
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let score = 0;
+        let timerInterval;
+        let timeRemaining = 15 * 60; // 15 Minutes
+
+        // DOM Elements
+        const questionTextEl = document.getElementById("questionText");
+        const optionsListEl = document.getElementById("optionsList");
+        const feedbackBoxEl = document.getElementById("feedbackBox");
+        const pageTitleEl = document.getElementById("pageTitle");
+        const paletteContainerEl = document.getElementById("paletteContainer");
+        const scoreEl = document.getElementById("score");
+        const totalQuestionsEl = document.getElementById("totalQuestions");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const timerEl = document.getElementById("timer");
+
+        // Initialize Test
+        function initQuiz() {
+            totalQuestionsEl.textContent = quizData.length;
+            renderPalette();
+            loadQuestion(0);
+            startTimer();
+            generateAnswerKey();
+        }
+
+        // Render Question Palette grouped by Page
+        function renderPalette() {
+            paletteContainerEl.innerHTML = "";
+            let currentGroup = "";
+            let gridEl = null;
+
+            quizData.forEach((item, index) => {
+                if (item.page !== currentGroup) {
+                    currentGroup = item.page;
+                    const groupTitle = document.createElement("div");
+                    groupTitle.className = "palette-group-title";
+                    groupTitle.textContent = currentGroup;
+                    paletteContainerEl.appendChild(groupTitle);
+
+                    gridEl = document.createElement("div");
+                    gridEl.className = "palette-grid";
+                    paletteContainerEl.appendChild(gridEl);
+                }
+
+                const btn = document.createElement("button");
+                btn.className = "btn-qnum";
+                btn.id = `palette-btn-${index}`;
+                btn.textContent = index + 1;
+                btn.onclick = () => jumpToQuestion(index);
+                gridEl.appendChild(btn);
+            });
+        }
+
+        // Load Question Data
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const data = quizData[index];
+
+            pageTitleEl.textContent = `${data.page} - Question ${index + 1} of ${quizData.length}`;
+            questionTextEl.textContent = `${index + 1}. ${data.question}`;
+            
+            optionsListEl.innerHTML = "";
+            feedbackBoxEl.style.display = "none";
+
+            const userAnswer = userAnswers[index];
+
+            data.options.forEach((optText, optIdx) => {
+                const li = document.createElement("li");
+                li.className = "option-item";
+
+                const isChecked = userAnswer !== null && userAnswer.selected === optIdx;
+                
+                // Active state styling if answered
+                if (userAnswer !== null) {
+                    if (optIdx === data.correct) {
+                        li.classList.add("correct");
+                    } else if (isChecked && optIdx !== data.correct) {
+                        li.classList.add("incorrect");
+                    }
+                }
+
+                li.innerHTML = `
+                    <input type="radio" name="opt" value="${optIdx}" ${isChecked ? "checked" : ""} ${userAnswer !== null ? "disabled" : ""}>
+                    <span>${optText}</span>
+                `;
+
+                if (userAnswer === null) {
+                    li.onclick = () => handleOptionSelect(optIdx);
+                }
+
+                optionsListEl.appendChild(li);
+            });
+
+            // Show explanation feedback if already answered
+            if (userAnswer !== null) {
+                feedbackBoxEl.style.display = "block";
+                if (userAnswer.isCorrect) {
+                    feedbackBoxEl.className = "feedback-box correct";
+                    feedbackBoxEl.innerHTML = `<strong>ಸರಿ! (Correct)</strong><br>${data.explanation}`;
+                } else {
+                    feedbackBoxEl.className = "feedback-box incorrect";
+                    feedbackBoxEl.innerHTML = `<strong>ತಪ್ಪು! (Incorrect)</strong><br>ಸರಿಯಾದ ಉತ್ತರ: <strong>${data.options[data.correct]}</strong><br>${data.explanation}`;
+                }
+            }
+
+            // Update Palette Active Class
+            document.querySelectorAll(".btn-qnum").forEach((btn, i) => {
+                btn.classList.toggle("active", i === index);
+            });
+
+            // Handle Navigation Buttons
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === quizData.length - 1;
+        }
+
+        // Option Selection Handler
+        function handleOptionSelect(selectedIdx) {
+            const data = quizData[currentQuestionIndex];
+            const isCorrect = selectedIdx === data.correct;
+
+            userAnswers[currentQuestionIndex] = {
+                selected: selectedIdx,
+                isCorrect: isCorrect
+            };
+
+            if (isCorrect) score += 1;
+            scoreEl.textContent = score;
+
+            // Update Palette Button Style
+            const btn = document.getElementById(`palette-btn-${currentQuestionIndex}`);
+            if (isCorrect) {
+                btn.classList.add("answered-correct");
+            } else {
+                btn.classList.add("answered-wrong");
+            }
+
+            // Reload current question to display feedback
+            loadQuestion(currentQuestionIndex);
+        }
+
+        // Navigation
+        function navigate(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < quizData.length) {
+                loadQuestion(newIndex);
+            }
+        }
+
+        function jumpToQuestion(index) {
+            loadQuestion(index);
+        }
+
+        // Timer Function
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                let m = Math.floor(timeRemaining / 60);
+                let s = timeRemaining % 60;
+                timerEl.textContent = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time is up! Your score: " + score);
+                }
+            }, 1000);
+        }
+
+        // Reset Quiz
+        function resetQuiz() {
+            if (confirm("ನಿಮಗೆ ರಿಸೆಟ್ ಮಾಡಲು ಖಚಿತವಿದೆಯೇ? (Are you sure you want to reset the test?)")) {
+                userAnswers = new Array(quizData.length).fill(null);
+                score = 0;
+                scoreEl.textContent = "0";
+                timeRemaining = 15 * 60;
+                
+                document.querySelectorAll(".btn-qnum").forEach(btn => {
+                    btn.classList.remove("answered-correct", "answered-wrong");
+                });
+
+                toggleAnswerKey(false);
+                loadQuestion(0);
+                startTimer();
+            }
+        }
+
+        // Toggle Answer Key View
+        function toggleAnswerKey(show) {
+            document.getElementById("quizPanel").style.display = show ? "none" : "flex";
+            document.getElementById("answerKeyPanel").style.display = show ? "block" : "none";
+        }
+
+        // Generate Answer Key List
+        function generateAnswerKey() {
+            const container = document.getElementById("answerKeyContent");
+            container.innerHTML = "";
+
+            quizData.forEach((item, idx) => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "answer-key-item";
+                itemDiv.innerHTML = `
+                    <p><strong>Q${idx + 1} (${item.page}):</strong> ${item.question}</p>
+                    <p><strong>ಉತ್ತರ (Answer):</strong> ${item.options[item.correct]}</p>
+                    <p style="color: #555;"><strong>ವಿವರಣೆ:</strong> ${item.explanation}</p>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        // Run Init
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
