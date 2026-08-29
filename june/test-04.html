@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka PC & SSC CBT Exam Mock Test</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #319795;
+            --success: #38a169;
+            --danger: #e53e3e;
+            --warning: #dd6b20;
+            --bg: #f7fafc;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Prevent body overflow freezing */
+        }
+
+        /* Header Bar */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        header h1 {
+            font-size: 1.2rem;
+        }
+
+        .timer-box {
+            background-color: #2d3748;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #feb2b2;
+            border: 1px solid #e53e3e;
+        }
+
+        /* Main CBT Container */
+        .cbt-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+            overflow: hidden; /* Lock main container */
+        }
+
+        /* Left Side: Question Area */
+        .question-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto; /* Independent smooth scroll */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #ffffff;
+        }
+
+        .page-badge {
+            display: inline-block;
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            border: 1px solid #bee3f8;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .option-item.selected {
+            border-color: var(--secondary);
+            background-color: #ebf8ff;
+            font-weight: bold;
+        }
+
+        .option-item.correct {
+            border-color: var(--success);
+            background-color: #f0fff4;
+            color: #22543d;
+        }
+
+        .option-item.wrong {
+            border-color: var(--danger);
+            background-color: #fff5f5;
+            color: #742a2a;
+        }
+
+        .option-prefix {
+            font-weight: bold;
+            margin-right: 12px;
+            background: #cbd5e0;
+            color: #2d3748;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .option-item.selected .option-prefix {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* Nav Controls */
+        .controls {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary { background-color: var(--secondary); color: white; }
+        .btn-primary:hover { background-color: #2c5282; }
+        .btn-success { background-color: var(--success); color: white; }
+        .btn-success:hover { background-color: #276749; }
+        .btn-warning { background-color: var(--warning); color: white; }
+        .btn-danger { background-color: var(--danger); color: white; }
+        .btn-secondary { background-color: #718096; color: white; }
+
+        /* Right Side: Palette & Overview */
+        .sidebar {
+            width: 320px;
+            background-color: #edf2f7;
+            border-left: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Fix scrollingfreeze */
+        }
+
+        .profile-card {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .status-legend {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.8rem;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            display: inline-block;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .bg-answered { background-color: var(--success); }
+        .bg-not-answered { background-color: var(--danger); }
+        .bg-marked { background-color: var(--warning); }
+        .bg-not-visited { background-color: #cbd5e0; color: #4a5568; }
+
+        .palette-container {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .palette-btn {
+            height: 38px;
+            border: 1px solid #cbd5e0;
+            background-color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .palette-btn.active {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 5px rgba(43, 108, 176, 0.5);
+        }
+
+        .palette-btn.answered { background-color: var(--success); color: white; border: none; }
+        .palette-btn.not-answered { background-color: var(--danger); color: white; border: none; }
+        .palette-btn.marked { background-color: var(--warning); color: white; border: none; }
+
+        .sidebar-footer {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Final Result & Explanation Section */
+        #result-screen {
+            display: none;
+            padding: 25px;
+            overflow-y: auto;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .score-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .score-number {
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .explanation-card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--secondary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        @media (max-width: 768px) {
+            .cbt-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Karnataka PC & SSC CBT Portal - Mock Test</h1>
+        <div class="timer-box" id="timer"> Time Left: 15:00</div>
+    </header>
+
+    <div class="cbt-container" id="exam-interface">
+        <!-- Question Content Area -->
+        <main class="question-area">
+            <div id="question-wrapper">
+                <span class="page-badge" id="page-label">Page 34</span>
+                <div class="question-text" id="q-text">Loading question...</div>
+                <ul class="options-list" id="options-container"></ul>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="previousQuestion()">Previous</button>
+                <button class="btn btn-warning" onclick="markForReview()">Mark for Review</button>
+                <button class="btn btn-primary" onclick="saveAndNext()">Save & Next</button>
+                <button class="btn btn-danger" style="margin-left: auto;" onclick="clearResponse()">Clear Response</button>
+            </div>
+        </main>
+
+        <!-- Right Navigation Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-card">
+                <div class="avatar">PC</div>
+                <div>
+                    <strong>Candidate Name</strong><br>
+                    <small>Roll No: 2026-KSP-892</small>
+                </div>
+            </div>
+
+            <div class="status-legend">
+                <div class="legend-item"><span class="badge-icon bg-answered" id="count-answered">0</span> Answered</div>
+                <div class="legend-item"><span class="badge-icon bg-not-answered" id="count-not-answered">0</span> Not Answered</div>
+                <div class="legend-item"><span class="badge-icon bg-marked" id="count-marked">0</span> Marked for Review</div>
+                <div class="legend-item"><span class="badge-icon bg-not-visited" id="count-not-visited">20</span> Not Visited</div>
+            </div>
+
+            <div class="palette-container">
+                <h4 style="margin-bottom: 10px; font-size: 0.9rem; color: #4a5568;">Question Palette</h4>
+                <div class="palette-grid" id="palette-grid"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-success" style="width: 100%;" onclick="submitExam()">Submit Test</button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Final Results & Explanations Screen -->
+    <div id="result-screen">
+        <div class="score-box">
+            <h2>Exam Completed!</h2>
+            <div class="score-number" id="final-score">0 / 20</div>
+            <p id="score-analysis">You completed the test successfully.</p>
+            <button class="btn btn-primary" style="margin-top: 15px;" onclick="resetTest()">Retry Test</button>
+        </div>
+
+        <h3 style="margin-bottom: 15px; color: var(--primary);">Answer Key & Detailed Explanations (ಉತ್ತರಗಳು ಮತ್ತು ವಿವರಣೆ)</h3>
+        <div id="explanations-container"></div>
+    </div>
+
+    <script>
+        // High Quality Questions from Scanned 10 Pages (Pages 34 to 43)
+        const quizData = [
+            // Page 34
+            {
+                page: 34,
+                question: "LEADS 2025 ವರದಿಯ ಪ್ರಕಾರ (Logistics Ease Across Different States), ಸಾರಿಗೆ ಮತ್ತು ಸರಕು ಸಾಗಣೆ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಕರ್ನಾಟಕವು ಯಾವ ವಿಭಾಗದಲ್ಲಿ ಗುರುತಿಸಿಕೊಂಡಿದೆ? (High Priority: Karnataka)",
+                options: ["ಅಚೀವರ್ಸ್ (Achievers)", "ಫಾಸ್ಟ್ ಮೂವರ್ಸ್", "ಆಸ್ಪೈರರ್ಸ್", "ಲೀಡರ್ಸ್"],
+                correct: 0,
+                explanation: "LEADS 2025 ವರದಿಯಂತೆ ಕರ್ನಾಟಕ ರಾಜ್ಯವು ಮೂಲಸೌಕರ್ಯ ಹಾಗೂ ಸರಕು ಸಾಗಣೆಯಲ್ಲಿ 'ಅಚೀವರ್ಸ್' (Achievers) ವಿಭಾಗದಲ್ಲಿ ಸ್ಥಾನ ಪಡೆದಿದೆ."
+            },
+            {
+                page: 34,
+                question: "ಅಂತರರಾಷ್ಟ್ರೀಯ ಯೋಗ ದಿನಾಚರಣೆಯ ಅಂಗವಾಗಿ ಕೇಂದ್ರ ಆಯುಷ್ ಸಚಿವಾಲಯದ ಸೂಚನೆಯಂತೆ ಆಯೋಜಿಸಲಾದ ನೂತನ ಕಾರ್ಯಕ್ರಮ ಯಾವುದು?",
+                options: ["ಯೋಗ ಭಾರತ್", "ನಿತ್ಯ ಯೋಗ", "ಯೋಗ ಶಕ್ತಿ", "ಆರೋಗ್ಯ ಯೋಗ"],
+                correct: 1,
+                explanation: "ರಾಜ್ಯಾದ್ಯಂತ ಸಾರ್ವಜನಿಕರು ನಿತ್ಯವೂ ಯೋಗಾಭ್ಯಾಸ ಮಾಡಲು 'ನಿತ್ಯ ಯೋಗ' ಎಂಬ ನೂತನ ಕಾರ್ಯಕ್ರಮವನ್ನು ಹಮ್ಮಿಕೊಳ್ಳಲಾಗಿದೆ."
+            },
+            // Page 35
+            {
+                page: 35,
+                question: "ಇಂಡಿಯನ್ ಅಸೋಸಿಯೇಷನ್ ಫಾರ್ ದಿ ಕಲ್ಟಿವೇಶನ್ ಆಫ್ ಸೈನ್ಸ್ (IACS) ತನ್ನ ಎಷ್ಟು ವರ್ಷಗಳ ಸುದೀರ್ಘ ಪಯಣವನ್ನು ಪೂರೈಸಿ 150ನೇ ವರ್ಷಾಚರಣೆ ಆಚರಿಸಿದೆ?",
+                options: ["100ನೇ ವರ್ಷ", "125ನೇ ವರ್ಷ", "150ನೇ ವರ್ಷ", "175ನೇ ವರ್ಷ"],
+                correct: 2,
+                explanation: "IACS ಸಂಸ್ಥೆಯು ತನ್ನ ಸ್ಥಾಪನೆಯ 150ನೇ ವರ್ಷದ ಮೈಲಿಗಲ್ಲನ್ನು ಪೂರೈಸಿದೆ."
+            },
+            {
+                page: 35,
+                question: "2026ರ ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ (AI Performance) ಜಾಗತಿಕ ಸೂಚಿ ವರದಿಯ ಪ್ರಕಾರ, ಜಾಗತಿಕ AI ಸಾಮರ್ಥ್ಯದಲ್ಲಿ ಭಾರತದ ಸ್ಥಾನ ಎಷ್ಟು?",
+                options: ["1ನೇ ಸ್ಥಾನ", "2ನೇ ಸ್ಥಾನ", "4ನೇ ಸ್ಥಾನ", "5ನೇ ಸ್ಥಾನ"],
+                correct: 2,
+                explanation: "ಜಾಗತಿಕ AI ಸಾಮರ್ಥ್ಯದ ವರದಿಯಲ್ಲಿ ಭಾರತವು ವಿಶ್ವದಲ್ಲೇ 4ನೇ ಸ್ಥಾನವನ್ನು ಪಡೆದುಕೊಂಡಿದೆ."
+            },
+            // Page 36
+            {
+                page: 36,
+                question: "ಭಾರತದ ಸುಪ್ರೀಂ ಕೋರ್ಟ್ ನ್ಯಾಯಾಂಗ ಸೇವೆಗಳು ಸಾರ್ವಜನಿಕರಿಗೆ ಸರಳವಾಗಿ ದೊರೆಯುವಂತೆ ಇತ್ತೀಚೆಗೆ ಚಾಲನೆ ನೀಡಿದ ಉಪಕ್ರಮ ಯಾವುದು?",
+                options: ["ಒಂದು ದೇಶ ಒಂದು ನ್ಯಾಯ", "ಒಂದು ಪ್ರಕರಣ, ಒಂದು ದತ್ತಾಂಶ (One Case One Data)", "ನ್ಯಾಯ ಬಂಧು", "ಇ-ಕೋರ್ಟ್ 2.0"],
+                correct: 1,
+                explanation: "ಸುಪ್ರೀಂ ಕೋರ್ಟ್ ಮುಖ್ಯ ನ್ಯಾಯಮೂರ್ತಿಗಳು 'ಒಂದು ಪ್ರಕರಣ, ಒಂದು ದತ್ತಾಂಶ' ಯೋಜನೆಗೆ ಚಾಲನೆ ನೀಡಿದ್ದಾರೆ."
+            },
+            {
+                page: 36,
+                question: "ಕೊಚ್ಚಿನ್ ಮಾದರಿಯ ಯಶಸ್ಸಿನ ನಂತರ ಭಾರತ ಸರ್ಕಾರವು ಎಷ್ಟು ನಗರಗಳಲ್ಲಿ 'ಜಲಮೆಟ್ರೋ ಯೋಜನೆ' (Water Metro) ಜಾರಿಗೆ ತರಲು ಸಿದ್ಧತೆ ನಡೆಸಿದೆ?",
+                options: ["10 ನಗರಗಳು", "12 ನಗರಗಳು", "18 ನಗರಗಳು", "25 ನಗರಗಳು"],
+                correct: 2,
+                explanation: "ಕೊಚ್ಚಿಯ ಯಶಸ್ಸಿನ ನಂತರ ದೇಶದ ಪ್ರಮುಖ 18 ನಗರಗಳಲ್ಲಿ ಜಲಮೆಟ್ರೋ ಯೋಜನೆ ಅನುಷ್ಠಾನಗೊಳ್ಳಲಿದೆ."
+            },
+            // Page 37
+            {
+                page: 37,
+                question: "ಬೀದಿ ಬದಿ ವ್ಯಾಪಾರಿಗಳ ಸ್ವಾವಲಂಬನೆಗಾಗಿ ಪ್ರಾರಂಭಿಸಲಾದ 'ಪ್ರಧಾನ ಮಂತ್ರಿ ಸ್ವ-ನಿಧಿ ಯೋಜನೆ' (PM SVANidhi) ಎಷ್ಟು ವರ್ಷಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಪೂರೈಸಿದೆ?",
+                options: ["3 ವರ್ಷ", "5 ವರ್ಷ", "6 ವರ್ಷ", "8 ವರ್ಷ"],
+                correct: 2,
+                explanation: "PM SVANidhi ಯೋಜನೆಯು ಅಧಿಕೃತವಾಗಿ 6 ವರ್ಷಗಳ ಯಶಸ್ವಿ ಸೇವೆಯನ್ನು ಪೂರೈಸಿದೆ (2020 ರಿಂದ 2026)."
+            },
+            {
+                page: 37,
+                question: "PM SVANidhi ಯೋಜನೆಯಡಿ ಬೀದಿ ಬದಿ ವ್ಯಾಪಾರಿಗಳಿಗೆ ನೀಡಲಾಗುವ ಬಡ್ಡಿ ಸಬ್ಸಿಡಿ ಪ್ರಮಾಣ ಎಷ್ಟು?",
+                options: ["5 ಪ್ರತಿಶತ", "7 ಪ್ರತಿಶತ", "10 ಪ್ರತಿಶತ", "12 ಪ್ರತಿಶತ"],
+                correct: 1,
+                explanation: "ಸಕಾಲದಲ್ಲಿ ಸಾಲ ಮರುಪಾವತಿಸುವ ಫಲಾನುಭವಿಗಳಿಗೆ ಶೇಕಡಾ 7 ರಷ್ಟು ಬಡ್ಡಿ ಸಬ್ಸಿಡಿಯನ್ನು ಒದಗಿಸಲಾಗುತ್ತದೆ."
+            },
+            // Page 38
+            {
+                page: 38,
+                question: "ಸಾರ್ವಜನಿಕ ಪಡಿತರ ವ್ಯವಸ್ಥೆಯನ್ನು (PDS) ಆಧುನಿಕೀಕರಿಸಲು ಮತ್ತು ಡಿಜಿಟಲೀಕರಣಗೊಳಿಸಲು ಕೇಂದ್ರ ಸಚಿವ ಸಂಪುಟ ವಿಸ್ತರಿಸಿದ ಯೋಜನೆ ಯಾವುದು?",
+                options: ["ಸಾರ್ಥಕ್-ಪಿಡಿಎಸ್ (SARTHAK-PDS)", "ಡಿಜಿಟಲ್ ಪಡಿತರ", "ಆಧಾರ್ PDS", "ಅನ್ನ ಸಾರ್ಥಕ್"],
+                correct: 0,
+                explanation: "ಪಡಿತರ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಸುಧಾರಣೆ ಮತ್ತು ಪಾರದರ್ಶಕತೆಗೆ ಸಾರ್ಥಕ್-ಪಿಡಿಎಸ್ (SARTHAK-PDS) ಯೋಜನೆಯನ್ನು ವಿಸ್ತರಿಸಲಾಗಿದೆ."
+            },
+            {
+                page: 38,
+                question: "ಆಫ್‌ಲೈನ್ ಮತ್ತು ಕಡಿಮೆ ಸಂಪರ್ಕ ಪ್ರದೇಶಗಳಲ್ಲಿ ಧ್ವನಿ-ಮೊದಲ (Voice-First AI) ಆಧಾರಿತ ಪರಿಹಾರ ಅಭಿವೃದ್ಧಿಪಡಿಸಲು ಪ್ರಾರಂಭಿಸಲಾದ ಚಾಲೆಂಜ್ ಯಾವುದು?",
+                options: ["ವಾಯ್ಸ್ ಇಂಡಿಯಾ", "ವ್ಯೋಮಾ ಇನ್ನೋವೇಶನ್ ಚಾಲೆಂಜ್ (VYOMA)", "ಭಾಷಿಣಿ AI", "ಧ್ವನಿ ತಂತ್ರಜ್ಞಾನ"],
+                correct: 1,
+                explanation: "ಧ್ವನಿ-ಆಧಾರಿತ ಬಹುಭಾಷಾ AI ಪರಿಹಾರಗಳಿಗಾಗಿ 'ವ್ಯೋಮಾ ಇನ್ನೋವೇಶನ್ ಚಾಲೆಂಜ್' ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ."
+            },
+            // Page 39
+            {
+                page: 39,
+                question: "ಜಾಗತಿಕ ನಿರ್ಣಾಯಕ ಖನಿಜ ಪೂರೈಕೆ ಸರಪಳಿ ವೀಕ್ಷಣಾಲಯವನ್ನು (GISCOB) ಜಂಟಿಯಾಗಿ ಉದ್ಘಾಟಿಸಿದ ದೇಶಗಳು ಯಾವುವು?",
+                options: ["ಭಾರತ - ಅಮೆರಿಕ", "ಭಾರತ - ಯುಕೆ (UK)", "ಭಾರತ - ಜಪಾನ್", "ಭಾರತ - ಆಸ್ಟ್ರೇಲಿಯಾ"],
+                correct: 1,
+                explanation: "ನಿರ್ಣಾಯಕ ಖನಿಜ ಪೂರೈಕೆ ಭದ್ರತೆಗಾಗಿ ಭಾರತ ಮತ್ತು ಯುಕೆ (UK) ಜಂಟಿಯಾಗಿ ಈ ವೀಕ್ಷಣಾಲಯವನ್ನು ಉದ್ಘಾಟಿಸಿವೆ."
+            },
+            {
+                page: 39,
+                question: "ಭಾರತ ಸರ್ಕಾರವು ಎಷ್ಟು ಪ್ರಮುಖ ಖನಿಜಗಳನ್ನು 'ನಿರ್ಣಾಯಕ ಖನಿಜಗಳು' (Critical Minerals) ಎಂದು ಪಟ್ಟಿಯಲ್ಲಿ ಗುರುತಿಸಿದೆ?",
+                options: ["15 ಖನಿಜಗಳು", "20 ಖನಿಜಗಳು", "30 ಖನಿಜಗಳು", "50 ಖನಿಜಗಳು"],
+                correct: 2,
+                explanation: "ಭಾರತ ಸರ್ಕಾರವು ತಂತ್ರಜ್ಞಾನ ಮತ್ತು ಭದ್ರತೆಗೆ ಅಗತ್ಯವಿರುವ 30 ನಿರ್ಣಾಯಕ ಖನಿಜಗಳನ್ನು ಗುರುತಿಸಿದೆ."
+            },
+            // Page 40
+            {
+                page: 40,
+                question: "ಗಡಿ ಗ್ರಾಮಗಳ ಅಭಿವೃದ್ಧಿ ಹಾಗೂ ಯುವಕರ ಸಬಲೀಕರಣಕ್ಕಾಗಿ ಜಾರಿಗೆ ತರಲಾದ ಕಾರ್ಯಕ್ರಮ ಯಾವುದು?",
+                options: ["ಗ್ರಾಮ ವಿಕಾಸ", "ವಿಕಸಿತ್ ವೈಬ್ರೆಂಟ್ ವಿಲೇಜ್ ಪ್ರೋಗ್ರಾಂ 2026", "ಗಡಿ ಸುರಕ್ಷಾ ಯೋಜನೆ", "ಯುವ ಗಡಿ ವಿಕಾಸ"],
+                correct: 1,
+                explanation: "ಗಡಿ ಪ್ರದೇಶದ ಗ್ರಾಮಗಳಲ್ಲಿ ಮೂಲಸೌಕರ್ಯ ಹಾಗೂ ಯುವಕರ ತೊಡಗಿಸಿಕೊಳ್ಳುವಿಕೆಗೆ 'ವಿಕಸಿತ್ ವೈಬ್ರೆಂಟ್ ವಿಲೇಜ್ ಪ್ರೋಗ್ರಾಂ' ಅನುಷ್ಠಾನಗೊಳಿಸಲಾಗಿದೆ."
+            },
+            {
+                page: 40,
+                question: "ವೈಬ್ರೆಂಟ್ ವಿಲೇಜ್ ಪ್ರೋಗ್ರಾಂ (Vibrant Village Programme) ಅನ್ನು ಯಾವ ಸಚಿವಾಲಯವು ಪ್ರಮುಖವಾಗಿ ಜಾರಿಗೆ ತರುತ್ತಿದೆ?",
+                options: ["ರಕ್ಷಣಾ ಸಚಿವಾಲಯ", "ಗೃಹ ಸಚಿವಾಲಯ (Ministry of Home Affairs)", "ಕೃಷಿ ಸಚಿವಾಲಯ", "ಪಂಚಾಯತ್ ರಾಜ್ ಸಚಿವಾಲಯ"],
+                correct: 1,
+                explanation: "ಈ ಯೋಜನೆಯನ್ನು ಗೃಹ ಸಚಿವಾಲಯವು ITBP ಯಂತಹ ಗಡಿ ಪಡೆಗಳ ಸಹಯೋಗದೊಂದಿಗೆ ಜಾರಿಗೊಳಿಸುತ್ತದೆ."
+            },
+            // Page 41
+            {
+                page: 41,
+                question: "ಕ್ವಾಂಟಮ್ ಕಂಪ್ಯೂಟರ್‌ಗಳಿಂದ ಭವಿಷ್ಯದಲ್ಲಿ ಉಂಟಾಗುವ ಸೈಬರ್ ಬೆದರಿಕೆಗಳಿಂದ ಡಿಜಿಟಲ್ ದತ್ತಾಂಶ ರಕ್ಷಿಸಲು ಬಳಸುವ ತಂತ್ರಜ್ಞಾನ ಯಾವುದು?",
+                options: ["ಪೋಸ್ಟ್ ಕ್ವಾಂಟಮ್ ಕ್ರಿಪ್ಟೋಗ್ರಫಿ (PQC)", "ಸೈಬರ್ ಲಾಕ್ 2.0", "ಕ್ವಾಂಟಮ್ ಬ್ಲಾಕ್‌ಚೈನ್", "ಸುರಕ್ಷಾ ಎನ್‌ಕ್ರಿಪ್ಷನ್"],
+                correct: 0,
+                explanation: "ಕ್ವಾಂಟಮ್ ಕಂಪ್ಯೂಟರ್ ಭೇದಿಸಲಾಗದ ಸುರಕ್ಷತೆಗಾಗಿ 'ಪೋಸ್ಟ್ ಕ್ವಾಂಟಮ್ ಕ್ರಿಪ್ಟೋಗ್ರಫಿ (PQC)' ವಿಧಾನವನ್ನು ಬಳಸಲಾಗುತ್ತದೆ."
+            },
+            {
+                page: 41,
+                question: "ಹೆಚ್ಚಿನ ಪರಿಣಾಮ ಬೀರುವ ಪ್ರದೇಶಗಳಲ್ಲಿ ನೀರಿನ ಸಮಸ್ಯೆಗಳಿಗೆ ಪರಿಹಾರ ಕಂಡುಕೊಳ್ಳಲು ಪ್ರಾರಂಭಿಸಲಾದ ಮಿಷನ್ ಯಾವುದು?",
+                options: ["ಜಲ ಶಕ್ತಿ ಮಿಷನ್", "ಮಹಾ ಜಲಮಿಷನ್ (MAHA Water Mission)", "ಅಮೃತ ಜಲ", "ಸ್ವಚ್ಛ ಜಲ ಧಾರೆ"],
+                correct: 1,
+                explanation: "ನೀರಿನ ಪರಿಹಾರ ಮತ್ತು ಸಂಶೋಧನೆಗಾಗಿ ₹200 ಕೋಟಿ ವೆಚ್ಚದಲ್ಲಿ 'ಮಹಾ ಜಲಮಿಷನ್' ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ."
+            },
+            // Page 42
+            {
+                page: 42,
+                question: "ತಾಯಂದಿರು ಮತ್ತು ಮಕ್ಕಳ ಆರೋಗ್ಯ ರಕ್ಷಣೆಯನ್ನು ಬಲಪಡಿಸಲು ಆರೋಗ್ಯ ಸಚಿವಾಲಯವು ಪ್ರಾರಂಭಿಸಿದ ಡಿಜಿಟಲ್ ವೇದಿಕೆ ಯಾವುದು?",
+                options: ["ಮಾತೃ ಸುರಕ್ಷಾ", "ಜನನಿ (JANANI Digital Platform)", "ಪೋಷಣ್ ಆಪ್", "ಆರೋಗ್ಯ ಮಾತಾ"],
+                correct: 1,
+                explanation: "ಗರ್ಭಿಣಿಯರು, ನವಜಾತ ಶಿಶುಗಳ ಆರೋಗ್ಯ ತನಿಖೆ ಮತ್ತು ಸೇವೆಗಳಿಗೆ ಡಿಜಿಟಲ್ 'ಜನನಿ' (JANANI) ವೇದಿಕೆ ಚಾಲನೆ ನೀಡಲಾಗಿದೆ."
+            },
+            {
+                page: 42,
+                question: "ಕೃಷಿ ಉತ್ಪಾದನಾ ವ್ಯವಸ್ಥೆಯನ್ನು ಪೋಷಕಾಂಶ ಆರೋಗ್ಯಕ್ಕೆ ಜೋಡಿಸುವ ಸಲುವಾಗಿ ಪ್ರಾರಂಭಿಸಲಾದ ಜಂಟಿ ಉಪಕ್ರಮ ಯಾವುದು?",
+                options: ["ಕೃಷಿ ಕಲ್ಯಾಣ ಯೋಜನೆ", "ಸೇಹತ್ ಮಿಷನ್ (SEHAT Mission)", "ಪೋಷಕ ಕೃಷಿ", "ಆರೋಗ್ಯ ಧಾನ್ಯ"],
+                correct: 1,
+                explanation: "ICMR ಮತ್ತು ICAR ಸಂಸ್ಥೆಗಳು ಜಂಟಿಯಾಗಿ ಕೃಷಿ-ಆರೋಗ್ಯ ಜೋಡಣೆಗೆ 'ಸೇಹತ್ ಮಿಷನ್' (SEHAT Mission) ಪ್ರಾರಂಭಿಸಿವೆ."
+            },
+            // Page 43
+            {
+                page: 43,
+                question: "ಗ್ರಾಮೀಣ ಪ್ರದೇಶಗಳಲ್ಲಿ ಮಹಿಳಾ ಸುರಕ್ಷತೆಯನ್ನು ಬಲಪಡಿಸಲು ಬಂಗಲೂರು ರಾಷ್ಟ್ರೀಯ ಕಾನೂನು ಶಾಲೆ (NLSIU Bengaluru) ಸಹಯೋಗದೊಂದಿಗೆ ಆರಂಭಿಸಲಾದ ತರಬೇತಿ ಉಪಕ್ರಮ ಯಾವುದು? (High Priority: Karnataka)",
+                options: ["ಶಕ್ತಿ ಯೋಜನೆ", "ನಿರ್ಭಯ್ ರಹೋ ಉಪಕ್ರಮ (Nirbhay Raho)", "ಮಹಿಳಾ ರಕ್ಷಾ", "ಗ್ರಾಮ ಶಕ್ತಿ"],
+                correct: 1,
+                explanation: "ಪಂಚಾಯತ್ ರಾಜ್ ಸಚಿವಾಲಯವು ಬೆಂಗಳೂರಿನ NLSIU ಸಹಯೋಗದಲ್ಲಿ 'ನಿರ್ಭಯ್ ರಹೋ' ಉಪಕ್ರಮದಡಿ ತರಬೇತಿ ನೀಡುತ್ತಿದೆ."
+            },
+            {
+                page: 43,
+                question: "ಸಾರ್ವಜನಿಕ ಕುಂದುಕೊರತೆಗಳ ಪರಿಹಾರಕ್ಕಾಗಿ ಎಐ-ಆಧಾರಿತ (AI-enabled) ಧ್ವನಿ ಚಾಟ್‌ಬಾಟ್ ಆಗಿ ಇತ್ತೀಚೆಗೆ ಸಕ್ರಿಯಗೊಳಿಸಲಾದ ವ್ಯವಸ್ಥೆ ಯಾವುದು?",
+                options: ["ಸಮಾಧಾನ್ ದೀದಿ (Samadhan Didi)", "ಜನ ಸೇವಕ ಚಾಟ್‌ಬಾಟ್", "ನ್ಯಾಯ ಸುಪ್ರಭಾ", "ಇ-ದೂರು ಎಐ"],
+                correct: 0,
+                explanation: "ಸಾರ್ವಜನಿಕ ಕುಂದುಕೊರತೆಗಳನ್ನು ಸ್ವೀಕರಿಸಿ ಪರಿಹರಿಸಲು 'ಸಮಾಧಾನ್ ದೀದಿ' ಎಐ ಧ್ವನಿ ಚಾಟ್‌ಬಾಟ್ ಅಭಿವೃದ್ಧಿಪಡಿಸಲಾಗಿದೆ."
+            }
+        ];
+
+        // State variables
+        let currentIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let userStatus = new Array(quizData.length).fill('not-visited'); // 'not-visited', 'answered', 'not-answered', 'marked'
+        let timerSeconds = 15 * 60;
+        let timerInterval;
+
+        // Initialize Exam UI
+        function initQuiz() {
+            renderPalette();
+            loadQuestion(0);
+            startTimer();
+            updateCounts();
+        }
+
+        // Timer Logic
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                } else {
+                    timerSeconds--;
+                    let mins = Math.floor(timerSeconds / 60);
+                    let secs = timerSeconds % 60;
+                    document.getElementById('timer').innerText = `Time Left: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        // Render Palette
+        function renderPalette() {
+            const grid = document.getElementById('palette-grid');
+            grid.innerHTML = '';
+            quizData.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `palette-btn ${userStatus[idx]}`;
+                if (idx === currentIndex) btn.classList.add('active');
+                btn.innerText = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+                grid.appendChild(btn);
+            });
+        }
+
+        // Load Question details
+        function loadQuestion(index) {
+            // Update previous question state if visited but not answered
+            if (userStatus[currentIndex] === 'not-visited') {
+                userStatus[currentIndex] = 'not-answered';
+            }
+
+            currentIndex = index;
+            if (userStatus[currentIndex] === 'not-visited') {
+                userStatus[currentIndex] = 'not-answered';
+            }
+
+            const data = quizData[index];
+            document.getElementById('page-label').innerText = `Page ${data.page}`;
+            document.getElementById('q-text').innerText = `${index + 1}. ${data.question}`;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const prefixes = ['A', 'B', 'C', 'D'];
+            data.options.forEach((opt, optIdx) => {
+                const li = document.createElement('li');
+                li.className = 'option-item';
+                if (userAnswers[index] === optIdx) {
+                    li.classList.add('selected');
+                }
+                li.onclick = () => selectOption(optIdx);
+
+                li.innerHTML = `
+                    <span class="option-prefix">${prefixes[optIdx]}</span>
+                    <span>${opt}</span>
+                `;
+                optionsContainer.appendChild(li);
+            });
+
+            renderPalette();
+            updateCounts();
+        }
+
+        // Handle Option Selection
+        function selectOption(optionIndex) {
+            userAnswers[currentIndex] = optionIndex;
+            userStatus[currentIndex] = 'answered';
+            
+            // Re-render options UI
+            const items = document.querySelectorAll('.option-item');
+            items.forEach((item, idx) => {
+                if (idx === optionIndex) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+
+            renderPalette();
+            updateCounts();
+        }
+
+        // Navigation actions
+        function saveAndNext() {
+            if (currentIndex < quizData.length - 1) {
+                loadQuestion(currentIndex + 1);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentIndex > 0) {
+                loadQuestion(currentIndex - 1);
+            }
+        }
+
+        function markForReview() {
+            userStatus[currentIndex] = 'marked';
+            renderPalette();
+            updateCounts();
+            if (currentIndex < quizData.length - 1) {
+                loadQuestion(currentIndex + 1);
+            }
+        }
+
+        function clearResponse() {
+            userAnswers[currentIndex] = null;
+            userStatus[currentIndex] = 'not-answered';
+            loadQuestion(currentIndex);
+        }
+
+        function jumpToQuestion(index) {
+            loadQuestion(index);
+        }
+
+        // Update Counter badges
+        function updateCounts() {
+            let answered = 0, notAnswered = 0, marked = 0, notVisited = 0;
+            userStatus.forEach(st => {
+                if (st === 'answered') answered++;
+                else if (st === 'not-answered') notAnswered++;
+                else if (st === 'marked') marked++;
+                else if (st === 'not-visited') notVisited++;
+            });
+
+            document.getElementById('count-answered').innerText = answered;
+            document.getElementById('count-not-answered').innerText = notAnswered;
+            document.getElementById('count-marked').innerText = marked;
+            document.getElementById('count-not-visited').innerText = notVisited;
+        }
+
+        // Submit & Evaluation
+        function submitExam() {
+            clearInterval(timerInterval);
+
+            document.getElementById('exam-interface').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+
+            let score = 0;
+            const expContainer = document.getElementById('explanations-container');
+            expContainer.innerHTML = '';
+
+            quizData.forEach((data, idx) => {
+                const isCorrect = userAnswers[idx] === data.correct;
+                if (isCorrect) score++;
+
+                const card = document.createElement('div');
+                card.className = 'explanation-card';
+                card.style.borderLeftColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+
+                const prefixes = ['A', 'B', 'C', 'D'];
+                const userAnsText = userAnswers[idx] !== null ? data.options[userAnswers[idx]] : 'ಉತ್ತರಿಸಿಲ್ಲ (Not Attempted)';
+                const correctAnsText = data.options[data.correct];
+
+                card.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 5px;">Q${idx + 1} (Page ${data.page}): ${data.question}</div>
+                    <div style="font-size: 0.9rem; margin-bottom: 3px;">
+                        ನಿಮ್ಮ ಉತ್ತರ: <span style="color: ${isCorrect ? 'green' : 'red'}; font-weight: bold;">${userAnsText}</span>
+                    </div>
+                    <div style="font-size: 0.9rem; margin-bottom: 5px; color: var(--success); font-weight: bold;">
+                        ಸರಿಯಾದ ಉತ್ತರ: ${correctAnsText}
+                    </div>
+                    <div style="font-size: 0.85rem; color: #4a5568; background: #edf2f7; padding: 8px; border-radius: 4px; margin-top: 5px;">
+                        💡 <strong>ವಿವರಣೆ:</strong> ${data.explanation}
+                    </div>
+                `;
+                expContainer.appendChild(card);
+            });
+
+            document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
+            const percentage = (score / quizData.length) * 100;
+            document.getElementById('score-analysis').innerText = `ನಿಮ್ಮ ಅಂಕ: ${percentage}% | Standard: Karnataka PC & SSC Constable Baseline`;
+        }
+
+        // Reset Test
+        function resetTest() {
+            currentIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            userStatus = new Array(quizData.length).fill('not-visited');
+            timerSeconds = 15 * 60;
+
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('exam-interface').style.display = 'flex';
+
+            initQuiz();
+        }
+
+        // Start initialization on load
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
