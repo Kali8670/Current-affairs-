@@ -107,26 +107,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Glowing badge for active count */
-        .count-badge {
-            background: rgba(0, 230, 118, 0.15);
-            border: 1px solid var(--neon-green);
-            color: var(--neon-green);
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
-            box-shadow: 0 0 10px var(--neon-green-glow);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover .count-badge {
-            background: #000;
-            color: var(--neon-green);
-            border-color: #000;
-            box-shadow: none;
-        }
-
         .arrow-icon {
             font-size: 1.2rem;
             color: var(--text-muted);
@@ -176,21 +156,11 @@
     </main>
 
     <script>
-        // Set exact count of uploaded files for each month here
-        const monthFileCounts = {
-            "JANUARY": 7,
-            "FEBRUARY": 0,
-            "MARCH": 0,
-            "APRIL": 0,
-            "MAY": 0,
-            "JUNE": 0,
-            "JULY": 0,
-            "AUGUST": 4,
-            "SEPTEMBER": 0,
-            "OCTOBER": 0,
-            "NOVEMBER": 0,
-            "DECEMBER": 0
-        };
+        const months = [
+            "JANUARY", "FEBRUARY", "MARCH", "APRIL", 
+            "MAY", "JUNE", "JULY", "AUGUST", 
+            "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+        ];
 
         const monthListEl = document.getElementById("month-list");
         const testListEl = document.getElementById("test-list");
@@ -200,34 +170,22 @@
 
         function renderMonths() {
             monthListEl.innerHTML = "";
-            Object.keys(monthFileCounts).forEach(month => {
-                const count = monthFileCounts[month];
+            months.forEach(month => {
                 const card = document.createElement("a");
                 card.className = "card";
                 card.onclick = () => openMonth(month);
-                
-                // Show glowing count badge
-                const badgeHTML = count > 0 
-                    ? `<span class="count-badge">${count} TESTS</span>` 
-                    : `<span class="count-badge" style="opacity: 0.5; border-color: gray; color: gray; box-shadow: none;">0 TESTS</span>`;
-
                 card.innerHTML = `
                     <div class="card-info">
                         <span class="card-icon">📅</span>
                         <h2>${month}</h2>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        ${badgeHTML}
-                        <span class="arrow-icon">→</span>
-                    </div>
+                    <span class="arrow-icon">→</span>
                 `;
                 monthListEl.appendChild(card);
             });
         }
 
         function openMonth(monthName) {
-            const count = monthFileCounts[monthName];
-            
             headerTitle.innerText = monthName;
             headerSubtitle.innerText = "SELECT TEST SERIES";
             
@@ -238,13 +196,7 @@
             const folder = monthName.toLowerCase();
             testListEl.innerHTML = "";
 
-            if (count === 0) {
-                testListEl.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 20px;">No tests available for this month yet.</p>`;
-                return;
-            }
-
-            // Loop only up to the specified file count
-            for (let i = 1; i <= count; i++) {
+            for (let i = 1; i <= 10; i++) {
                 const testNum = i.toString().padStart(2, '0');
                 const testCard = document.createElement("a");
                 testCard.className = "card";
