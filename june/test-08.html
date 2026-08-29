@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka PC & SSC CBT Exam Mock Test (Pages 74 - 83)</title>
+    <style>
+        :root {
+            --primary-blue: #003366;
+            --secondary-blue: #0066cc;
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+            --warning-yellow: #ffc107;
+            --light-bg: #f4f7fa;
+            --border-color: #dcdcdc;
+            --text-dark: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif, 'Tunga', 'Kedage';
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Main window lock */
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SSC Exam Header */
+        header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--secondary-blue);
+            flex-shrink: 0;
+            height: 60px;
+        }
+
+        header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .timer-box {
+            background: #ffffff;
+            color: #d9534f;
+            padding: 4px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid #d9534f;
+            font-size: 1.05rem;
+        }
+
+        /* Container Layout */
+        .app-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Left Interactive Question Area */
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .page-header {
+            background: #e9ecef;
+            padding: 8px 20px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: var(--primary-blue);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        /* Critical Fix for Scrolling */
+        .question-scroll-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            min-height: 0; /* Enables flex child scrolling */
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #111;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .option-item:hover {
+            background-color: #f0f4f8;
+            border-color: var(--secondary-blue);
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        /* Option Feedback States */
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-green) !important;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .option-item.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger-red) !important;
+            color: #721c24;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .feedback-box.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback-box.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Bottom Controls */
+        .footer-controls {
+            padding: 10px 20px;
+            background: #e9ecef;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            height: 55px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary { background-color: var(--secondary-blue); color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-danger { background-color: var(--danger-red); color: white; }
+
+        /* Right Palette Sidebar */
+        .sidebar {
+            width: 320px;
+            background: #f8f9fa;
+            border-left: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .palette-header {
+            padding: 10px;
+            background: #e2e6ea;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .score-board {
+            padding: 10px;
+            background: #ffffff;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        /* Palette Scroll Fix */
+        .palette-container {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .palette-group-title {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #555;
+            margin: 10px 0 5px 0;
+            text-transform: uppercase;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .btn-qnum {
+            height: 36px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .btn-qnum.active {
+            border: 2px solid var(--primary-blue);
+            box-shadow: 0 0 5px rgba(0,51,102,0.4);
+        }
+
+        .btn-qnum.answered-correct {
+            background-color: var(--success-green);
+            color: white;
+            border-color: var(--success-green);
+        }
+
+        .btn-qnum.answered-wrong {
+            background-color: var(--danger-red);
+            color: white;
+            border-color: var(--danger-red);
+        }
+
+        .palette-footer {
+            padding: 12px;
+            border-top: 1px solid var(--border-color);
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+
+        /* Answer Key Overlay Panel */
+        .answer-key-section {
+            display: none;
+            padding: 20px;
+            background: #ffffff;
+            height: 100%;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .answer-key-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .answer-key-item strong {
+            color: var(--primary-blue);
+        }
+
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 220px; }
+            .main-panel { height: calc(100% - 220px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Karnataka PC & SSC CBT Exam Mock Test (Pages 74-83)</h1>
+        <div class="header-info">
+            <span>Time Left:</span>
+            <div class="timer-box" id="timer">20:00</div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="app-container">
+        
+        <!-- Main Quiz View -->
+        <div class="main-panel" id="quizPanel">
+            <div class="page-header" id="pageTitle">Page 74 Questions</div>
+            
+            <div class="question-scroll-area">
+                <div class="q-text" id="questionText">Loading Question...</div>
+                
+                <ul class="options-list" id="optionsList">
+                    <!-- Dynamic Radio Options -->
+                </ul>
+
+                <div class="feedback-box" id="feedbackBox"></div>
+            </div>
+
+            <div class="footer-controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="navigate(-1)">Previous</button>
+                <button class="btn btn-danger" onclick="resetQuiz()">Reset Test</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="navigate(1)">Next</button>
+            </div>
+        </div>
+
+        <!-- Answer Key View (Toggled via button) -->
+        <div class="main-panel answer-key-section" id="answerKeyPanel">
+            <h2>Answer Key & Explanations (ಉತ್ತರಗಳು ಮತ್ತು ವಿವರಣೆ)</h2>
+            <br>
+            <div id="answerKeyContent"></div>
+            <br>
+            <button class="btn btn-primary" onclick="toggleAnswerKey(false)">Back to Test</button>
+        </div>
+
+        <!-- Question Palette Sidebar -->
+        <div class="sidebar">
+            <div class="palette-header">Question Palette</div>
+            
+            <div class="score-board">
+                Score: <span id="score">0</span> / <span id="totalQuestions">0</span>
+            </div>
+
+            <div class="palette-container" id="paletteContainer">
+                <!-- Dynamic Grouped Page Grid -->
+            </div>
+
+            <div class="palette-footer">
+                <button class="btn btn-primary" style="width: 100%;" onclick="toggleAnswerKey(true)">View Answer Key</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Data populated strictly from the provided 10 scanned pages (74 to 83)
+        // State Priority items (Karnataka related) are placed first per page requirement.
+        const quizData = [
+            // PAGE 74 (1000033427.jpg)
+            {
+                id: 1,
+                page: "Page 74",
+                question: "ಕರ್ನಾಟಕ ಮತ್ತು ತಮಿಳುನಾಡು ನಡುವಿನ ಯಾವ ನದಿ ನೀರು ಹಂಚಿಕೆ ವ್ಯಾಜ್ಯವನ್ನು ಬಗೆಹರಿಸಲು ನ್ಯಾಯಮಂಡಳಿ ಸ್ಥಾಪಿಸಲು ಕೇಂದ್ರ ಸರ್ಕಾರಕ್ಕೆ ಸುಪ್ರೀಂ ಕೋರ್ಟ್ 6 ತಿಂಗಳ ಕಾಲಾವಕಾಶ ನೀಡಿದೆ?",
+                options: [
+                    "A) ಕಾವೇರಿ ನದಿ",
+                    "B) ತೇನ್‌ಪೆನ್ನೈ (ದಕ್ಷಿಣ ಪಿನಾಕಿನಿ) ನದಿ",
+                    "C) ಕೃಷ್ಣಾ ನದಿ",
+                    "D) ಮಹಾದಾಯಿ ನದಿ"
+                ],
+                correct: 1,
+                explanation: "ತೇನ್‌ಪೆನ್ನೈ (ದಕ್ಷಿಣ ಪಿನಾಕಿನಿ) ನದಿ ನೀರು ಹಂಚಿಕೆ ವ್ಯಾಜ್ಯ ಬಗೆಹರಿಸಲು ನ್ಯಾಯಮಂಡಳಿ ಸ್ಥಾಪಿಸಲು ಸುಪ್ರೀಂ ಕೋರ್ಟ್ 6 ತಿಂಗಳ ಗಡುವು ನೀಡಿದೆ."
+            },
+            {
+                id: 2,
+                page: "Page 74",
+                question: "ಬಹುರಾಷ್ಟ್ರೀಯ ವ್ಯಾಯಾಮ 'ಪ್ರಗತಿ 2026' (PRAGATI 2026) ರ ಮೊದಲ ಆವೃತ್ತಿಯು ಎಲ್ಲಿ ಜರುಗಿತು?",
+                options: [
+                    "A) ಮೇಘಾಲಯದ ಉಮ್ರೋಯ್",
+                    "B) ರಾಜಸ್ಥಾನದ ಪೋಖ್ರಾನ್",
+                    "C) ಪುಣೆಯ ಔಂಧ್",
+                    "D) ಉತ್ತರಾಖಂಡದ ರಾಣಿಖೇತ್"
+                ],
+                correct: 0,
+                explanation: "ಹಿಂದು ಮಹಾಸಾಗರ ಪ್ರದೇಶದ ದೇಶಗಳ 'ಪ್ರಗತಿ 2026' ಮಿಲಿಟರಿ ಸಮರಾಭ್ಯಾಸ ಮೇಘಾಲಯದ ಉಮ್ರೋಯ್‌ನಲ್ಲಿ ನಡೆಯಿತು."
+            },
+            {
+                id: 3,
+                page: "Page 74",
+                question: "ಭಾರತ ಮತ್ತು ಕಾಂಬೋಡಿಯಾ ಸಶಸ್ತ್ರ ಪಡೆಗಳ ನಡುವೆ ನಡೆದ 'ಸಿಂಬ್ಯಾಕ್ಸ್-II 2026' (VINBAX-II / CINBAX-II) ದ್ವಿಪಕ್ಷೀಯ ಮಿಲಿಟರಿ ಸಮರಾಭ್ಯಾಸ ಎಲ್ಲಿ ನಡೆಯಿತು?",
+                options: [
+                    "A) ಕಾಂಬೋಡಿಯಾ",
+                    "B) ಭಾರತದ ಚಂಡೀಮಂದಿರ",
+                    "C) ವಿಯೆಟ್ನಾಂ",
+                    "D) ಸಿಂಗಾಪುರ"
+                ],
+                correct: 0,
+                explanation: "ಭಾರತ ಮತ್ತು ಕಾಂಬೋಡಿಯಾ ದ್ವಿಪಕ್ಷೀಯ ಮಿಲಿಟರಿ ಸಮರಾಭ್ಯಾಸವು ಕಾಂಬೋಡಿಯಾದ ಕಂಪಾಂಗ್ ಸ್ಪಿ ಪ್ರಾಂತ್ಯದಲ್ಲಿ ಜರುಗಿತು."
+            },
+            {
+                id: 4,
+                page: "Page 74",
+                question: "DRDO ಮತ್ತು ಭಾರತೀಯ ವಾಯುಪಡೆ ಜಂಟಿಯಾಗಿ ಯಶಸ್ವಿಯಾಗಿ ಪರೀಕ್ಷಿಸಿದ ದೇಶೀಯ ತಂತ್ರಜ್ಞಾನದ ಕ್ಷಿಪಣಿ ಯಾವುದು?",
+                options: [
+                    "A) ರುದ್ರಂ-II (Rudram-II)",
+                    "B) ಆಕಾಶ್-NG",
+                    "C) ಅಸ್ಟ್ರಾ Mk-2",
+                    "D) ಬ್ರಹ್ಮೋಸ್-ER"
+                ],
+                correct: 0,
+                explanation: "DRDO ಚಂಡೀಪುರದ ಇಂಟಿಗ್ರೇಟೆಡ್ ಟೆಸ್ಟ್ ರೇಂಜ್‌ನಲ್ಲಿ ರುದ್ರಂ-II ಗಾಳಿಯಿಂದ ತರೆಗೆ ಹಾಯುವ ಕ್ಷಿಪಣಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಪರೀಕ್ಷಿಸಿದೆ."
+            },
+
+            // PAGE 75 (1000033428.jpg)
+            {
+                id: 5,
+                page: "Page 75",
+                question: "ಭಾರತೀಯ ವಾಯುಪಡೆಯ ಪ್ರಸಿದ್ಧ 'ಸೂರ್ಯಕಿರಣ್ ಏರೋಬ್ಯಾಟಿಕ್ ತಂಡ'ದ (SKAT) ತರಬೇತಿ ಕೇಂದ್ರ ಕರ್ನಾಟಕದ ಯಾವ ಸ್ಥಳದಲ್ಲಿದೆ?",
+                options: [
+                    "A) ಯಲಹಂಕ (ಬೆಂಗಳೂರು)",
+                    "B) ಬೀದರ್",
+                    "C) ಬೆಳಗಾವಿ",
+                    "D) ಕಾರವಾರ"
+                ],
+                correct: 1,
+                explanation: "ಸೂರ್ಯಕಿರಣ್ ಏರೋಬ್ಯಾಟಿಕ್ ತಂಡದ ವಿಮಾನಗಳ ತರಬೇತಿಯು ಪ್ರಸ್ತುತ ಬೀದರ್‌ನ ಆಕಾಶದಲ್ಲಿ ನಡೆಯುತ್ತದೆ."
+            },
+            {
+                id: 6,
+                page: "Page 75",
+                question: "ಮುಂಬೈನಿಂದ ನಿವೃತ್ತಿಗೊಂಡ ಯುದ್ಧನೌಕೆ 'INS ಗುಲ್ಫಾರ್' ಅನ್ನು ಸಮುದ್ರದಲ್ಲಿ ಮುಳುಗಿಸಿ ಆಳಸಮುದ್ರ ವಸ್ತುಸಂಗ್ರಹಾಲಯವಾಗಿ ನಿರ್ಮಿಸುತ್ತಿರುವ ರಾಜ್ಯ ಯಾವುದು?",
+                options: [
+                    "A) ಮಹಾರಾಷ್ಟ್ರ (ಸಿಂಧುದುರ್ಗ)",
+                    "B) ಗೋವಾ",
+                    "C) ಕರ್ನಾಟಕ",
+                    "D) ಗುಜರಾತ್"
+                ],
+                correct: 0,
+                explanation: "ಮಹಾರಾಷ್ಟ್ರದ ಸಿಂಧುದುರ್ಗ ತೀರದಲ್ಲಿ INS ಗುಲ್ಫಾರ್ ಯುದ್ಧನೌಕೆಯನ್ನು ಮುಳುಗಿಸಿ ಭಾರತದ ಮೊದಲ ಆಳಸಮುದ್ರ ಮುಳುಗು ಮ್ಯೂಸಿಯಂ ನಿರ್ಮಿಸಲಾಗುತ್ತಿದೆ."
+            },
+            {
+                id: 7,
+                page: "Page 75",
+                question: "ಜಗತ್ಪ್ರಸಿದ್ಧ ಸೋಮನಾಥ ಮಂದಿರದಲ್ಲಿ ಮೇ 11 ರಂದು ಉದ್ಘಾಟನೆಗೊಂಡ 'ಅಮೃತ ಮಹೋತ್ಸವ' ಕಾರ್ಯಕ್ರಮ ಎಲ್ಲಿ ಜರುಗಿತು?",
+                options: [
+                    "A) ಸೌರಾಷ್ಟ್ರ (ಗುಜರಾತ್)",
+                    "B) ಉಜ್ಜಯಿನಿ (ಮಧ್ಯಪ್ರದೇಶ)",
+                    "C) ವಾರಾಣಸಿ (ಉತ್ತರ ಪ್ರದೇಶ)",
+                    "D) ಪುರಿ (ಒಡಿಶಾ)"
+                ],
+                correct: 0,
+                explanation: "ಗುಜರಾತ್‌ನ ಸೌರಾಷ್ಟ್ರ ಕರಾವಳಿಯಲ್ಲಿರುವ ಪ್ರಸಿದ್ಧ ಸೋಮನಾಥ ಮಂದಿರದಲ್ಲಿ ಈ ಕಾರ್ಯಕ್ರಮ ಜರುಗಿತು."
+            },
+
+            // PAGE 76 (1000033429.jpg)
+            {
+                id: 8,
+                page: "Page 76",
+                question: "ಬೆಂಗಳೂರಿನ ವಿಧಾನ ಸೌಧದಲ್ಲಿ ಉಗ್ರರ ದಾಳಿ ಎದುರಿಸುವ ಕುರಿತು ಇತ್ತೀಚೆಗೆ ಅಣಕು ಕಾರ್ಯಾಚರಣೆ (Mock Drill) ನಡೆಸಿದ ಪಡೆ ಯಾವುದು?",
+                options: [
+                    "A) NSG (ರಾಷ್ಟ್ರೀಯ ಭದ್ರತಾ ಪಡೆ) ಕಮಾಂಡೋಗಳು",
+                    "B) CRFP",
+                    "C) BSF",
+                    "D) ITBP"
+                ],
+                correct: 0,
+                explanation: "ಬೆಂಗಳೂರಿನ ವಿಧಾನಸೌಧದಲ್ಲಿ NSG (National Security Guard) ಕಮಾಂಡೋಗಳು ಅಣಕು ಕಾರ್ಯಾಚರಣೆ ನಡೆಸಿದರು."
+            },
+            {
+                id: 9,
+                page: "Page 76",
+                question: "ಕೇಂದ್ರ ರಕ್ಷಣಾ ಸಚಿವ ರಾಜನಾಥ್ ಸಿಂಗ್ ಅವರು ನೂತನವಾಗಿ ತೆರೆದ 'ನೌಸೇನಾ ಶೌರ್ಯ ವಾಟಿಕಾ' ವಸ್ತುಸಂಗ್ರಹಾಲಯವನ್ನು ಎಲ್ಲಿ ಉದ್ಘಾಟಿಸಿದರು?",
+                options: [
+                    "A) ಲಖನೌ (ಉತ್ತರ ಪ್ರದೇಶ)",
+                    "B) ಕಾನ್ಪುರ",
+                    "C) ನವದೆಹಲಿ",
+                    "D) ಭೋಪಾಲ್"
+                ],
+                correct: 0,
+                explanation: "ಉತ್ತರ ಪ್ರದೇಶದ ಲಖನೌದಲ್ಲಿ ನೂತನವಾಗಿ ನಿರ್ಮಿಸಲಾಗಿರುವ 'ನೌಸೇನಾ ಶೌರ್ಯ ವಾಟಿಕಾ'ವನ್ನು ಉದ್ಘಾಟಿಸಲಾಯಿತು."
+            },
+            {
+                id: 10,
+                page: "Page 76",
+                question: "ಭಾರತದಲ್ಲಿ ಸ್ಪೇನ್ ಸಂಸ್ಥೆಯ ಸಹಯೋಗದೊಂದಿಗೆ C-295 ಸಾರಿಗೆ ವಿಮಾನಗಳನ್ನು ತಯಾರಿಸುತ್ತಿರುವ ಘಟಕ ಎಲ್ಲಿದೆ?",
+                options: [
+                    "A) ವಡೋದರಾ (ಗುಜರಾತ್)",
+                    "B) ಬೆಂಗಳೂರು",
+                    "C) ಹೈದರಾಬಾದ್",
+                    "D) ಪುಣೆ"
+                ],
+                correct: 0,
+                explanation: "ಸ್ಪೇನ್‌ನ ಏರ್‌ಬಸ್ ಮತ್ತು ಟಾಟಾ ಸಹಯೋಗದಲ್ಲಿ ಗುಜರಾತ್‌ನ ವಡೋದರಾದಲ್ಲಿ C-295 ವಿಮಾನಗಳನ್ನು ತಯಾರಿಸಲಾಗುತ್ತಿದೆ."
+            },
+
+            // PAGE 77 (1000033430.jpg)
+            {
+                id: 11,
+                page: "Page 77",
+                question: "ಶ್ರೀ ಶ್ರೀ ರವಿಶಂಕರ್ ಗುರೂಜಿ ಅವರು 2026ರ ಮೇ 10 ರಂದು ಧ್ಯಾನ್ ಮಂದಿರವನ್ನು ಉದ್ಘಾಟಿಸಿದ 'ಆರ್ಟ್ ಆಫ್ ಲಿವಿಂಗ್' ಕೇಂದ್ರ ಎಲ್ಲಿದೆ?",
+                options: [
+                    "A) ಬೆಂಗಳೂರು",
+                    "B) ಮೈಸೂರು",
+                    "C) ಮಂಗಲೂರು",
+                    "D) ಶಿವಮೊಗ್ಗ"
+                ],
+                correct: 0,
+                explanation: "ಬೆಂಗಳೂರಿನಲ್ಲಿರುವ ಆರ್ಟ್ ಆಫ್ ಲಿವಿಂಗ್ ಸಂಸ್ಥೆಯ ಭವ್ಯ ಧ್ಯಾನ್ ಮಂದಿರವನ್ನು ನರೇಂದ್ರ ಮೋದಿ ಮತ್ತು ರವಿಶಂಕರ್ ಗುರೂಜಿ ಭಾಗವಹಿಸಿ ಉದ್ಘಾಟಿಸಿದರು."
+            },
+            {
+                id: 12,
+                page: "Page 77",
+                question: "ಭಾರತದಿಂದ ಸೂಪರ್‌ಸಾನಿಕ್ 'ಬ್ರಹ್ಮೋಸ್' ಕ್ಷಿಪಣಿ ಖರೀದಿಸಲು ಒಪ್ಪಂದ ಮಾಡಿಕೊಂಡ 3ನೇ ಆಗ್ನೇಯ ಏಷ್ಯಾ ದೇಶ ಯಾವುದು?",
+                options: [
+                    "A) ವಿಯೆಟ್ನಾಂ",
+                    "B) ಫಿಲಿಪೈನ್ಸ್",
+                    "C) ಇಂಡೋನೇಷ್ಯಾ",
+                    "D) ಮಲೇಶ್ಯಾ"
+                ],
+                correct: 0,
+                explanation: "ಫಿಲಿಪೈನ್ಸ್ ಮತ್ತು ಇಂಡೋನೇಷ್ಯಾ ಬಳಿಕ 2026ರಲ್ಲಿ ವಿಯೆಟ್ನಾಂ ದೇಶವು ಬ್ರಹ್ಮೋಸ್ ಕ್ಷಿಪಣಿ ಖರೀದಿಗೆ ಒಪ್ಪಂದ ಮಾಡಿಕೊಂಡಿದೆ."
+            },
+            {
+                id: 13,
+                page: "Page 77",
+                question: "ಭಾರತವು ಸ್ವದೇಶಿಯಾಗಿ ಅಭಿವೃದ್ಧಿಪಡಿಸಿದ ಬಹು-ಕ್ಯಾಲಿಬರ್ ದೀರ್ಘಾವಧಿ 'ಸೂರ್ಯಾಸ್ತ್ರ' ರಾಕೆಟ್ ವ್ಯವಸ್ಥೆಯ ಪರೀಕ್ಷೆ ಎಲ್ಲಿ ನಡೆಯಿತು?",
+                options: [
+                    "A) ಒಡಿಶಾದ ಚಂಡೀಪುರ",
+                    "B) ಶ್ರೀಹರಿಕೋಟಾ",
+                    "C) ಪೋಖ್ರಾನ್",
+                    "D) ವೀಲ್ಹರ್ ದ್ವೀಪ"
+                ],
+                correct: 0,
+                explanation: "ಒಡಿಶಾದ ಚಂಡೀಪುರದಲ್ಲಿ 'ಸೂರ್ಯಾಸ್ತ್ರ' ರಾಕೆಟ್ ವ್ಯವಸ್ಥೆಯ ಯಶಸ್ವಿ ಪರೀಕ್ಷೆ ನಡೆಯಿತು."
+            },
+
+            // PAGE 78 (1000033431.jpg)
+            {
+                id: 14,
+                page: "Page 78",
+                question: "ಬೆಂಗಳೂರು ನಗರದ ಕನಕಪುರ ರಸ್ತೆಯಲ್ಲಿರುವ 'ದಿ ಆರ್ಟ್ ಆಫ್ ಲಿವಿಂಗ್' ಸಂಸ್ಥೆಯ ಎಷ್ಟನೇ ವಾರ್ಷಿಕೋತ್ಸವ ಜರುಗಿತು?",
+                options: [
+                    "A) 43ನೇ ವಾರ್ಷಿಕೋತ್ಸವ",
+                    "B) 50ನೇ ವಾರ್ಷಿಕೋತ್ಸವ",
+                    "C) 25ನೇ ವಾರ್ಷಿಕೋತ್ಸವ",
+                    "D) 35ನೇ ವಾರ್ಷಿಕೋತ್ಸವ"
+                ],
+                correct: 0,
+                explanation: "ಬೆಂಗಳೂರಿನ ಕನಕಪುರ ರಸ್ತೆಯ ಆರ್ಟ್ ಆಫ್ ಲಿವಿಂಗ್ ಸಂಸ್ಥೆಯ 43ನೇ ವಾರ್ಷಿಕೋತ್ಸವದಲ್ಲಿ ಪ್ರಧಾನಿ ಮೋದಿ ಭಾಗವಹಿಸಿದ್ದರು."
+            },
+            {
+                id: 15,
+                page: "Page 78",
+                question: "ಸುಮಾರು 2.5 ಬಿಲಿಯನ್ ವರ್ಷಗಳ ಹಿಂದೆ ಭೂಮಿಯ ವಾತಾವರಣದಲ್ಲಿ ಆಮ್ಲಜನಕವನ್ನು (Oxygen) ಉತ್ಪಾದಿಸಿದ ಮೊದಲ ಜೀವಿ ಯಾವುದು?",
+                options: [
+                    "A) ಸಯನೋಬ್ಯಾಕ್ಟೀರಿಯಾ (ನೀಲಿ-ಹಸಿರು ಪಾಚಿ)",
+                    "B) ವೈರಸ್",
+                    "C) ಶಿಲೀಂಧ್ರ",
+                    "D) ಪ್ರೋಟೋಜೋವಾ"
+                ],
+                correct: 0,
+                explanation: "ಸಯನೋಬ್ಯಾಕ್ಟೀರಿಯಾ (Blue-Green Algae) ದ್ಯುತಿಸಂಶ್ಲೇಷಣೆ ಮೂಲಕ ಆಮ್ಲಜನಕ ಉತ್ಪಾದಿಸಿದ ಮೊದಲ ಜೀವಿಯಾಗಿದೆ."
+            },
+            {
+                id: 16,
+                page: "Page 78",
+                question: "ನಗರ ವಾಯುಮಾಲಿನ್ಯದ (Urban Air Pollution) ಜೈವಿಕ ಸೂಚಕವಾಗಿ (Bio-Indicator) ಕಾರ್ಯನಿರ್ವಹಿಸುವ ಜೀವಿ ಯಾವುದು?",
+                options: [
+                    "A) ಕಲ್ಲುಹೂವು (Lichens)",
+                    "B) ಪಾಚಿ",
+                    "C) ಬ್ಯಾಕ್ಟೀರಿಯಾ",
+                    "D) ಅಮೋಬಾ"
+                ],
+                correct: 0,
+                explanation: "ಕಲ್ಲುಹೂವುಗಳು (Lichens) ಗಂಧಕದ ಡೈ ಆಕ್ಸೈಡ್ (SO2) ಮಾಲಿನ್ಯವನ್ನು ಹೀರಿಕೊಳ್ಳುವ ವಾಯುಮಾಲಿನ್ಯ ಜೈವಿಕ ಸೂಚಕಗಳಾಗಿವೆ."
+            },
+
+            // PAGE 79 (1000033432.jpg)
+            {
+                id: 17,
+                page: "Page 79",
+                question: "ಕರ್ನಾಟಕದ ರಾಜಧಾನಿ ಬೆಂಗಳೂರಿನಲ್ಲಿ 2026 ಮೇ 12 ರಂದು 'ರಾಷ್ಟ್ರೀಯ ಸಮ್ಮೇಳನ' ಆಯೋಜಿಸಲಾದ ಯಾವ ಯೋಜನೆಯ ಕಾರ್ಯಾಗಾರ ಜರುಗಿತು?",
+                options: [
+                    "A) ಪಿಎಂ-ಕುಸುಮ್ (PM-KUSUM) ಯೋಜನೆ",
+                    "B) ಜಲ ಜೀವನ್ ಮಿಷನ್",
+                    "C) ಪಿಎಂ ಕಿಸಾನ್",
+                    "D) ಅಮೃತ್ ಯೋಜನೆ"
+                ],
+                correct: 0,
+                explanation: "ಪಿಎಂ-ಕುಸುಮ್ ಯೋಜನೆಯಡಿ ರಾಜ್ಯವ್ಯಾಪಿ ಇವಿ ಜಾಲ ಮತ್ತು ನವೀಕರಿಸಬಹುದಾದ ಇಂಧನ ಕುರಿತ ರಾಷ್ಟ್ರೀಯ ಸಮ್ಮೇಳನ ಬೆಂಗಳೂರಿನಲ್ಲಿ ನಡೆಯಿತು."
+            },
+            {
+                id: 18,
+                page: "Page 79",
+                question: "ಸಮುದ್ರದ ಉಪ್ಪು ನೀರನ್ನು ಕುಡಿಯುವ ನೀರಾಗಿ ಪರಿವರ್ತಿಸುವ (Desalination) ತಂತ್ರಜ್ಞಾನದಲ್ಲಿ ವಿಶ್ವದಲ್ಲೇ ಮುಂಚೂಣಿಯಲ್ಲಿರುವ ದೇಶ ಯಾವುದು?",
+                options: [
+                    "A) ಇಸ್ರೇಲ್",
+                    "B) ಜಪಾನ್",
+                    "C) ಚೀನಾ",
+                    "D) ಜರ್ಮನಿ"
+                ],
+                correct: 0,
+                explanation: "ಇಸ್ರೇಲ್ ದೇಶವು 'ರಿವರ್ಸ್ ಆಸ್ಮೋಸಿಸ್' (RO) ತಂತ್ರಜ್ಞಾನದ ಮೂಲಕ ಸಮುದ್ರ ನೀರನ್ನು ಕುಡಿಯುವ ನೀರನ್ನಾಗಿ ಮಾಡುವಲ್ಲಿ ಮುಂಚೂಣಿಯಲ್ಲಿದೆ."
+            },
+            {
+                id: 19,
+                page: "Page 79",
+                question: "ಸಮುದ್ರದ ನೀರನ್ನು ಕುಡಿಯುವ ನೀರನ್ನಾಗಿ ಮಾಡಲು ಅತ್ಯಂತ ಪ್ರಮುಖವಾಗಿ ಬಳಸಲಾಗುವ ತಂತ್ರಜ್ಞಾನ ವಿಧಾನ ಯಾವುದು?",
+                options: [
+                    "A) ರಿವರ್ಸ್ ಆಸ್ಮೋಸಿಸ್ (Reverse Osmosis - RO)",
+                    "B) ಫಿಲ್ಟರೇಶನ್",
+                    "C) ಸೆಡಿಮೆಂಟೇಶನ್",
+                    "D) ಕ್ಲೋರಿನೇಷನ್"
+                ],
+                correct: 0,
+                explanation: "ಆಧುನಿಕ ಘಟಕಗಳಲ್ಲಿ ರಿವರ್ಸ್ ಆಸ್ಮೋಸಿಸ್ (RO) ವಿಧಾನದ ಮೂಲಕ ಸಮುದ್ರ ನೀರನ್ನು ಸಂಸ್ಕರಿಸಲಾಗುತ್ತದೆ."
+            },
+
+            // PAGE 80 (1000033433.jpg)
+            {
+                id: 20,
+                page: "Page 80",
+                question: "ಆಂಧ್ರಪ್ರದೇಶದ ವಿಜಯವಾಡದಲ್ಲಿ ಉಡಾವಣೆಗೊಂಡ ಭಾರತದ ಮೊದಲ ದೇಶೀಯ 'ಸ್ಟ್ರಾಟೋಸ್ಫಿಯರಿಕ್ ಸೂಪರ್ ಪ್ರೆಷರ್ ಬಲೂನ್ ಮಿಷನ್'ನ ಹೆಸರೇನು?",
+                options: [
+                    "A) ಸನಾ (SANA)",
+                    "B) ಗಗನ್",
+                    "C) ಪವನ್",
+                    "D) ವಾಯು"
+                ],
+                correct: 0,
+                explanation: "ಭಾರತದ ಮೊದಲ ದೇಶೀಯ ಸ್ಟ್ರಾಟೋಸ್ಫಿಯರಿಕ್ ಸೂಪರ್ ಪ್ರೆಷರ್ ಬಲೂನ್ ಯೋಜನೆಗೆ 'ಸನಾ' (SANA) ಎಂದು ಹೆಸರಿಸಲಾಗಿದೆ."
+            },
+            {
+                id: 21,
+                page: "Page 80",
+                question: "DRDO ಅಭಿವೃದ್ಧಿಪಡಿಸಿದ 'ತಾರಾ' (TARA) ವ್ಯವಸ್ಥೆಯ ಮುಖ್ಯ ಕಾರ್ಯವೇನು?",
+                options: [
+                    "A) ಗೈಡೆಡ್ ಶಸ್ತ್ರಾಸ್ತ್ರ ವ್ಯವಸ್ಥೆಯ ಹಾರಾಟ ಪರೀಕ್ಷೆ",
+                    "B) ಜಲಾಂತರ್ಗಾಮಿ ಪತ್ತೆ",
+                    "C) ಉಪಗ್ರಹ ಉಡಾವಣೆ",
+                    "D) ರೇಡಾರ್ ತಂತ್ರಜ್ಞಾನ"
+                ],
+                correct: 0,
+                explanation: "ತಾರಾ (TARA) ಎಂಬುದು ಕಡಿಮೆ ವೆಚ್ಚದ ಶಸ್ತ್ರಾಸ್ತ್ರ ಹಾರಾಟ ಪರೀಕ್ಷಾ ವ್ಯವಸ್ಥೆಯಾಗಿದೆ."
+            },
+
+            // PAGE 81 (1000033434.jpg)
+            {
+                id: 22,
+                page: "Page 81",
+                question: "ಕರ್ನಾಟಕ ಸೇರಿದಂತೆ 16 ರಾಜ್ಯಗಳಲ್ಲಿ ಕಂದಾಯ ಇಲಾಖೆಯ 5.56 ಕೋಟಿ ಭೂಮಾಲೀಕರ ಪರಿಶೀಲನೆಗಾಗಿ ಚಾಲನೆ ನೀಡಿದ ಸಂಸ್ಥೆ ಯಾವುದು?",
+                options: [
+                    "A) ಕೇಂದ್ರ ಚುನಾವಣೆ ಆಯೋಗ",
+                    "B) ನೀತಿ ಆಯೋಗ",
+                    "C) ಹಣಕಾಸು ಸಚಿವಾಲಯ",
+                    "D) ಸುಪ್ರೀಂ ಕೋರ್ಟ್"
+                ],
+                correct: 0,
+                explanation: "ಕೇಂದ್ರ ಚುನಾವಣೆ ಆಯೋಗವು ಕರ್ನಾಟಕ ಸೇರಿದಂತೆ ರಾಜ್ಯಗಳಲ್ಲಿ ಮತದಾರರ ಪಟ್ಟಿ ಮತ್ತು ಭೂದಾಖಲೆಗಳ ಪರಿಶೀಲನಾ ಪ್ರಕ್ರಿಯೆಗೆ ಚಾಲನೆ ನೀಡಿದೆ."
+            },
+            {
+                id: 23,
+                page: "Page 81",
+                question: "ನಾಸಾ (NASA) ಚಂದ್ರನಲ್ಲಿ ಶಾಶ್ವತ ನೆಲೆ ನಿರ್ಮಿಸಲು ಘೋಷಿಸಿರುವ ಯೋಜನೆಯಲ್ಲಿ ಎಷ್ಟು ಹಂತಗಳಿವೆ?",
+                options: [
+                    "A) 3 ಹಂತಗಳು",
+                    "B) 5 ಹಂತಗಳು",
+                    "C) 2 ಹಂತಗಳು",
+                    "D) 4 ಹಂತಗಳು"
+                ],
+                correct: 0,
+                explanation: "ನಾಸಾ ಸಂಸ್ಥೆಯು ಚಂದ್ರನ ಮೇಲೆ 'ಮೂನ್ ಬೇಸ್ ಮಿಷನ್' ಅಡಿಯಲ್ಲಿ 3 ಹಂತಗಳ ಯೋಜನೆಯನ್ನು ಪ್ರಕಟಿಸಿದೆ."
+            },
+            {
+                id: 24,
+                page: "Page 81",
+                question: "ಚಂದ್ರಯಾನ-2 ಆರ್ಬಿಟರ್ ಚಂದ್ರನ ದಕ್ಷಿಣ ಧ್ರುವದ ಯಾವ ಪ್ರದೇಶದಲ್ಲಿ ಮಂಜುಗಡ್ಡೆ (Ice) ಇರುವುದನ್ನು ಪತ್ತೆ ಮಾಡಿದೆ?",
+                options: [
+                    "A) ಶ್ಯಾಕಲ್ಟನ್ ಕ್ರೇಟರ್ (Shackleton Crater)",
+                    "B) ಅಪೊಲೊ ಗಹ್ವರ",
+                    "C) ಟೈಕೋ ಕ್ರೇಟರ್",
+                    "D) ಕೊಪರ್ನಿಕಸ್"
+                ],
+                correct: 0,
+                explanation: "ಚಂದ್ರಯಾನ-2 ಆರ್ಬಿಟರ್ ದಕ್ಷಿಣ ಧ್ರುವದ ಶ್ಯಾಕಲ್ಟನ್ ಕ್ರೇಟರ್‌ ಪ್ರದೇಶದ ಶಾಶ್ವತ ಛಾಯಾ ವಲಯದಲ್ಲಿ ಹಿಮದ ಅಸ್ತಿತ್ವ ಪತ್ತೆ ಮಾಡಿದೆ."
+            },
+
+            // PAGE 82 (1000033435.jpg)
+            {
+                id: 25,
+                page: "Page 82",
+                question: "ಸೂರ್ಯನ ಕರೋನಾದಲ್ಲಿನ ಕಾಂತೀಯ ಕ್ಷೇತ್ರವನ್ನು ನೇರವಾಗಿ ಅಳೆದ ಗೌರಿಬಿದನೂರು ವೀಕ್ಷಣಾಲಯ ಕರ್ನಾಟಕದ ಯಾವ ಜಿಲ್ಲೆಯಲ್ಲಿದೆ?",
+                options: [
+                    "A) ಚಿಕ್ಕಬಳ್ಳಾಪುರ",
+                    "B) ಕೋಲಾರ",
+                    "C) ತುಮಕೂರು",
+                    "D) ಬೆಂಗಳೂರು ಗ್ರಾಮಾಂತರ"
+                ],
+                correct: 0,
+                explanation: "IIA ನ ಗೌರಿಬಿದನೂರು ರೇಡಿಯೋ ವೀಕ್ಷಣಾಲಯವು ಕರ್ನಾಟಕದ ಚಿಕ್ಕಬಳ್ಳಾಪುರ ಜಿಲ್ಲೆಯ ಗೌರಿಬಿದನೂರಿನಲ್ಲಿದೆ."
+            },
+            {
+                id: 26,
+                page: "Page 82",
+                question: "ಚಂದ್ರನ ಮೇಲ್ಮೈ ಭಾಗವು ಎರಡು ಪದರದ 'ಕೇಕ್'ನಂತಿದೆ ಎಂದು ಪತ್ತೆ ಮಾಡಿದ ಭಾರತೀಯ ಬಾಹ್ಯಾಕಾಶ ಸಂಸ್ಥೆ ಯಾವುದು?",
+                options: [
+                    "A) ಇಸ್ರೋ (ISRO)",
+                    "B) ನಾಸಾ (NASA)",
+                    "C) ಜಕ್ಸಾ (JAXA)",
+                    "D) ಸಿಎನ್ಎಸ್ಎ"
+                ],
+                correct: 0,
+                explanation: "ಚಂದ್ರಯಾನ-3 ರ ವಿಕ್ರಮ್ ಲ್ಯಾಂಡರ್ ಮತ್ತು ಪ್ರಜ್ಞಾನ್ ರೋವರ್ ದತ್ತಾಂಶ ಆಧರಿಸಿ ಇಸ್ರೋ ಈ ಮಾಹಿತಿಯನ್ನು ಪ್ರಕಟಿಸಿದೆ."
+            },
+            {
+                id: 27,
+                page: "Page 82",
+                question: "ವಿದ್ಯುತ್ ಕಾಂತೀಯತೆಯ (Electromagnetism) ತತ್ವಕ್ಕೆ ಕೊಡುಗೆ ನೀಡಿ 'ವಿದ್ಯುಚ್ಛಕ್ತಿಯ ಜನಕ' ಎಂದು ಕರೆಸಿಕೊಳ್ಳುವ ವಿಜ್ಞಾನಿ ಯಾರು?",
+                options: [
+                    "A) ಮೈಕೆಲ್ ಫ್ಯಾರಡೆ",
+                    "B) ಐಸಾಕ್ ನ್ಯೂಟನ್",
+                    "C) ಥಾಮಸ್ ಆಲ್ವಾ ಎಡಿಸನ್",
+                    "D) ನಿಕೋಲಾ ಟೆಸ್ಲಾ"
+                ],
+                correct: 0,
+                explanation: "ಮೈಕೆಲ್ ಫ್ಯಾರಡೆ ಅವರನ್ನು ವಿದ್ಯುಚ್ಛಕ್ತಿ ಮತ್ತು ವಿದ್ಯುತ್ ಕಾಂತೀಯತೆಯ ಜನಕ ಎಂದು ಕರೆಯಲಾಗುತ್ತದೆ."
+            },
+
+            // PAGE 83 (1000033436.jpg)
+            {
+                id: 28,
+                page: "Page 83",
+                question: "ಕರ್ನಾಟಕ ಸೋಪ್ಸ್ ಅಂಡ್ ಡಿಟರ್ಜೆಂಟ್ಸ್ ಲಿಮಿಟೆಡ್ (KSDL) ನ 'ಮೈಸೂರು ಸ್ಯಾಂಡಲ್ ಸೋಪ್' ರಾಯಭಾರಿಯಾಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
+                options: [
+                    "A) ತಮನ್ನಾ ಭಾಟಿಯಾ",
+                    "B) ರಶ್ಮಿಕಾ ಮಂದಣ್ಣ",
+                    "C) ಆಶಿಕಾ ರಂಗನಾಥ್",
+                    "D) ಶ್ರೀಲೀಲಾ"
+                ],
+                correct: 0,
+                explanation: "ಮೈಸೂರು ಸ್ಯಾಂಡಲ್ ಸೋಪ್‌ನ ತ್ವರಿತ ವಹಿವಾಟು ಉತ್ತೇಜಿಸಲು ನಟಿ ತಮನ್ನಾ ಭಾಟಿಯಾ ಅವರನ್ನು 2 ವರ್ಷಗಳ ಅವಧಿಗೆ ರಾಯಭಾರಿಯಾಗಿ ನೇಮಿಸಲಾಗಿದೆ."
+            },
+            {
+                id: 29,
+                page: "Page 83",
+                question: "2026ನೇ ಸಾಲಿನ ಪ್ರತಿಷ್ಠಿತ 'ನಾಲ್ವಡಿ ಕೃಷ್ಣರಾಜ ಒಡೆಯರ್ ಪ್ರಶಸ್ತಿ'ಗೆ ಆಯ್ಕೆಯಾದ ಖ್ಯಾತ ಜಾನಪದ ವಿದ್ವಾಂಸರು ಯಾರು?",
+                options: [
+                    "A) ಡಾ. ಗೋ.ರೂ. ಚನ್ನಬಸವಪ್ಪ",
+                    "B) ಹಂಪನಾ",
+                    "C) ಸಿದ್ಧಲಿಂಗಯ್ಯ",
+                    "D) ಚಂದ್ರಶೇಖರ ಕಂಬಾರ"
+                ],
+                correct: 0,
+                explanation: "ಕನ್ನಡ ಜನಶಕ್ತಿ ಕೇಂದ್ರ ನೀಡುವ ನಾಲ್ವಡಿ ಕೃಷ್ಣರಾಜ ಒಡೆಯರ್ ಪ್ರಶಸ್ತಿಗೆ ಹಿರಿಯ ಜಾನಪದ ವಿದ್ವಾಂಸ ಡಾ. ಗೋ.ರೂ. ಚನ್ನಬಸವಪ್ಪ ಆಯ್ಕೆಯಾಗಿದ್ದಾರೆ."
+            },
+            {
+                id: 30,
+                page: "Page 83",
+                question: "ರಾಷ್ಟ್ರಪತಿ ದ್ರೌಪದಿ ಮುರ್ಮು ಅವರಿಂದ 'ಫ್ಲಾರೆನ್ಸ್ ನೈಟಿಂಗೇಲ್ ಪ್ರಶಸ್ತಿ' (Florence Nightingale Award) ಪಡೆದ ನಿಮ್ಹಾನ್ಸ್ (NIMHANS) ಸಹಾಯಕ ನರ್ಸಿಂಗ್ ಸೂಪರಿಂಟೆಂಡೆಂಟ್ ಯಾರು?",
+                options: [
+                    "A) ಕವಿತಾ ಜಗನ್ನಾಥ್",
+                    "B) ಸರೋಜಿನಿ ದೇವಿ",
+                    "C) ಸುಧಾ ಮೂರ್ತಿ",
+                    "D) ಪದ್ಮಾವತಿ"
+                ],
+                correct: 0,
+                explanation: "ಬೆಂಗಳೂರಿನ ನಿಮ್ಹಾನ್ಸ್ ಸಂಸ್ಥೆಯ ಕವಿತಾ ಜಗನ್ನಾಥ್ ಅವರು ರಾಷ್ಟ್ರೀಯ ಫ್ಲಾರೆನ್ಸ್ ನೈಟಿಂಗೇಲ್ ಪ್ರಶಸ್ತಿ ಸ್ವೀಕರಿಸಿದರು."
+            },
+            {
+                id: 31,
+                page: "Page 83",
+                question: "ರಾಷ್ಟ್ರಪತಿಗಳು ಒಟ್ಟು ಎಷ್ಟು ಮಂದಿ ಸಾಧಕರಿಗೆ ಪದ್ಮ ಪ್ರಶಸ್ತಿಗಳನ್ನು (Padma Awards) ಪ್ರದಾನ ಮಾಡಿದರು?",
+                options: [
+                    "A) 66 ಸಾಧಕರಿಗೆ",
+                    "B) 100 ಸಾಧಕರಿಗೆ",
+                    "C) 50 ಸಾಧಕರಿಗೆ",
+                    "D) 131 ಸಾಧಕರಿಗೆ"
+                ],
+                correct: 0,
+                explanation: "ರಾಷ್ಟ್ರಪತಿ ದ್ರೌಪದಿ ಮುರ್ಮು ಅವರು ಮೊದಲ ಹಂತದಲ್ಲಿ 66 ಮಂದಿ ಸಾಧಕರಿಗೆ ಪದ್ಮ ಪ್ರಶಸ್ತಿ ಪ್ರದಾನ ಮಾಡಿದರು (ಒಟ್ಟು 131 ಪ್ರಕಟಿತ)."
+            }
+        ];
+
+        // Engine State
+        let currentIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let currentScore = 0;
+        let timerInterval = null;
+        let secondsLeft = 20 * 60; // 20 Minutes
+
+        // DOM Nodes
+        const questionText = document.getElementById("questionText");
+        const optionsList = document.getElementById("optionsList");
+        const feedbackBox = document.getElementById("feedbackBox");
+        const pageTitle = document.getElementById("pageTitle");
+        const paletteContainer = document.getElementById("paletteContainer");
+        const scoreDisplay = document.getElementById("score");
+        const totalQuestionsDisplay = document.getElementById("totalQuestions");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const timerDisplay = document.getElementById("timer");
+
+        // Initialize Engine
+        function startApp() {
+            totalQuestionsDisplay.textContent = quizData.length;
+            renderPalette();
+            loadQuestion(0);
+            initTimer();
+            buildAnswerKey();
+        }
+
+        // Render Sidebar Palette
+        function renderPalette() {
+            paletteContainer.innerHTML = "";
+            let currentGroup = "";
+            let currentGrid = null;
+
+            quizData.forEach((item, idx) => {
+                if (item.page !== currentGroup) {
+                    currentGroup = item.page;
+                    const groupHeader = document.createElement("div");
+                    groupHeader.className = "palette-group-title";
+                    groupHeader.textContent = currentGroup;
+                    paletteContainer.appendChild(groupHeader);
+
+                    currentGrid = document.createElement("div");
+                    currentGrid.className = "palette-grid";
+                    paletteContainer.appendChild(currentGrid);
+                }
+
+                const btn = document.createElement("button");
+                btn.className = "btn-qnum";
+                btn.id = `palette-btn-${idx}`;
+                btn.textContent = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+                currentGrid.appendChild(btn);
+            });
+        }
+
+        // Load Question Function
+        function loadQuestion(index) {
+            currentIndex = index;
+            const item = quizData[index];
+
+            pageTitle.textContent = `${item.page} - Question ${index + 1} of ${quizData.length}`;
+            questionText.textContent = `${index + 1}. ${item.question}`;
+            
+            optionsList.innerHTML = "";
+            feedbackBox.style.display = "none";
+
+            const existingAnswer = userAnswers[index];
+
+            item.options.forEach((optText, optIdx) => {
+                const li = document.createElement("li");
+                li.className = "option-item";
+
+                const isSelected = existingAnswer !== null && existingAnswer.selected === optIdx;
+
+                if (existingAnswer !== null) {
+                    if (optIdx === item.correct) {
+                        li.classList.add("correct");
+                    } else if (isSelected && optIdx !== item.correct) {
+                        li.classList.add("incorrect");
+                    }
+                }
+
+                li.innerHTML = `
+                    <input type="radio" name="option" value="${optIdx}" ${isSelected ? "checked" : ""} ${existingAnswer !== null ? "disabled" : ""}>
+                    <span>${optText}</span>
+                `;
+
+                if (existingAnswer === null) {
+                    li.onclick = () => selectOption(optIdx);
+                }
+
+                optionsList.appendChild(li);
+            });
+
+            if (existingAnswer !== null) {
+                feedbackBox.style.display = "block";
+                if (existingAnswer.isCorrect) {
+                    feedbackBox.className = "feedback-box correct";
+                    feedbackBox.innerHTML = `<strong>ಸರಿ! (Correct)</strong><br>${item.explanation}`;
+                } else {
+                    feedbackBox.className = "feedback-box incorrect";
+                    feedbackBox.innerHTML = `<strong>ತಪ್ಪು! (Incorrect)</strong><br>ಸರಿಯಾದ ಉತ್ತರ: <strong>${item.options[item.correct]}</strong><br>${item.explanation}`;
+                }
+            }
+
+            // Sync Active Class on Palette
+            document.querySelectorAll(".btn-qnum").forEach((btn, i) => {
+                btn.classList.toggle("active", i === index);
+            });
+
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === quizData.length - 1;
+        }
+
+        // Handle Option Click
+        function selectOption(optIdx) {
+            const item = quizData[currentIndex];
+            const isCorrect = optIdx === item.correct;
+
+            userAnswers[currentIndex] = {
+                selected: optIdx,
+                isCorrect: isCorrect
+            };
+
+            if (isCorrect) currentScore++;
+            scoreDisplay.textContent = currentScore;
+
+            const paletteBtn = document.getElementById(`palette-btn-${currentIndex}`);
+            if (isCorrect) {
+                paletteBtn.classList.add("answered-correct");
+            } else {
+                paletteBtn.classList.add("answered-wrong");
+            }
+
+            loadQuestion(currentIndex);
+        }
+
+        // Controls Navigation
+        function navigate(dir) {
+            const nextIdx = currentIndex + dir;
+            if (nextIdx >= 0 && nextIdx < quizData.length) {
+                loadQuestion(nextIdx);
+            }
+        }
+
+        function jumpToQuestion(idx) {
+            loadQuestion(idx);
+        }
+
+        // Timer Logic
+        function initTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                let m = Math.floor(secondsLeft / 60);
+                let s = secondsLeft % 60;
+                timerDisplay.textContent = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time expired! Total Score: " + currentScore + "/" + quizData.length);
+                }
+            }, 1000);
+        }
+
+        // Reset Engine
+        function resetQuiz() {
+            if (confirm("ಪರೀಕ್ಷೆಯನ್ನು ಮತ್ತೆ ಪ್ರಾರಂಭಿಸಲು ಇಷ್ಟಪಡುತ್ತೀರಾ? (Reset Test?)")) {
+                userAnswers = new Array(quizData.length).fill(null);
+                currentScore = 0;
+                scoreDisplay.textContent = "0";
+                secondsLeft = 20 * 60;
+
+                document.querySelectorAll(".btn-qnum").forEach(btn => {
+                    btn.classList.remove("answered-correct", "answered-wrong");
+                });
+
+                toggleAnswerKey(false);
+                loadQuestion(0);
+                initTimer();
+            }
+        }
+
+        // View Key Toggle
+        function toggleAnswerKey(show) {
+            document.getElementById("quizPanel").style.display = show ? "none" : "flex";
+            document.getElementById("answerKeyPanel").style.display = show ? "block" : "none";
+        }
+
+        // Answer Key Panel Generation
+        function buildAnswerKey() {
+            const keyContainer = document.getElementById("answerKeyContent");
+            keyContainer.innerHTML = "";
+
+            quizData.forEach((item, idx) => {
+                const row = document.createElement("div");
+                row.className = "answer-key-item";
+                row.innerHTML = `
+                    <p><strong>Q${idx + 1} (${item.page}):</strong> ${item.question}</p>
+                    <p><strong>ಸರಿಯಾದ ಉತ್ತರ:</strong> ${item.options[item.correct]}</p>
+                    <p style="color: #444;"><strong>ವಿವರಣೆ:</strong> ${item.explanation}</p>
+                `;
+                keyContainer.appendChild(row);
+            });
+        }
+
+        // Run App
+        window.onload = startApp;
+    </script>
+</body>
+</html>
