@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karnataka PC & SSC CBT Exam Mock Test - May 2026</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background-color: #f4f6f9; color: #333; }
+    header { background-color: #0d3b66; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #002244; }
+    header h1 { font-size: 1.1rem; }
+    .timer { background: #b7094c; padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
+    
+    .container { display: flex; max-width: 1240px; margin: 15px auto; gap: 15px; padding: 0 10px; }
+    .main-content { flex: 3; background: white; border: 1px solid #ccc; border-radius: 4px; padding: 20px; min-height: 520px; }
+    .sidebar { flex: 1; background: white; border: 1px solid #ccc; border-radius: 4px; padding: 15px; }
+    
+    .q-header { font-size: 1.05rem; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; line-height: 1.5; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .option-btn { padding: 12px 15px; border: 1px solid #ccc; border-radius: 4px; background: #fff; text-align: left; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; transition: background 0.2s; }
+    .option-btn:hover { background: #f0f4f8; }
+    
+    /* Result Styles */
+    .option-btn.selected-correct { background-color: #d4edda; border-color: #28a745; color: #155724; font-weight: bold; }
+    .option-btn.selected-incorrect { background-color: #f8d7da; border-color: #dc3545; color: #721c24; }
+    .option-btn.show-correct { background-color: #d4edda; border-color: #28a745; color: #155724; }
+    
+    .explanation-box { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 4px; font-size: 0.9rem; margin-top: 15px; line-height: 1.5; }
+    .explanation-box.correct { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+    .explanation-box h4 { font-size: 0.95rem; margin-bottom: 5px; }
+    
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+    .nav-btn { padding: 8px 16px; border: none; background: #0d3b66; color: white; border-radius: 4px; cursor: pointer; }
+    .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* Palette Sidebar */
+    .sidebar h3 { font-size: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 12px; text-align: center; }
+    .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; max-height: 420px; overflow-y: auto; }
+    .palette-btn { padding: 8px 0; border: 1px solid #bbb; background: #fff; cursor: pointer; border-radius: 3px; font-size: 0.82rem; font-weight: bold; }
+    .palette-btn.active { border: 2px solid #000; }
+    .palette-btn.answered-correct { background-color: #28a745; color: white; border-color: #28a745; }
+    .palette-btn.answered-incorrect { background-color: #dc3545; color: white; border-color: #dc3545; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Karnataka PC & SSC CBT Exam Mock Test (May 2026 Edition)</h1>
+  <div class="timer">Time Remaining: <span id="timer">30:00</span></div>
+</header>
+
+<div class="container">
+  <div class="main-content">
+    <div class="q-header" id="question-text">Loading question...</div>
+    <div class="options" id="options-container"></div>
+    <div id="explanation-container"></div>
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">Previous</button>
+      <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Next</button>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <h3>Question Palette</h3>
+    <p style="font-size:0.85rem; text-align:center;">Score: <span id="score">0</span> / 40</p>
+    <div class="palette-grid" id="palette"></div>
+  </div>
+</div>
+
+<script>
+const quizData = [
+  {
+    q: "1. ಫೆಮಿನಾ ಮಿಸ್ ಇಂಡಿಯಾ ಗೌರವವನ್ನು ಗೆದ್ದುಕೊಂಡ ಕರ್ನಾಟಕದ ಯುವತಿ ಯಾರು?",
+    options: ["A) ಸಾದ್ವಿ ಸೈಲ್", "B) ಶಿನಿ ಶೆಟ್ಟಿ", "C) ನಂದಿನಿ ಗುಪ್ತಾ", "D) ರೂಬಲ್ ಶೇಖಾವತ್"],
+    correct: 0,
+    exp: "ಕರ್ನಾಟಕ ಮೂಲದ 'ಸಾದ್ವಿ ಸೈಲ್' ಅವರು ಫೆಮಿನಾ ಮಿಸ್ ಇಂಡಿಯಾ ಕಿರೀಟವನ್ನು ಮುಡಿಗೇರಿಸಿಕೊಂಡಿದ್ದಾರೆ."
+  },
+  {
+    q: "2. ನೀತಿ ಆಯೋಗದ (NITI Aayog) ನೂತನ ಉಪಾಧ್ಯಕ್ಷರಾಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
+    options: ["A) ಸುಜಾತ್ ಕೌಶಿಕ್", "B) ಅಶೋಕ್ ಲಾಹಿರಿ", "C) ಸುಜಿತ್ ಕುಮಾರ್", "D) ರಾಜೀವ್ ಕುಮಾರ್"],
+    correct: 1,
+    exp: "ಅರ್ಥಶಾಸ್ತ್ರಜ್ಞ 'ಅಶೋಕ್ ಲಾಹಿರಿ' ಅವರನ್ನು ನೀತಿ ಆಯೋಗದ ನೂತನ ಉಪಾಧ್ಯಕ್ಷರನ್ನಾಗಿ ನಿಯೋಜಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "3. 2025ನೇ ಸಾಲಿನ ಪ್ರತಿಷ್ಠಿತ 'ಬಸವ ರಾಷ್ಟ್ರೀಯ ಪುರಸ್ಕಾರ'ಕ್ಕೆ ಆಯ್ಕೆಯಾದವರು ಯಾರು?",
+    options: ["A) ಬೆಳಗಾವಿಯ ಸಿದ್ಧರಾಮಣ್ಣ ಶರಣರು", "B) ಶ್ರೀ ಶಿವರಾತ್ರಿ ದೇಶಿಕೇಂದ್ರ ಸ್ವಾಮೀಜಿ", "C) ಡಾ. ವೀರೇಂದ್ರ ಹೆಗ್ಗಡೆ", "D) ತರಳುಬಾಳು ಜಗದ್ಗುರು"],
+    correct: 0,
+    exp: "ಬೆಳಗಾವಿಯ ಸಾಹಿತ್ಯಿಕ-ಸಾಮಾಜಿಕ ಚಿಂತಕ 'ಸಿದ್ಧರಾಮಣ್ಣ ಶರಣರು' ಅವರಿಗೆ 2025ನೇ ಸಾಲಿನ ಬಸವ ರಾಷ್ಟ್ರೀಯ ಪುರಸ್ಕಾರ ಲಭಿಸಿದೆ."
+  },
+  {
+    q: "4. ಜಾಗತಿಕ ತಂತ್ರಜ್ಞಾನ ಸಂಸ್ಥೆ 'ಆಪಲ್' (Apple) ನ ನೂತನ ಸಿಇಒ (CEO) ಆಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
+    options: ["A) ಟಿಮ್ ಕುಕ್", "B) ಜಾನ್ ಟರ್ನಸ್", "C) ಸತ್ಯ ನಾಡೆಳ್ಳ", "D) ಸುಂದರ್ ಪಿಚೈ"],
+    correct: 1,
+    exp: "ಆಪಲ್ ಸಂಸ್ಥೆಯ ಹಿರಿಯ ತಂತ್ರಜ್ಞಾನ ಕಾರ್ಯಾಚರಣೆಗಳ ಮುಖ್ಯಸ್ಥ 'ಜಾನ್ ಟರ್ನಸ್' ಅವರನ್ನು ನೂತನ ಸಿಇಒ ಆಗಿ ಆಯ್ಕೆ ಮಾಡಲಾಗಿದೆ."
+  },
+  {
+    q: "5. 2025ನೇ ಸಾಲಿನ ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಅತ್ಯುನ್ನತ 'ಪಂಪ ಪ್ರಶಸ್ತಿ'ಗೆ ಭಾಜನರಾದ ಸಾಹಿತಿ ಯಾರು?",
+    options: ["A) ದೇವನೂರು ಮಹಾದೇವ", "B) ಚಂದ್ರಶೇಖರ ಕಂಬಾರ", "C) ಎಸ್.ಎಲ್. ಭೈರಪ್ಪ", "D) ಕೆ.ಎಸ್. ನಿಸ್ಸಾರ್ ಅಹಮದ್"],
+    correct: 0,
+    exp: "ಕನ್ನಡದ ಹಿರಿಯ ಬಂಡಾಯ ಸಾಹಿತಿ ಹಾಗೂ ಚಿಂತಕರಾದ 'ದೇವನೂರು ಮಹಾದೇವ' ಅವರಿಗೆ 2025 ಸಾಲಿನ ಪಂಪ ಪ್ರಶಸ್ತಿ ನೀಡಿ ಗೌರವಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "6. ಕರ್ನಾಟಕ ರಾಜ್ಯ ಮಾಹಿತಿ ಆಯೋಗದ ಮುಖ್ಯ ಮಾಹಿತಿ ಆಯುಕ್ತರಾಗಿ ನೇಮಕಗೊಂಡ ನಿವೃತ್ತ ಐಎಎಸ್ ಅಧಿಕಾರಿ ಯಾರು?",
+    options: ["A) ಜಿ. ಸತ್ಯವತಿ", "B) ರತ್ನಪ್ರಭಾ", "C) ವಂದಿತಾ ಶರ್ಮಾ", "D) ಶಾಲಿನಿ ರಜನೀಶ್"],
+    correct: 0,
+    exp: "ನಿವೃತ್ತ IAS ಅಧಿಕಾರಿ 'ಜಿ. ಸತ್ಯವತಿ' ಅವರು ಕರ್ನಾಟಕ ರಾಜ್ಯ ಮಾಹಿತಿ ಆಯೋಗದ ಮುಖ್ಯ ಆಯುಕ್ತರಾಗಿ ಅಧಿಕಾರ ಸ್ವೀಕರಿಸಿದ್ದಾರೆ."
+  },
+  {
+    q: "7. ಸಾರ್ವಜನಿಕ ಪ್ರಸಾರ ಸಂಸ್ಥೆ 'ಪ್ರಸಾರ ಭಾರತಿ'ಯ ನೂತನ ಅಧ್ಯಕ್ಷರಾಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
+    options: ["A) ಪ್ರಸೂನ್ ಜೋಶಿ", "B) ಶೇಖರ್ ಕಪೂರ್", "C) ಸುಭಾಷ್ ಚಂದ್ರ", "D) ಶಶಿ ಶೇಖರ್ ವೆಂಪಟಿ"],
+    correct: 0,
+    exp: "ಚಿತ್ರಸಾಹಿತಿ ಹಾಗೂ ಕಲಾ ಕ್ಷೇತ್ರದ ಪ್ರಮುಖರಾದ 'ಪ್ರಸೂನ್ ಜೋಶಿ' ಅವರನ್ನು ಪ್ರಸಾರ ಭಾರತಿ ಮಂಡಳಿಯ ಅಧ್ಯಕ್ಷರನ್ನಾಗಿ ನೇಮಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "8. ಇತ್ತೀಚೆಗೆ 'ಶ್ರೀ ಭಗವಾನ್ ಮಹಾವೀರ ಶಾಂತಿ ರಾಷ್ಟ್ರೀಯ ಪ್ರಶಸ್ತಿ'ಗೆ ಪಾತ್ರರಾದ ಧಾರ್ಮಿಕ ಧುರೀಣರು ಯಾರು?",
+    options: ["A) ಭಾನುಕೀರ್ತಿ ಭಟ್ಟಾರಕ ಸ್ವಾಮೀಜಿ", "B) ಚಾರುಕೀರ್ತಿ ಭಟ್ಟಾರಕ ಸ್ವಾಮೀಜಿ", "C) ವಿಬುಧೇಶ ತೀರ್ಥರು", "D) ವಿಶ್ವಪ್ರಸನ್ನ ತೀರ್ಥರು"],
+    correct: 0,
+    exp: "ಅಹಿಂಸೆ ಮತ್ತು ಜಾಗತಿಕ ಶಾಂತಿ ಪ್ರಚಾರಕ್ಕಾಗಿ 'ಭಾನುಕೀರ್ತಿ ಭಟ್ಟಾರಕ ಸ್ವಾಮೀಜಿ' ಅವರಿಗೆ ರಾಷ್ಟ್ರೀಯ ಮಹಾವೀರ ಶಾಂತಿ ಪ್ರಶಸ್ತಿ ಪ್ರದಾನ ಮಾಡಲಾಗಿದೆ."
+  },
+  {
+    q: "9. ಕರ್ನಾಟಕದ ಶಿವನಸಮುದ್ರ ಪ್ರದೇಶದಲ್ಲಿ ಪತ್ತೆಯಾದ ಅಪರೂಪದ ಪ್ರಭೇದದ ಜಲಚರ ಯಾವುದು?",
+    options: ["A) ಕಾಗೆ ಮೀನು", "B) ಆನೆ ಮೀನು", "C) ಸಿಂಹ ಮೀನು", "D) ಹಾರುವ ಮೀನು"],
+    correct: 0,
+    exp: "ಶಿವನಸಮುದ್ರ ಜಲಪಾತ ಮತ್ತು ಕಾವೇರಿ ನದಿ ಪಾತ್ರದಲ್ಲಿ ಅಪರೂಪದ 'ಕಾಗೆ ಮೀನು' ಪ್ರಭೇದ ಸಂಶೋಧಕರಿಗೆ ಪತ್ತೆಯಾಗಿದೆ."
+  },
+  {
+    q: "10. ಭಾರತೀಯ ಕರಾವಳಿ ಕಾವಲು ಪಡೆಗೆ ಇತ್ತೀಚೆಗೆ ಹಸ್ತಾಂತರಿಸಲಾದ ಸುಧಾರಿತ ಹಗುರ ಹೆಲಿಕಾಪ್ಟರ್‌ಗಳ ಮಾದರಿ ಯಾವುದು?",
+    options: ["A) ALH MK-3 (4 ಹೆಲಿಕಾಪ್ಟರ್‌ಗಳು)", "B) ಚಿನ್ಯೂಕ್", "C) ಅಪಾಚೆ", "D) ರುದ್ರ"],
+    correct: 0,
+    exp: "ಕರಾವಳಿ ಕಾವಲು ಪಡೆಯ ಕಣ್ಣಾವಲು ಬಲಪಡಿಸಲು 4 'ALH MK-3' (Advanced Light Helicopter) ಮಾದರಿಯ ಹೆಲಿಕಾಪ್ಟರ್‌ಗಳನ್ನು ನಿಯೋಜಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "11. ನೂತನವಾಗಿ ಚಾಲನೆ ನೀಡಲಾದ 6-ಪಥದ 'ಗಂಗಾ ಎಕ್ಸ್‌ಪ್ರೆಸ್‌ವೇ' ಯಾವ ಎರಡು ನಗರಗಳನ್ನು ಸಂಪರ್ಕಿಸುತ್ತದೆ?",
+    options: ["A) ಮೀರಜ್ - ಪ್ರಯಾಗ್‌ರಾಜ್", "B) ಲಕ್ನೋ - ವಾರಣಾಸಿ", "C) ಆಗ್ರಾ - ಕಾನ್ಪುರ", "D) ನೋಯ್ಡಾ - ಅಯೋಧ್ಯೆ"],
+    correct: 0,
+    exp: "ಉತ್ತರ ಪ್ರದೇಶದಲ್ಲಿ ನಿರ್ಮಿಸಲಾದ 6 ಪಥಗಳ ಗಂಗಾ ಎಕ್ಸ್‌ಪ್ರೆಸ್‌ವೇ 'ಮೀರಜ್ ಮತ್ತು ಪ್ರಯಾಗ್‌ರಾಜ್' ನಗರಗಳ ನಡುವೆ ಶೀಘ್ರ ಸಂಚಾರ ವ್ಯವಸ್ಥೆ ಕಲ್ಪಿಸುತ್ತದೆ."
+  },
+  {
+    q: "12. ಇಸ್ರೋ (ISRO) 'ಗಗನಯಾನ' ಯೋಜನೆಯ ಯಶಸ್ಸಿಗಾಗಿ ಇತ್ತೀಚೆಗೆ ಯಶಸ್ವಿಯಾಗಿ ನಡೆಸಿದ ಪರೀಕ್ಷೆ ಯಾವುದು?",
+    options: ["A) ಬಾರ್ಟ್ ಡ್ರಾಪ್ ಪರೀಕ್ಷಾಂತರ", "B) ವಿಕ್ರಮ್ ಲ್ಯಾಂಡರ್ ಪರೀಕ್ಷೆ", "C) ಕ್ರಯೋಜೆನಿಕ್ ಪರೀಕ್ಷೆ", "D) ಸೋಲಾರ್-ವಿಂಡ್ ಪರೀಕ್ಷೆ"],
+    correct: 0,
+    exp: "ಮಾನವಸಹಿತ ಗಗನಯಾನ ಮಿಷನ್‌ನ ಸುರಕ್ಷತೆಯ ಭಾಗವಾಗಿ ಇಸ್ರೋ 'ಬಾರ್ಟ್ ಡ್ರಾಪ್ ಪರೀಕ್ಷಾಂತರ'ವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನೆರವೇರಿಸಿದೆ."
+  },
+  {
+    q: "13. 2026ರ ಸಾಲಿನ ಜಾಗತಿಕ 'ಪುಲಿಟ್ಜರ್ ಪ್ರಶಸ್ತಿ'ಗೆ (Pulitzer Prize) ಭಾಜನರಾದ ಭಾರತೀಯ ಪತ್ರಕರ್ತರು ಯಾರು?",
+    options: ["A) ಸುಪರ್ಣಾ ಶರ್ಮಾ & ಆನಂದ್ ಆರ್.ಕೆ.", "B) ರವೀಶ್ ಕುಮಾರ್ & ಸಿದ್ಧಾರ್ಥ್", "C) ಬರ್ಖಾ ದತ್ & ರಾಜ್‌ದೀಪ್", "D) ಕರಣ್ ಥಾಪರ್ & ಶೇಖರ್"],
+    correct: 0,
+    exp: "ಪತ್ರಿಕೋದ್ಯಮದ ಅತ್ಯುನ್ನತ ಪುಲಿಟ್ಜರ್ ಪ್ರಶಸ್ತಿಯನ್ನು ಭಾರತದ 'ಸುಪರ್ಣಾ ಶರ್ಮಾ' ಹಾಗೂ 'ಆನಂದ್ ಆರ್.ಕೆ.' ಅವರು ಪಡೆದುಕೊಂಡಿದ್ದಾರೆ."
+  },
+  {
+    q: "14. 2026ರ 'ರೋಲೆಕ್ಸ್ ನ್ಯಾಷನಲ್ ಜಿಯೋಗ್ರಾಫಿಕ್ ಎಕ್ಸ್‌ಪ್ಲೋರರ್ ಆಫ್ ದಿ ಇಯರ್' ಪ್ರಶಸ್ತಿ ಪಡೆದ ವಿಜ್ಞಾನಿ ಯಾರು?",
+    options: ["A) ಡಾ. ಕೃತಿ ಕಾರಂತ್", "B) ಡಾ. ಸುನೀತಾ ನಾರಾಯಣ್", "C) ಡಾ. ಅನ್ನಪೂರ್ಣಿ ರಘುರಾಮ್", "D) ಪ್ರೇಮಾ ಕರಂತ"],
+    correct: 0,
+    exp: "ವನ್ಯಜೀವಿ ಸಂರಕ್ಷಣಾ ವಿಜ್ಞಾನಿ 'ಡಾ. ಕೃತಿ ಕಾರಂತ್' ಅವರು ಈ ಪ್ರತಿಷ್ಠಿತ ಅಂತರರಾಷ್ಟ್ರೀಯ ಎಕ್ಸ್‌ಪ್ಲೋರರ್ ಪ್ರಶಸ್ತಿಯನ್ನು ಪಡೆದಿದ್ದಾರೆ."
+  },
+  {
+    q: "15. ಫಿಡೆ (FIDE) ಮಹಿಳಾ ಕ್ಯಾಂಡಿಡೇಟ್ಸ್ ಚೆಸ್ ಟೂರ್ನಮೆಂಟ್‌ನಲ್ಲಿ ಚಾಂಪಿಯನ್ ಆದ ಭಾರತದ ಯುವ ಗ್ರಾಂಡ್ ಮಾಸ್ಟರ್ ಯಾರು?",
+    options: ["A) ವೈಶಾಲಿ ರಮೇಶ್ ಬಾಬು", "B) ದಿವ್ಯಾ ದೇಶ್‌ಮುಖ್", "C) ಕೋನೇರು ಹಂಪಿ", "D) ದ್ರೋಣವಲ್ಲಿ ಹಾರಿಕಾ"],
+    correct: 0,
+    exp: "ಆರ್. ಪ್ರಜ್ಞಾನಂದ ಅವರ ಸಹೋದರಿ 'ವೈಶಾಲಿ ರಮೇಶ್ ಬಾಬು' ಅವರು ಫಿಡೆ ಮಹಿಳಾ ಕ್ಯಾಂಡಿಡೇಟ್ಸ್ ಟೂರ್ನಮೆಂಟ್ ಗೆದ್ದು ಚಾಂಪಿಯನ್ ಆಗಿದ್ದಾರೆ."
+  },
+  {
+    q: "16. ಭಾರತದ ಅತ್ಯಂತ ಮೊದಲ 'ಖಾಸಗಿ ಚಿನ್ನದ ಗಣಿಗಾರಿಕೆ' ಯೋಜನೆ ಎಲ್ಲಿ ಜಾರಿಯಾಗಿದೆ?",
+    options: ["A) ಜೊನ್ನಗಿರಿ (ಆಂಧ್ರಪ್ರದೇಶ)", "B) ಕೆ.ಜಿ.ಎಫ್. (ಕರ್ನಾಟಕ)", "C) ಹಟ್ಟಿ (ಕರ್ನಾಟಕ)", "D) ಸಿಂಘ್‌ಭೂಮ್ (ಜಾರ್ಖಂಡ್)"],
+    correct: 0,
+    exp: "ಆಂಧ್ರಪ್ರದೇಶದ ಕರ್ನೂಲ್ ಜಿಲ್ಲೆಯ 'ಜೊನ್ನಗಿರಿ'ಯಲ್ಲಿ ದೇಶದ ಮೊದಲ ಖಾಸಗಿ ವಲಯದ ಚಿನ್ನದ ಗಣಿ ಉದ್ಯಮವನ್ನು ಸ್ಥಾಪಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "17. ಇತ್ತೀಚೆಗೆ 'ಅರಣ್ಯ ಸಂರಕ್ಷಣಾ ಮೀಸಲು ಪ್ರದೇಶ' ಸ್ಥಾನಮಾನ ಪಡೆದ 'ಆಲೂರು (ಬಿ)' ಪ್ರದೇಶವು ಯಾವ ತಾಲೂಕಿನಲ್ಲಿದೆ?",
+    options: ["A) ಚಿತ್ತಾಪುರ (ಕಲಬುರಗಿ)", "B) ಜೇವರ್ಗಿ", "C) ಸೇಡಂ", "D) ಆಳಂದ"],
+    correct: 0,
+    exp: "ಕಲಬುರಗಿ ಜಿಲ್ಲೆಯ ಚಿತ್ತಾಪುರ ತಾಲೂಕಿನ 'ಆಲೂರು (ಬಿ)' ಅರಣ್ಯ ಪ್ರದೇಶಕ್ಕೆ ಸರ್ಕಾರ ಜೀವವೈವಿಧ್ಯ ಸಂರಕ್ಷಿತ ಮೀಸಲು ಸ್ಥಾನಮಾನ ನೀಡಿದೆ."
+  },
+  {
+    q: "18. ಭಾರತದಲ್ಲಿ ಮೊಟ್ಟಮೊದಲ ಬಾರಿಗೆ 'ಸಾಗರ ಪ್ರಾದೇಶಿಕ ಯೋಜನೆ'ಯನ್ನು (Marine Spatial Planning) ಜಾರಿಗೆ ತಂದ ರಾಜ್ಯ ಯಾವುದು?",
+    options: ["A) ಒಡಿಶಾ", "B) ತಮಿಳುನಾಡು", "C) ಕೇರಳ", "D) ಗುಜರಾತ್"],
+    correct: 0,
+    exp: "ಸಮುದ್ರ ತೀರದ ಸಮಗ್ರ ನಿರ್ವಹಣೆ ಮತ್ತು ಅಭಿವೃದ್ಧಿಗೆ 'ಸಾಗರ ಪ್ರಾದೇಶಿಕ ಯೋಜನೆ' ಜಾರಿಗೊಳಿಸಿದ ಪ್ರಥಮ ರಾಜ್ಯ 'ಒಡಿಶಾ' ಆಗಿದೆ."
+  },
+  {
+    q: "19. ವಿಶ್ವದ ಮೊಟ್ಟಮೊದಲ 'ಸಂತಾರ ಸಮಗ್ರ ವಿಶ್ವವಿದ್ಯಾಲಯ'ವನ್ನು ಎಲ್ಲಿ ಸ್ಥಾಪಿಸಲು ಉದ್ದೇಶಿಸಲಾಗಿದೆ?",
+    options: ["A) ರಾಜಸ್ಥಾನ", "B) ಗುಜರಾತ್", "C) ಕರ್ನಾಟಕ", "D) ಮಧ್ಯಪ್ರದೇಶ"],
+    correct: 0,
+    exp: "ಜೈನ ಧರ್ಮದ ಐತಿಹಾಸಿಕ ಸಂಪ್ರದಾಯ ಹಾಗೂ ತತ್ವಚಿಂತನೆಗಾಗಿ ವಿಶ್ವದ ಪ್ರಥಮ ಸಂತಾರ ಸಮಗ್ರ ವಿಶ್ವವಿದ್ಯಾಲಯವನ್ನು ಸ್ಥಾಪಿಸಲಾಗುತ್ತಿದೆ."
+  },
+  {
+    q: "20. ಪೋಷಣ್ ಅಭಿಯಾನದ ಮೇಲ್ವಿಚಾರಣೆಗಾಗಿ ಕೇಂದ್ರ ಸರ್ಕಾರ ಬಳಕೆಗೆ ತಂದಿರುವ ಮೊಬೈಲ್ ಅಪ್ಲಿಕೇಷನ್ ಯಾವುದು?",
+    options: ["A) ಪೋಷಣ್ ಟ್ರ್ಯಾಕರ್", "B) ಮಾತೃ ಪೋಷಣ್", "C) ಆಶಾ ಆ್ಯಪ್", "D) ಶಕ್ತಿ ಆ್ಯಪ್"],
+    correct: 0,
+    exp: "ಮಕ್ಕಳು ಮತ್ತು ಗರ್ಭಿಣಿಯರಲ್ಲಿ ಅಪೌಷ್ಟಿಕತೆ ನಿವಾರಿಸಲು ಸಾಫ್ಟ್‌ವೇರ್ ಆಧಾರಿತ ನಿಯಂತ್ರಣಕ್ಕಾಗಿ 'ಪೋಷಣ್ ಟ್ರ್ಯಾಕರ್' ಬಳಸಲಾಗುತ್ತಿದೆ."
+  },
+  {
+    q: "21. ಮಹಿಳೆಯರ ಡಿಜಿಟಲ್ ಸಾಮರ್ಥ್ಯ ಮತ್ತು ಸುರಕ್ಷತೆ ಬಲಪಡಿಸಲು ಜಾರಿಗೆ ತಂದ ಡಿಜಿಟಲ್ ಯೋಜನೆಯ ಹೆಸರೇನು?",
+    options: ["A) ಇ-ಸೇಫ್‌ಹರ್ (E-SafeHer)", "B) ಡಿಜಿ ಮಹಿಳಾ", "C) ಸ್ತ್ರೀ ಸುರಕ್ಷಾ", "D) ಸೈಬರ್ ಶಕ್ತಿ"],
+    correct: 0,
+    exp: "ಮಹಿಳೆಯರ ಡಿಜಿಟಲ್ ಸೇರ್ಪಡೆ ಹಾಗೂ ಆನ್‌ಲೈನ್ ಸುರಕ್ಷತೆಗೆ ತಂತ್ರಜ್ಞಾನ ಆಧಾರಿತ 'ಇ-ಸೇಫ್‌ಹರ್' ಯೋಜನೆಯನ್ನು ಚಾಲನೆಗೊಳಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "22. ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ (AI) ತಂತ್ರಜ್ಞಾನದಲ್ಲಿ ಜಾತಿ ತಾರತಮ್ಯ ತಡೆಯಲು ಕರ್ನಾಟಕ ಸರ್ಕಾರ ಜಾರಿಗೆ ತಂದ ಮಸೂದೆ ಯಾವುದು?",
+    options: ["A) ವೆಮುಲಾ ಮಸೂದೆ", "B) ಡಿಜಿಟಲ್ ನ್ಯಾಯ ಮಸೂದೆ", "C) ಎಐ ತಾರತಮ್ಯ ತಡೆ ಕಾಯ್ದೆ", "D) ಸಮಾನತಾ ಮಸೂದೆ"],
+    correct: 0,
+    exp: "ತಂತ್ರಜ್ಞಾನ ಹಾಗೂ AI ಆಲ್ಗರಿದಮ್‌ಗಳಲ್ಲಿ ಜಾತಿಯ ಆಧಾರದ ತಾರತಮ್ಯವಾಗುವುದನ್ನು ತಡೆಯಲು ಕರ್ನಾಟಕ ಸರ್ಕಾರ 'ವೆಮುಲಾ ಮಸೂದೆ' ತಂದಿದೆ."
+  },
+  {
+    q: "23. ಇತ್ತೀಚೆಗೆ ರಿಸರ್ವ್ ಬ್ಯಾಂಕ್ (RBI) ಯಾವ ಬ್ಯಾಂಕಿಂಗ್ ಸಂಸ್ಥೆಯ 'ಪಾವತಿ ಬ್ಯಾಂಕ್ ಪರವಾನಗಿ'ಯನ್ನು ರದ್ದುಗೊಳಿಸಿದೆ?",
+    options: ["A) ಪೇ-ಟಿಎಮ್ (Paytm Payments Bank)", "B) ಜಿಯೋ ಪೇಮೆಂಟ್ಸ್", "C) ಏರ್‌ಟೆಲ್ ಪೇಮೆಂಟ್ಸ್", "D) ಫಿನೋ ಪೇಮೆಂಟ್ಸ್"],
+    correct: 0,
+    exp: "ನಿಯಮಗಳ ಉಲ್ಲಂಘನೆ ಹಿನ್ನೆಲೆಯಲ್ಲಿ ಪೇ-ಟಿಎಮ್‌ಗೆ ನೀಡಲಾಗಿದ್ದ ಪಾವತಿ ಬ್ಯಾಂಕ್ (Payments Bank) ಪರವಾನಗಿಯನ್ನು ಆರ್‌ಬಿಐ ರದ್ದುಗೊಳಿಸಿದೆ."
+  },
+  {
+    q: "24. 2 ಗಂಟೆಯ ಒಳಗಾಗಿ 42 ಕಿ.ಮೀ. ಮ್ಯಾರಥಾನ್ ಓಟವನ್ನು ಪೂರ್ಣಗೊಳಿಸಿ ನೂತನ ದಾಖಲೆ ನಿರ್ಮಿಸಿದ ಅಥ್ಲೀಟ್ ಯಾರು?",
+    options: ["A) ಸೆಬಾಸ್ಟಿಯನ್ ಸಾಸ್ಟೆ (ಕೀನ್ಯಾ)", "B) ಎಲಿಯುಡ್ ಕಿಪ್ಚೋಗೆ", "C) ಕೆಲ್ವಿನ್ ಕಿಪ್ಟಮ್", "D) ಬರ್ಹಾನು เลเเซ"],
+    correct: 0,
+    exp: "ಕೀನ್ಯಾ ದೇಶದ ಕ್ರೀಡಾಪಟು 'ಸೆಬಾಸ್ಟಿಯನ್ ಸಾಸ್ಟೆ' ಅವರು 42 ಕಿ.ಮೀ. ದೂರದ ಮ್ಯಾರಥಾನ್ ಅನ್ನು 2 ಗಂಟೆಗಳ ಕಾಲಮಿತಿಯೊಳಗೆ ಪೂರ್ಣಗೊಳಿಸಿದ್ದಾರೆ."
+  },
+  {
+    q: "25. ಇತ್ತೀಚೆಗೆ ವಿದ್ಯುತ್ ಉತ್ಪಾದನೆಯಲ್ಲಿ ಜಾಗತಿಕ ಸಾಧನೆ ಮಾಡಿದ 'ಕಲ್ಲಕಂ ಅಣುಸ್ಥಾವರ'ವು ಯಾವ ರಾಜ್ಯದಲ್ಲಿದೆ?",
+    options: ["A) ತಮಿಳುನಾಡು", "B) ಕರ್ನಾಟಕ", "C) ಆಂಧ್ರಪ್ರದೇಶ", "D) ಕೇರಳ"],
+    correct: 0,
+    exp: "ತಮಿಳುನಾಡು ರಾಜ್ಯದಲ್ಲಿರುವ ಕಲ್ಲಕಂ ಅಣುಶಕ್ತಿ ಸ್ಥಾವರವು ನಿರಂತರ ವಿದ್ಯುತ್ ಉತ್ಪಾದನೆಯಲ್ಲಿ ಪ್ರಮುಖ ಸಾಧನೆ ಮಾಡಿದೆ."
+  },
+  {
+    q: "26. ರಾಷ್ಟ್ರೀಯ ಪ್ರಾಮುಖ್ಯತೆಯ 'ಭೌಗೋಳಿಕ-ಪಾರಂಪರಿಕ ತಾಣ' (Geo-Heritage Site) ಎಂದು ಘೋಷಿಸಲ್ಪಟ್ಟ 'ಯಾಣ ಗುಹೆಗಳು' ಎಲ್ಲಿವೆ?",
+    options: ["A) ಉತ್ತರ ಕನ್ನಡ (ಕರ್ನಾಟಕ)", "B) ಶಿವಮೊಗ್ಗ", "C) ಉಡುಪಿ", "D) ಚಿಕ್ಕಮಗಳೂರು"],
+    correct: 0,
+    exp: "ಕರ್ನಾಟಕದ ಉತ್ತರ ಕನ್ನಡ ಜಿಲ್ಲೆಯ ಕಪ್ಪು ಶಿಲಾ ರಚನೆಗಳಿಗೆ ಹೆಸರುವಾಸಿಯಾದ 'ಯಾಣ ಗುಹೆಗಳು' ರಾಷ್ಟ್ರೀಯ ಪಾರಂಪರಿಕ ತಾಣವೆಂದು ಘೋಷಣೆಯಾಗಿವೆ."
+  },
+  {
+    q: "27. ಸತತ 6ನೇ ಬಾರಿಗೆ ಅಂತರರಾಷ್ಟ್ರೀಯ 'ಬ್ಲೂ ಫ್ಲ್ಯಾಗ್' (Blue Flag) ಪರಿಸರ ಮಾನ್ಯತೆ ಪಡೆದ 'ಕಾಸರಗೋಡು ಕಡಲತೀರ' ಎಲ್ಲಿದೆ?",
+    options: ["A) ಕೇರಳ", "B) ಕರ್ನಾಟಕ", "C) ಗೋವಾ", "D) ತಮಿಳುನಾಡು"],
+    correct: 0,
+    exp: "ಕೇರಳ ರಾಜ್ಯದ ಕಾಸರಗೋಡು ಜಿಲ್ಲೆಯ ಕಡಲತೀರವು ನೈರ್ಮಲ್ಯ ಹಾಗೂ ಪರಿಸರ ಸುರಕ್ಷತೆಗಾಗಿ ಸತತ 6ನೇ ಬಾರಿಗೆ ಬ್ಲೂ ಫ್ಲ್ಯಾಗ್ ಪ್ರಮಾಣಪತ್ರ ಪಡೆದಿದೆ."
+  },
+  {
+    q: "28. 'ಭಾರತದಲ್ಲೇ ಬಾವಲಿಗಳ ಸ್ಥಿತಿಗತಿ ವರದಿ 2024-25' ರ ಪ್ರಕಾರ ದೇಶದಲ್ಲೇ ಅತಿ ಹೆಚ್ಚು ಬಾವಲಿಗಳನ್ನು ಹೊಂದಿರುವ ರಾಜ್ಯ ಯಾವುದು?",
+    options: ["A) ಪಶ್ಚಿಮ ಬಂಗಾಳ", "B) ಅಸ್ಸಾಂ", "C) ಕೇರಳ", "D) ಮೇಘಾಲಯ"],
+    correct: 0,
+    exp: "ಬಾವಲಿಗಳ ಸ್ಥಿತಿಗತಿ ವರದಿಯ ಪ್ರಕಾರ ಜೈವಿಕ ವೈವಿಧ್ಯ ಹೊಂದಿರುವ 'ಪಶ್ಚಿಮ ಬಂಗಾಳ' ರಾಜ್ಯದಲ್ಲಿ ಅತಿ ಹೆಚ್ಚು ಬಾವಲಿ ಸಂಖ್ಯೆ ದಾಖಲಾಗಿದೆ."
+  },
+  {
+    q: "29. ಗ್ರಾಮೀಣ ಭಾಗದ ರಸ್ತೆ ಸಂಪರ್ಕ ಸುಧಾರಣೆಗಾಗಿ ಕೇಂದ್ರ ಸರ್ಕಾರ ಇತ್ತೀಚೆಗೆ ಯಾವ ಹಂತಕ್ಕೆ ಅನುಮೋದನೆ ನೀಡಿದೆ?",
+    options: ["A) ಪ್ರಧಾನ ಮಂತ್ರಿ ಗ್ರಾಮ್ ಸಡಕ್ ಯೋಜನೆ-3", "B) ಪ್ರಧಾನ ಮಂತ್ರಿ ಸಡಕ್ ಯೋಜನೆ-2", "C) ಭಾರತಮಾಲಾ ಹಂತ-4", "D) ಗ್ರಾಮೀಣ ಸಂಪರ್ಕ ಯೋಜನೆ"],
+    correct: 0,
+    exp: "ಗ್ರಾಮೀಣ ರಸ್ತೆಗಳ ನವೀಕರಣ ಮತ್ತು ವಿಸ್ತರಣೆಗಾಗಿ 'PMGSY-3' (ಪ್ರಧಾನ ಮಂತ್ರಿ ಗ್ರಾಮ್ ಸಡಕ್ ಯೋಜನೆ-3) ಅನುಮೋದನೆ ಪಡೆದುಕೊಂಡಿದೆ."
+  },
+  {
+    q: "30. ಕೇಂದ್ರ ಸರ್ಕಾರವು ನವೋದ್ಯಮಗಳನ್ನು (Startups) ಉತ್ತೇಜಿಸಲು ಚಾಲನೆ ನೀಡಿದ ನೂತನ ನಿಧಿ ಯಾವುದು?",
+    options: ["A) ನವೋದ್ಯಮ ಭಾರತ ನಿಧಿ 2.0", "B) ಸ್ಟಾರ್ಟ್-ಅಪ್ ಇಂಡಿಯಾ 3.0", "C) ಮುದ್ರಾ ಇನೋವೇಷನ್ ಫಂಡ್", "D) ಮೇಕ್ ಇನ್ ಇಂಡಿಯಾ ಫಂಡ್"],
+    correct: 0,
+    exp: "ದೇಶದಲ್ಲಿ ಹೊಸ ತಂತ್ರಜ್ಞಾನ ನವೋದ್ಯಮಗಳಿಗೆ ಬಂಡವಾಳ ಹೂಡಿಕೆ ಸುಲಭಗೊಳಿಸಲು 'ನವೋದ್ಯಮ ಭಾರತ ನಿಧಿ 2.0' ಬಿಡುಗಡೆ ಮಾಡಲಾಗಿದೆ."
+  },
+  {
+    q: "31. ಗಾಳಿ ಮಾಲಿನ್ಯವನ್ನು ನಿಯಂತ್ರಿಸುವ ಉದ್ದೇಶದಿಂದ ಜಾರಿಗೆ ತರಲಾಗುವ ಅಧಿಸೂಚನೆ ಪ್ರದೇಶ ಯಾವುದು?",
+    options: ["A) ಪರಿಸರ ಸೂಕ್ಷ್ಮ ವಲಯ (Eco-Sensitive Zone)", "B) ಹಸಿರು ವಲಯ", "C) ಕೈಗಾರಿಕಾ ವಲಯ", "D) ಸಂರಕ್ಷಿತ ಕಾವಲು ಪ್ರದೇಶ"],
+    correct: 0,
+    exp: "ಗಾಳಿ ಮಾಲಿನ್ಯ ರಹಿತ ಹಾಗೂ ನೈಸರ್ಗಿಕ ವಾತಾವರಣ ಕಾಯ್ದುಕೊಳ್ಳಲು ಪ್ರದೇಶಗಳನ್ನು 'ಪರಿಸರ ಸೂಕ್ಷ್ಮ ವಲಯ' ಎಂದು ಅಧಿಸೂಚಿಸಲಾಗುತ್ತದೆ."
+  },
+  {
+    q: "32. ತಮಿಳುನಾಡು ಅರಣ್ಯ ಇಲಾಖೆಯು ಇತ್ತೀಚೆಗೆ ನಡೆಸಿದ 3ನೇ ಸಿಂಖೋನೈಸ್ಡ್ ಸಮೀಕ್ಷೆಯು ಯಾವ ವನ್ಯಜೀವಿಗೆ ಸಂಬಂಧಿಸಿದೆ?",
+    options: ["A) ನಿಲಗಿರಿ ತಹರ್ (Nilgiri Tahr)", "B) ಕಾಡು ಆನೆ", "C) ವರಹಾ", "D) ಸಿಂಹಬಾಲದ ಸಿಂಹ"],
+    correct: 0,
+    exp: "ತಮಿಳುನಾಡು ರಾಜ್ಯದ ರಾಜ್ಯ ಪ್ರಾಣಿಯಾದ 'ನಿಲಗಿರಿ ತಹರ್' (ವರೆಯಾಡು) ರಕ್ಷಣೆಗಾಗಿ 3ನೇ ಸಿಂಖೋನೈಸ್ಡ್ ಸಮೀಕ್ಷೆ ನಡೆಸಲಾಗಿದೆ."
+  },
+  {
+    q: "33. 'ಭಾರತ - ಶ್ರೀಲಂಕಾ' ನೌಕಾಪಡೆಗಳ ಜಂಟಿ 'ಡೈವೆಕ್ಸ್-2026' (DIVEX) ಸಮರಾಭ್ಯಾಸದ ಆವೃತ್ತಿ ಯಾವುದು?",
+    options: ["A) 4ನೇ ಆವೃತ್ತಿ", "B) 2ನೇ ಆವೃತ್ತಿ", "C) 5ನೇ ಆವೃತ್ತಿ", "D) 10ನೇ ಆವೃತ್ತಿ"],
+    correct: 0,
+    exp: "ಭಾರತ ಮತ್ತು ಶ್ರೀಲಂಕಾ ನೌಕಾಪಡೆ ಆಳಸಮುದ್ರ ಮುಳುಗು ತರಬೇತಿಗಾಗಿ ನಡೆಸುವ ಡೈವೆಕ್ಸ್ ಪ್ರಸಕ್ತ '4ನೇ ಆವೃತ್ತಿ'ಯಾಗಿದೆ."
+  },
+  {
+    q: "34. ಭಾರತ ಹಾಗೂ ಈಜಿಪ್ಟ್ (Egypt) ದೇಶಗಳ ಜಂಟಿ ವಿಶೇಷ ಪಡೆಗಳು ನಡೆಸುವ ಸಮರಾಭ್ಯಾಸದ ಹೆಸರೇನು?",
+    options: ["A) ಸೈಕ್ಲೋನ್-4 (Cyclone-IV)", "B) ಬೋಲ್ಡ್ ಕುರುಕ್ಷೇತ್ರ", "C) ಸಂಪ್ರತಿ", "D) ಗರುಡ ಶಕ್ತಿ"],
+    correct: 0,
+    exp: "ಭಾರತ ಮತ್ತು ಈಜಿಪ್ಟ್ ದೇಶಗಳ ಜಂಟಿ ವಿಶೇಷ ಮಿಲಿಟರಿ ಪಡೆಗಳ ಸಮರಾಭ್ಯಾಸವೇ 'ಸೈಕ್ಲೋನ್-4' ಆಗಿದೆ."
+  },
+  {
+    q: "35. ಭಾರತ ಮತ್ತು ಉಜ್ಬೆಕಿಸ್ತಾನ ದೇಶಗಳ ನಡುವೆ ನಡೆದ ಜಂಟಿ ಸೇನಾ ಸಮರಾಭ್ಯಾಸ ಯಾವುದು?",
+    options: ["A) ಡಸ್ಟ್‌ಲಿಕ್-VII (DUSTLIK-VII) 2026", "B) ಖಂಜರ್", "C) ಕಾಜಿಂಡ್", "D) ನೋಮ್ಯಾಡಿಕ್ ಎಲಿಫೆಂಟ್"],
+    correct: 0,
+    exp: "ಭಾರತ ಹಾಗೂ ಉಜ್ಬೆಕಿಸ್ತಾನ ಸೇನೆಗಳ ನಡುವೆ 'ಡಸ್ಟ್‌ಲಿಕ್-VII' ಜಂಟಿ ಸಮರಾಭ್ಯಾಸವು ಯಶಸ್ವಿಯಾಗಿ ನೆರವೇರಿತು."
+  },
+  {
+    q: "36. ಭಾರತೀಯ ನೌಕಾಪಡೆಯು ಇತ್ತೀಚೆಗೆ 'ಬಿಮೆಕ್ಸ್ 3ಟಿವಿಎಕ್ಸ್' (BIMEX 3TVX) ಸಮರಾಭ್ಯಾಸವನ್ನು ಎಲ್ಲಿ ಆಯೋಜಿಸಿತ್ತು?",
+    options: ["A) ಕೊಚ್ಚಿ (ಕೇರಳ)", "B) ವಿಶಾಖಪಟ್ಟಣಂ", "C) ಕಾರವಾರ", "D) ಮುಂಬೈ"],
+    correct: 0,
+    exp: "ಭಾರತೀಯ ನೌಕಾಪಡೆಯ ತರಬೇತಿ ವಿಭಾಗವು ಕೇರಳದ 'ಕೊಚ್ಚಿ' ನೌಕಾನೆಲೆಯಲ್ಲಿ BIMEX 3TVX ಯುದ್ಧಾಭ್ಯಾಸ ನಡೆಸಿತು."
+  },
+  {
+    q: "37. ಅಮೆರಿಕ ಮತ್ತು ಫಿಲಿಪೈನ್ಸ್ ಪಡೆಗಳ ಜೊತೆ ಜಾಗತಿಕವಾಗಿ ನಡೆಯುವ ಬೃಹತ್ ಸೇನಾ ಸಮರಾಭ್ಯಾಸ ಯಾವುದು?",
+    options: ["A) 'ಬಾಲಿಕಾಟನ್' (Exercise BALIKATAN-2026)", "B) ಮಲಬಾರ್", "C) ರಿಮ್‌ಪ್ಯಾಕ್", "D) ಮಿಲನ್"],
+    correct: 0,
+    exp: "'ಬಾಲಿಕಾಟನ್-2026' ಎಂಬುದು ಅಮೆರಿಕ ಮತ್ತು ಫಿಲಿಪೈನ್ಸ್ ಸಶಸ್ತ್ರ ಪಡೆಗಳ ನಡುವಿನ ಪ್ರಮುಖ ಜಂಟಿ ಮಿಲಿಟರಿ ತರಬೇತಿಯಾಗಿದೆ."
+  },
+  {
+    q: "38. 'ಸ್ಪರ್ಧಾ ವಿಜೇತ' ಮೇ 2026ರ ಮಾಸಪತ್ರಿಕೆಯ ಸಂಚಿಕೆ ಸಂಖ್ಯೆ (Issue No.) ಎಷ್ಟು?",
+    options: ["A) ಸಂಚಿಕೆ-224", "B) ಸಂಚಿಕೆ-226", "C) ಸಂಚಿಕೆ-200", "D) ಸಂಚಿಕೆ-250"],
+    correct: 0,
+    exp: "ಮೇ 2026ರ ಸ್ಪರ್ಧಾ ವಿಜೇತ ಪತ್ರಿಕೆಯ ಮುಖಪುಟದ ಪ್ರಕಾರ ಇದು ಸಂಪುಟ-19ರ 'ಸಂಚಿಕೆ-224' ಆಗಿದೆ."
+  },
+  {
+    q: "39. ಸ್ಪರ್ಧಾ ವಿಜೇತ ಪತ್ರಿಕೆಯ ಮೇ 2026ರ ಆವೃತ್ತಿಯ ಒಟ್ಟು ಮುದ್ರಿತ ಪುಟಗಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?",
+    options: ["A) 116 ಪುಟಗಳು", "B) 100 ಪುಟಗಳು", "C) 120 ಪುಟಗಳು", "D) 150 ಪುಟಗಳು"],
+    correct: 0,
+    exp: "ಸ್ಪರ್ಧಾ ವಿಜೇತ ಮಾಸಪತ್ರಿಕೆಯು ಒಟ್ಟು 116 ಪುಟಗಳ ಸಮಗ್ರ ಮಾಹಿತಿ ಒಳಗೊಂಡಿದೆ."
+  },
+  {
+    q: "40. 'ಸ್ಪರ್ಧಾ ವಿಜೇತ' ಪತ್ರಿಕೆಯ ಮುಖಪುಟದಲ್ಲಿರುವ ಅಧಿಕೃತ ಧ್ಯೇಯ ಸಾಲು (Tagline) ಯಾವುದು?",
+    options: ["A) Creativity, Reality, Validity", "B) Innovation and Victory", "C) Education for All", "D) Service and Success"],
+    correct: 0,
+    exp: "ಪತ್ರಿಕೆಯ ಶೀರ್ಷಿಕೆಯ ಅಡಿಯಲ್ಲಿ ಪ್ರಕಟಿಸಲಾದ ಅಧಿಕೃತ ಧ್ಯೇಯವಾಕ್ಯ 'Creativity, Reality, Validity' ಆಗಿದೆ."
+  }
+];
+
+let currentIndex = 0;
+let userAnswers = new Array(quizData.length).fill(null);
+
+function initQuiz() {
+  renderPalette();
+  loadQuestion(currentIndex);
+}
+
+function renderPalette() {
+  const palette = document.getElementById('palette');
+  palette.innerHTML = '';
+  quizData.forEach((_, index) => {
+    const btn = document.createElement('button');
+    btn.className = `palette-btn ${index === currentIndex ? 'active' : ''}`;
+    btn.innerText = index + 1;
+    
+    if (userAnswers[index] !== null) {
+      if (userAnswers[index] === quizData[index].correct) {
+        btn.classList.add('answered-correct');
+      } else {
+        btn.classList.add('answered-incorrect');
+      }
+    }
+    
+    btn.onclick = () => jumpToQuestion(index);
+    palette.appendChild(btn);
+  });
+}
+
+function loadQuestion(index) {
+  const qData = quizData[index];
+  document.getElementById('question-text').innerText = qData.q;
+  
+  const optionsContainer = document.getElementById('options-container');
+  optionsContainer.innerHTML = '';
+  
+  const expContainer = document.getElementById('explanation-container');
+  expContainer.innerHTML = '';
+
+  const isAnswered = userAnswers[index] !== null;
+
+  qData.options.forEach((opt, optIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerText = opt;
+
+    if (isAnswered) {
+      btn.disabled = true;
+      if (optIdx === qData.correct) {
+        btn.classList.add('show-correct');
+      }
+      if (userAnswers[index] === optIdx) {
+        if (optIdx === qData.correct) {
+          btn.classList.add('selected-correct');
+        } else {
+          btn.classList.add('selected-incorrect');
+        }
+      }
+    } else {
+      btn.onclick = () => selectOption(optIdx);
+    }
+
+    optionsContainer.appendChild(btn);
+  });
+
+  if (isAnswered) {
+    const isCorrect = userAnswers[index] === qData.correct;
+    expContainer.innerHTML = `
+      <div class="explanation-box ${isCorrect ? 'correct' : ''}">
+        <h4>${isCorrect ? 'ಸರಿಯಾದ ಉತ್ತರ!' : 'ತಪ್ಪು (Incorrect)'}</h4>
+        <p><b>ಸರಿಯಾದ ಉತ್ತರ:</b> ${qData.options[qData.correct]}</p>
+        <p style="margin-top:5px;"><b>ವಿವರಣೆ:</b> ${qData.exp}</p>
+      </div>
+    `;
+  }
+
+  document.getElementById('prev-btn').disabled = index === 0;
+  document.getElementById('next-btn').disabled = index === quizData.length - 1;
+  
+  renderPalette();
+  updateScore();
+}
+
+function selectOption(optionIndex) {
+  userAnswers[currentIndex] = optionIndex;
+  loadQuestion(currentIndex);
+}
+
+function jumpToQuestion(index) {
+  currentIndex = index;
+  loadQuestion(currentIndex);
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    loadQuestion(currentIndex);
+  }
+}
+
+function nextQuestion() {
+  if (currentIndex < quizData.length - 1) {
+    currentIndex++;
+    loadQuestion(currentIndex);
+  }
+}
+
+function updateScore() {
+  const score = userAnswers.reduce((acc, ans, idx) => {
+    return ans === quizData[idx].correct ? acc + 1 : acc;
+  }, 0);
+  document.getElementById('score').innerText = score;
+}
+
+window.onload = initQuiz;
+</script>
+
+</body>
+</html>
