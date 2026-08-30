@@ -156,11 +156,20 @@
     </main>
 
     <script>
-        const months = [
-            "JANUARY", "FEBRUARY", "MARCH", "APRIL", 
-            "MAY", "JUNE", "JULY", "AUGUST", 
-            "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
-        ];
+        const monthData = {
+            "JANUARY": 10,
+            "FEBRUARY": 12,
+            "MARCH": 15,
+            "APRIL": 15,
+            "MAY": 15,
+            "JUNE": 15,
+            "JULY": 15,
+            "AUGUST": 15,
+            "SEPTEMBER": 15,
+            "OCTOBER": 15,
+            "NOVEMBER": 15,
+            "DECEMBER": 15
+        };
 
         const monthListEl = document.getElementById("month-list");
         const testListEl = document.getElementById("test-list");
@@ -170,7 +179,7 @@
 
         function renderMonths() {
             monthListEl.innerHTML = "";
-            months.forEach(month => {
+            Object.keys(monthData).forEach(month => {
                 const card = document.createElement("a");
                 card.className = "card";
                 card.onclick = () => openMonth(month);
@@ -196,7 +205,9 @@
             const folder = monthName.toLowerCase();
             testListEl.innerHTML = "";
 
-            for (let i = 1; i <= 15; i++) {
+            const totalTests = monthData[monthName] || 0;
+
+            for (let i = 1; i <= totalTests; i++) {
                 const testNum = i.toString().padStart(2, '0');
                 const testCard = document.createElement("a");
                 testCard.className = "card";
