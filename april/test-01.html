@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karnataka PC & SSC CBT Exam Mock Test - 40 Questions (April 2026)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background-color: #f4f6f9; color: #333; }
+    header { background-color: #0d3b66; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #002244; }
+    header h1 { font-size: 1.1rem; }
+    .timer { background: #b7094c; padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
+    
+    .container { display: flex; max-width: 1240px; margin: 15px auto; gap: 15px; padding: 0 10px; }
+    .main-content { flex: 3; background: white; border: 1px solid #ccc; border-radius: 4px; padding: 20px; min-height: 520px; }
+    .sidebar { flex: 1; background: white; border: 1px solid #ccc; border-radius: 4px; padding: 15px; }
+    
+    .q-header { font-size: 1.05rem; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; line-height: 1.5; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .option-btn { padding: 12px 15px; border: 1px solid #ccc; border-radius: 4px; background: #fff; text-align: left; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; transition: background 0.2s; }
+    .option-btn:hover { background: #f0f4f8; }
+    
+    /* Result Styles */
+    .option-btn.selected-correct { background-color: #d4edda; border-color: #28a745; color: #155724; font-weight: bold; }
+    .option-btn.selected-incorrect { background-color: #f8d7da; border-color: #dc3545; color: #721c24; }
+    .option-btn.show-correct { background-color: #d4edda; border-color: #28a745; color: #155724; }
+    
+    .explanation-box { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 4px; font-size: 0.9rem; margin-top: 15px; line-height: 1.5; }
+    .explanation-box.correct { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+    .explanation-box h4 { font-size: 0.95rem; margin-bottom: 5px; }
+    
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+    .nav-btn { padding: 8px 16px; border: none; background: #0d3b66; color: white; border-radius: 4px; cursor: pointer; }
+    .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* Palette Sidebar */
+    .sidebar h3 { font-size: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 12px; text-align: center; }
+    .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; max-height: 420px; overflow-y: auto; }
+    .palette-btn { padding: 8px 0; border: 1px solid #bbb; background: #fff; cursor: pointer; border-radius: 3px; font-size: 0.82rem; font-weight: bold; }
+    .palette-btn.active { border: 2px solid #000; }
+    .palette-btn.answered-correct { background-color: #28a745; color: white; border-color: #28a745; }
+    .palette-btn.answered-incorrect { background-color: #dc3545; color: white; border-color: #dc3545; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Karnataka PC & SSC CBT Test Series (April 2026 - Part 1)</h1>
+  <div class="timer">Time Remaining: <span id="timer">30:00</span></div>
+</header>
+
+<div class="container">
+  <div class="main-content">
+    <div class="q-header" id="question-text">Loading question...</div>
+    <div class="options" id="options-container"></div>
+    <div id="explanation-container"></div>
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">Previous</button>
+      <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Next</button>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <h3>Question Palette</h3>
+    <p style="font-size:0.85rem; text-align:center;">Score: <span id="score">0</span> / 40</p>
+    <div class="palette-grid" id="palette"></div>
+  </div>
+</div>
+
+<script>
+const quizData = [
+  {
+    q: "1. ರಾಷ್ಟ್ರೀಯ ಹಿಂದುಳಿದ ವರ್ಗಗಳ ಆಯೋಗದ (NCBC) ನೂತನ ಅಧ್ಯಕ್ಷರಾಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
+    options: ["A) ಸಾಧ್ವಿ ನಿರಂಜನ್ ಜ್ಯೋತಿ", "B) ಹಂಸರಾಜ್ ಗಂಗಾರಾಮ್ ಅಹೀರ್", "C) ಭಗವಾನ್ ಲಾಲ್ ಸಾಹ್ನಿ", "D) ಜ್ಯೋತಿರಾಧಿತ್ಯ ಸಿಂಧಿಯಾ"],
+    correct: 0,
+    exp: "ರಾಷ್ಟ್ರೀಯ ಹಿಂದುಳಿದ ವರ್ಗಗಳ ಆಯೋಗದ ಅಧ್ಯಕ್ಷರಾಗಿ ಸಾಧ್ವಿ ನಿರಂಜನ್ ಜ್ಯೋತಿ ಅವರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ."
+  },
+  {
+    q: "2. 2025ನೇ ಸಾಲಿನ 60ನೇ ಜ್ಞಾನಪೀಠ ಪ್ರಶಸ್ತಿಗೆ ಭಾಜನರಾದ ತಮಿಳಿನ ಪ್ರಸಿದ್ಧ ಕವಿ ಯಾರು?",
+    options: ["A) ವೈರಮುತ್ತು", "B) ಪೆರುಮಾಳ್ ಮುರುಗನ್", "C) ಜಯಕಾಂತನ್", "D) ಇಂದಿರಾ ಪಾರ್ಥಸಾರಥಿ"],
+    correct: 0,
+    exp: "ತಮಿಳಿನ ಸುಪ್ರಸಿದ್ಧ ಕವಿ ಮತ್ತು ಸಾಹಿತಿ ವೈರಮುತ್ತು ಅವರು 2025ನೇ ಸಾಲಿನ (60ನೇ) ಜ್ಞಾನಪೀಠ ಪ್ರಶಸ್ತಿಯನ್ನು ಮುಡಿಗೇರಿಸಿಕೊಂಡಿದ್ದಾರೆ."
+  },
+  {
+    q: "3. 2027ರ ಭಾರತೀಯ ಜನಗಣತಿಯ ಬ್ರ್ಯಾಂಡ್ ರಾಯಭಾರಿಯಾಗಿ ನೇಮಕಗೊಂಡ ವಿಶ್ವಪ್ರಸಿದ್ಧ ಮರಳು ಶಿಲ್ಪಿ (Sand Artist) ಯಾರು?",
+    options: ["A) ಸುದರ್ಶನ್ ಪಟ್ನಾಯಕ್", "B) ಮನ್ಸೂರ್ ಅಲಿ", "C) ಪಟ್ನಾಯಕ್ ಜಿ", "D) ರಾಮಚಂದ್ರ ಸಾಹೂ"],
+    correct: 0,
+    exp: "ಒಡಿಶಾದ ಖ್ಯಾತ ಅಂತರರಾಷ್ಟ್ರೀಯ ಮರಳು ಶಿಲ್ಪಿ ಸುದರ್ಶನ್ ಪಟ್ನಾಯಕ್ ಅವರನ್ನು 2027ರ ಭಾರತದ ರಾಷ್ಟ್ರೀಯ ಜನಗಣತಿಯ ಬ್ರ್ಯಾಂಡ್ ರಾಯಭಾರಿಯಾಗಿ ಘೋಷಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "4. ಇತ್ತೀಚೆಗೆ ನೇಪಾಳದ ನೂತನ ಪ್ರಧಾನಿಯಾಗಿ ಪ್ರಮಾಣ ವಚನ ಸ್ವೀಕರಿಸಿದ ನಾಯಕ ಯಾರು?",
+    options: ["A) ಬಾಲೇಂದ್ರ ಶಾ", "B) ಪುಷ್ಪ ಕಮಲ್ ದಹಾಲ್ (ಪ್ರಚಂಡ)", "C) ಕೆ. ಪಿ. ಶರ್ಮಾ ಓಲಿ", "D) ಶೇರ್ ಬಹದ್ದೂರ್ ದೇವಬಾ"],
+    correct: 0,
+    exp: "ನೇಪಾಳದ ನೂತನ ರಾಜಕೀಯ ಬೆಳವಣಿಗೆಯಲ್ಲಿ ಬಾಲೇಂದ್ರ ಶಾ ಅವರು ದೇಶದ ಪ್ರಧಾನ ಮಂತ್ರಿಯಾಗಿ ಅಧಿಕಾರ ಸ್ವೀಕರಿಸಿದ್ದಾರೆ."
+  },
+  {
+    q: "5. ಡಿಜಿಟಲ್ ಪಾವತಿಯ 'ಭೀಮ್' (BHIM) ಆಪ್‌ಗೆ ರಾಯಭಾರಿಯಾಗಿ (Brand Ambassador) ನೇಮಕಗೊಂಡ ಭಾರತೀಯ ಕ್ರಿಕೆಟಿಗ ಯಾರು?",
+    options: ["A) ಮಹೇಂದ್ರಸಿಂಗ್ ಧೋನಿ", "B) ವಿರಾಟ್ ಕೊಹ್ಲಿ", "C) ರೋಹಿತ್ ಶರ್ಮಾ", "D) ಸಚಿನ್ ತೆಂಡೂಲ್ಕರ್"],
+    correct: 0,
+    exp: "BHIM ಯುಪಿಐ ಪಾವತಿ ಅಪ್ಲಿಕೇಶನ್‌ನ ಪ್ರಚಾರ ಮತ್ತು ಉತ್ತೇಜನಕ್ಕಾಗಿ ಎಂ. ಎಸ್. ಧೋನಿ ಅವರನ್ನು ಬ್ರ್ಯಾಂಡ್ ಅಂಬಾಸಿಡರ್ ಆಗಿ ಆಯ್ಕೆ ಮಾಡಲಾಗಿದೆ."
+  },
+  {
+    q: "6. ಮ್ಯಾನ್ಮಾರ್‌ನ ಸೇನಾ ಮುಖ್ಯಸ್ಥರಾಗಿ ಮತ್ತು ದೇಶದ ಅಧ್ಯಕ್ಷರಾಗಿ ಆಡಳಿತ ವಹಿಸಿಕೊಂಡಿರುವ ಮಿಲಿಟರಿ ನಾಯಕ ಯಾರು?",
+    options: ["A) ಮಿನ್ ಆಂಗ್ ಹ್ಲೈಂಗ್", "B) ಆಂಗ್ ಸನ್ ಸೂ ಕಿ", "C) ತೇನ್ ಸೇನ್", "D) ಟಾನ್ ಶ್ವೆ"],
+    correct: 0,
+    exp: "ಮ್ಯಾನ್ಮಾರ್ ಜುಂಟಾ ಸೇನೆಯ ಮುಖ್ಯಸ್ಥ ಮಿನ್ ಆಂಗ್ ಹ್ಲೈಂಗ್ ಅವರು ದೇಶದ ಅಧ್ಯಕ್ಷರಾಗಿ ಅಧಿಕಾರ ನಡೆಸುತ್ತಿದ್ದಾರೆ."
+  },
+  {
+    q: "7. ವಿಶ್ವ ಆರ್ಚರಿ ಸಂಸ್ಥೆಯಿಂದ 'ವರ್ಷದ ಪ್ಯಾರಾ ಆರ್ಚರ್' ಗೌರವಕ್ಕೆ ಭಾಜನರಾದ ಭಾರತದ ಶೂನ್ಯ-ಕೈಗಳ ಬಿಲ್ಲುಗಾರ್ತಿ ಯಾರು?",
+    options: ["A) ಶೀತಲ್ ದೇವಿ (ಎರಡೂ ಕೈಗಳಿಲ್ಲದ ಶೀತಲ್)", "B) ಅವನಿ ಲೇಖರಾ", "C) ದೀಪಾ ಮಲಿಕ್", "D) ಭಾವಿನಾ ಪಟೇಲ್"],
+    correct: 0,
+    exp: "ಎರಡೂ ಕೈಗಳಿಲ್ಲದೆ ಕಾಲುಗಳಿಂದಲೇ ಬಿಲ್ಲು ಹೂಡಿ ಸಾಧನೆ ಮಾಡಿದ ಜಮ್ಮು ಕಾಶ್ಮೀರದ ಶೀತಲ್ ದೇವಿ 'ವಿಶ್ವ ಪ್ಯಾರಾ ಆರ್ಚರ್ ಆಫ್ ದಿ ಇಯರ್' ಗೌರವ ಪಡೆದಿದ್ದಾರೆ."
+  },
+  {
+    q: "8. ಚೆನ್ನೈ ಸೂಪರ್ ಕಿಂಗ್ಸ್ (CSK) ಹಾಲ್ ಆಫ್ ಫೇಮ್‌ಗೆ ಇತ್ತೀಚೆಗೆ ಸೇರ್ಪಡೆಗೊಂಡ ಇಬ್ಬರು ಕ್ರಿಕೆಟಿಗರು ಯಾರು?",
+    options: ["A) ಮ್ಯಾಥ್ಯೂ ಹೇಡನ್ & ಸುರೇಶ್ ರೈನಾ", "B) ಎಂಎಸ್ ಧೋನಿ & ರವೀಂದ್ರ ಜಡೇಜಾ", "C) ಶೇನ್ ವ್ಯಾಟ್ಸನ್ & ಡ್ವೇನ್ ಬ್ರಾವೋ", "D) ಸ್ಟೀಫನ್ ಫ್ಲೆಮಿಂಗ್ & ಮೈಕಲ್ ಹಸ್ಸಿ"],
+    correct: 0,
+    exp: "ಐಪಿಎಲ್ ತಂಡ CSK ಯ ಅತ್ಯುತ್ತಮ ಕೊಡುಗೆಗಾಗಿ ಮ್ಯಾಥ್ಯೂ ಹೇಡನ್ ಮತ್ತು ಸುರೇಶ್ ರೈನಾ ಅವರನ್ನು 'CSK Hall of Fame' ಗೆ ಸೇರಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "9. 'ಗಣಿತ ಕ್ಷೇತ್ರದ ನೊಬೆಲ್' ಎಂದೇ ಪ್ರಸಿದ್ಧವಾಗಿರುವ 2026ರ 'ಅಬೆಲ್ ಪ್ರಶಸ್ತಿ' (Abel Prize) ಪಡೆದ ಜರ್ಮನ್ ಗಣಿತಜ್ಞ ಯಾರು?",
+    options: ["A) ಗೆರ್ಡ್‌ಫಾಲ್ಟಿಂಗ್ (Gerd Faltings)", "B) ಆಂಡ್ರ್ಯೂ ವೈಲ್ಸ್", "C) ಟೆರೆನ್ಸ್ ತಾವೋ", "D) ಪೀಟರ್ ಶುಲ್ಜ್"],
+    correct: 0,
+    exp: "ಜರ್ಮನಿಯ ಪ್ರಸಿದ್ಧ ಗಣಿತಶಾಸ್ತ್ರಜ್ಞ ಗೆರ್ಡ್‌ಫಾಲ್ಟಿಂಗ್ ಅವರಿಗೆ ಸುಧಾರಿತ ಗಣಿತ ಸಂಶೋಧನೆಗಾಗಿ prestige ಅಬೆಲ್ ಪ್ರಶಸ್ತಿ ನೀಡಲಾಗಿದೆ."
+  },
+  {
+    q: "10. ವಿಶ್ವ ಆಹಾರ ಪ್ರಶಸ್ತಿ-2026 (World Food Prize) ಕ್ಕೆ ಆಯ್ಕೆಯಾದ ನೆದರ್ಲ್ಯಾಂಡ್‌ನ ಪ್ರಸಿದ್ಧ ಆಹಾರ ತಜ್ಞ ಯಾರು?",
+    options: ["A) ಹ್ಯೂಬ್ ಲೀಲಿ ವೆಲ್ಡ್ (Huub Lelieveld)", "B) ಎಂ. ಎಸ್. ಸ್ವಾಮಿನಾಥನ್", "C) ಶಕುಂತಲಾ ಹರಕ್ ಸಿಂಗ್", "D) ಡೇವಿಡ್ ನಬಾರೋ"],
+    correct: 0,
+    exp: "ನೆದರ್ಲ್ಯಾಂಡ್ಸ್‌ನ ಹ್ಯೂಬ್ ಲೀಲಿ ವೆಲ್ಡ್ ಅವರಿಗೆ ವಿಶ್ವದ ಆಹಾರ ಭದ್ರತೆ ಮತ್ತು ತಂತ್ರಜ್ಞಾನ ಅಭಿವೃದ್ಧಿಗಾಗಿ 'ವಿಶ್ವ ಆಹಾರ ಪ್ರಶಸ್ತಿ 2026' ಲಭಿಸಿದೆ."
+  },
+  {
+    q: "11. 2025ನೇ ಸಾಲಿನ 98ನೇ ಆಸ್ಕರ್ ಪ್ರಶಸ್ತಿ ಸಮಾರಂಭದಲ್ಲಿ ಗರಿಷ್ಠ 6 ಆಸ್ಕರ್ ಪ್ರಶಸ್ತಿಗಳನ್ನು ಮುಡಿಗೇರಿಸಿಕೊಂಡ ಚಿತ್ರ ಯಾವುದು?",
+    options: ["A) ಒನ್ ಬ್ಯಾಟಲ್ ಆಫ್ಟರ್ ಅನದರ್ (One Battle After Another)", "B) ಓಪನ್‌ಹೈಮರ್", "C) ಪೂರ್ ಥಿಂಗ್ಸ್", "D) ದ ಬಾಯ್ ಅಂಡ್ ದ ಹೆರಾನ್"],
+    correct: 0,
+    exp: "'ಒನ್ ಬ್ಯಾಟಲ್ ಆಫ್ಟರ್ ಅನದರ್' ಚಲನಚಿತ್ರವು 98ನೇ ಆಸ್ಕರ್ ಪ್ರಶಸ್ತಿ ಸಮಾರಂಭದಲ್ಲಿ ವಿವಿಧ ವಿಭಾಗಗಳಲ್ಲಿ 6 ಪ್ರಶಸ್ತಿಗಳನ್ನು ಗಳಿಸಿ ದಾಖಲೆ ಬರೆದಿದೆ."
+  },
+  {
+    q: "12. ದೇಶದ ಪ್ರಥಮ ಕಾನೂನುಬದ್ಧ 'ದಯಾ ಮರಣ' (Euthanasia) ಪ್ರಕರಣಕ್ಕೆ ಸಂಬಂಧಿಸಿದ ಉತ್ತರಪ್ರದೇಶದ ವ್ಯಕ್ತಿ ಯಾರು?",
+    options: ["A) ಹರೀಶ್ ರಾಣಾ", "B) ಅರುಣಾ ಶಾನ್‌ಬಾಗ್", "C) ಸ್ಯಾನಿ ಯಾದವ್", "D) ರಾಮ್ ಕುಮಾರ್"],
+    correct: 0,
+    exp: "ಉತ್ತರ ಪ್ರದೇಶದ 'ಹರೀಶ್ ರಾಣಾ' ಪ್ರಕರಣವು ಭಾರತದ ಸಕ್ರಿಯ/ಪರೋಕ್ಷ ದಯಾಮರಣದ ಕಾನೂನು ಚರ್ಚೆಯಲ್ಲಿ ಐತಿಹಾಸಿಕ ಮೊದಲ ಉಲ್ಲೇಖವಾಗಿದೆ."
+  },
+  {
+    q: "13. 2027ರ ಭಾರತದ ರಾಷ್ಟ್ರೀಯ ಜನಗಣತಿಗಾಗಿ ಬಿಡುಗಡೆ ಮಾಡಲಾದ ಅಧಿಕೃತ ಮ್ಯಾಸ್ಕಾಟ್‌ಗಳು (Mascots) ಯಾವುವು?",
+    options: ["A) ಪ್ರಗತಿ ಮತ್ತು ವಿಕಾಸ್", "B) ಆಶಾ ಮತ್ತು ಲಕ್ಷ್ಯ", "C) ಪ್ರಕೃತಿ ಮತ್ತು ಜ್ಞಾನ", "D) ಚಿಂಟು ಮತ್ತು ಮಿಂಟು"],
+    correct: 0,
+    exp: "2027ರ ಡಿಜಿಟಲ್ ಜನಗಣತಿಯ ಪ್ರಚಾರಕ್ಕಾಗಿ 'ಪ್ರಗತಿ' ಮತ್ತು 'ವಿಕಾಸ್' ಎಂಬ ಎರಡು ಅಧಿಕೃತ ಮ್ಯಾಸ್ಕಾಟ್‌ಗಳು ಹಾಗೂ 4 ಡಿಜಿಟಲ್ ಪರಿಕರಗಳನ್ನು ಅನಾವರಣಗೊಳಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "14. ಭಾರತದಲ್ಲಿ 'ಮುಖ್ಯ ಚುನಾವಣಾ ಆಯುಕ್ತರನ್ನು' (CEC) ಹುದ್ದೆಯಿಂದ ಪದಚ್ಯುತಿಗೊಳಿಸುವ ಪ್ರಕ್ರಿಯೆಯು ಯಾರಿಗೆ ಸಮಾನವಾಗಿರುತ್ತದೆ?",
+    options: ["A) ಸುಪ್ರೀಂ ಕೋರ್ಟ್ ನ್ಯಾಯಾಧೀಶರ ವಜಾ ಪ್ರಕ್ರಿಯೆ (ಸಂಸತ್ತಿನ ಮಹಾಭಿಯೋಗ)", "B) ರಾಜ್ಯಪಾಲರ ಆದೇಶ", "C) ಪ್ರಧಾನ ಮಂತ್ರಿಗಳ ಸಂಪುಟ ನಿರ್ಣಯ", "D) ಅಟಾರ್ನಿ ಜನರಲ್ ಸಲಹೆ"],
+    correct: 0,
+    exp: "ಮುಖ್ಯ ಚುನಾವಣಾ ಆಯುಕ್ತರನ್ನು ಸಂವಿಧಾನದ ವಿಧಿ 124(4) ರ ಅಡಿಯಲ್ಲಿ ಸುಪ್ರೀಂ ಕೋರ್ಟ್ ನ್ಯಾಯಾಧೀಶರನ್ನು ತೆಗೆದುಹಾಕುವ ಮಾದರಿಯಲ್ಲೇ ಸಂಸತ್ತಿನಲ್ಲಿ ವಿಶೇಷ ಬಹುಮತದ ಮೂಲಕ ಪದಚ್ಯುತಗೊಳಿಸಬಹುದು."
+  },
+  {
+    q: "15. ಉತ್ತರಾಖಂಡದ ನಂತರ 'ಏಕರೂಪ ನಾಗರಿಕ ಸಂಹಿತೆ' (UCC) ಜಾರಿಗೆ ತಂದ ದೇಶದ 2ನೇ ರಾಜ್ಯ ಯಾವುದು?",
+    options: ["A) ಗುಜರಾತ್", "B) ಮಧ್ಯಪ್ರದೇಶ", "C) ಅಸ್ಸಾಂ", "D) ಗೋವಾ"],
+    correct: 0,
+    exp: "ಉತ್ತರಾಖಂಡದ ಪೂರ್ಣ ಜಾರಿಯ ಬಳಿಕ 'ಗುಜರಾತ್' ರಾಜ್ಯವು ಏಕರೂಪ ನಾಗರಿಕ ಸಂಹಿತೆ (Uniform Civil Code) ಜಾರಿಗೊಳಿಸಿದ ದೇಶದ 2ನೇ ರಾಜ್ಯವಾಗಿದೆ."
+  },
+  {
+    q: "16. ಕೇಂದ್ರ ಗೃಹ ಸಚಿವ ಅಮಿತ್ ಶಾ ಅವರು ಇತ್ತೀಚೆಗೆ ಭಾರತದ ಯಾವ ಸಮಸ್ಯೆಯನ್ನು ಸಂಪೂರ್ಣ ನಿರ್ಮೂಲನೆ ಮಾಡಲಾಗಿದೆ ಎಂದು ಘೋಷಿಸಿದರು?",
+    options: ["A) ನಕ್ಸಲ್/ಎಡಪಂಥೀಯ ಉಗ್ರವಾದ", "B) ಪೋಲಿಯೋ ರೋಗ", "C) ಪ್ಲಾಸ್ಟಿಕ್ ಬಳಕೆ", "D) ನಿರುದ್ಯೋಗ"],
+    correct: 0,
+    exp: "ಕೇಂದ್ರ ಗೃಹ ಸಚಿವ ಅಮಿತ್ ಶಾ ಅವರು ಸೂಕ್ತ ಮಿಲಿಟರಿ ಕಾರ್ಯಾಚರಣೆ ಹಾಗೂ ಅಭಿವೃದ್ಧಿ ಯೋಜನೆಗಳ ಮೂಲಕ 'ಭಾರತವನ್ನು ನಕ್ಸಲ್ ಮುಕ್ತ' ಎಂದು ಘೋಷಿಸಿದ್ದಾರೆ."
+  },
+  {
+    q: "17. 'ವಿಶ್ವ ಸಂತೋಷ ಸೂಚ್ಯಂಕ 2026' (World Happiness Report) ವರದಿಯಲ್ಲಿ ಭಾರತ ಗಳಿಸಿದ ಶ್ರೇಯಾಂಕ (Rank) ಎಷ್ಟು?",
+    options: ["A) 116ನೇ ಸ್ಥಾನ (ಪ್ರಥಮ: ಫಿನ್ಲ್ಯಾಂಡ್)", "B) 126ನೇ ಸ್ಥಾನ", "C) 100ನೇ ಸ್ಥಾನ", "D) 85ನೇ ಸ್ಥಾನ"],
+    correct: 0,
+    exp: "2026ರ ಜಾಗತಿಕ ಹ್ಯಾಪಿನೆಸ್ ವರದಿಯಲ್ಲಿ ಫಿನ್ಲ್ಯಾಂಡ್ ಸತತವಾಗಿ ಪ್ರಥಮ ಸ್ಥಾನದಲ್ಲಿದ್ದರೆ, ಭಾರತವು 116ನೇ ಸ್ಥಾನದಲ್ಲಿದೆ."
+  },
+  {
+    q: "18. ಇತ್ತೀಚೆಗೆ ಮೊದಲ ಹಂತದ ಕಾರ್ಯಾಚರಣೆಗೆ ಉದ್ಘಾಟನೆಗೊಂಡ 'ನೋಯ್ಡಾ ಅಂತರರಾಷ್ಟ್ರೀಯ ವಿಮಾನ ನಿಲ್ದಾಣ' ಎಲ್ಲಿದೆ?",
+    options: ["A) ಜೆವಾರ್, ಉತ್ತರ ಪ್ರದೇಶ", "B) ಗುರುಗ್ರಾಮ, ಹರಿಯಾಣ", "C) ದೆಹಲಿ NCR", "D) ಲಕ್ನೋ"],
+    correct: 0,
+    exp: "ಉತ್ತರ ಪ್ರದೇಶದ ಜೆವಾರ್‌ನಲ್ಲಿ ನಿರ್ಮಿಸಲಾಗಿರುವ ನೋಯ್ಡಾ ಅಂತರರಾಷ್ಟ್ರೀಯ ವಿಮಾನ ನಿಲ್ದಾಣದ 1ನೇ ಹಂತದ ಕಾಮಗಾರಿ ಉದ್ಘಾಟನೆಯಾಗಿದೆ."
+  },
+  {
+    q: "19. 2028ರ 'ಖೇಲೊ ಇಂಡಿಯಾ' ಗೇಮ್ಸ್ ಆತಿಥ್ಯದ ಜಾಗತಿಕ ಆವೃತ್ತಿಯನ್ನು ಪ್ರಕಟಿಸಿದ ವಿದೇಶಿ ನಗರ ಯಾವುದು?",
+    options: ["A) ಅಬುಧಾಬಿ", "B) ದುಬೈ", "C) ದೋಹಾ", "D) ರಿಯಾದ್"],
+    correct: 0,
+    exp: "ಯುಎಇ ದೇಶದ 'ಅಬುಧಾಬಿ' ನಗರವು 2028ರ ಖೇಲೊ ಇಂಡಿಯಾ ಕ್ರೀಡಾಕೂಟದ ವಿಶೇಷ ಜಾಗತಿಕ ಕಾರ್ಯಕ್ರಮ ಆಯೋಜಿಸುವುದಾಗಿ ಘೋಷಿಸಿದೆ."
+  },
+  {
+    q: "20. 2028ರ 'ವಿಶ್ವ ಒಳಾಂಗಣ ಅಥ್ಲೆಟಿಕ್ಸ್ ಚಾಂಪಿಯನ್‌ಷಿಪ್' (World Athletics Indoor Championships) ಗೆ ಆತಿಥ್ಯ ವಹಿಸಲಿರುವ ಭಾರತದ ರಾಜ್ಯ ಯಾವುದು?",
+    options: ["A) ಒಡಿಶಾ", "B) ಕರ್ನಾಟಕ", "C) ತಮಿಳುನಾಡು", "D) ಮಹಾರಾಷ್ಟ್ರ"],
+    correct: 0,
+    exp: "ಕ್ರೀಡಾ ಮೂಲಸೌಕರ್ಯಕ್ಕೆ ಹೆಸರಾದ 'ಒಡಿಶಾ' ರಾಜ್ಯವು 2028ರ ಪ್ರಷ್ಠಿತ ವಿಶ್ವ ಒಳಾಂಗಣ ಅಥ್ಲೆಟಿಕ್ಸ್ ಚಾಂಪಿಯನ್‌ಷಿಪ್ ಆತಿಥ್ಯ ವಹಿಸಲಿದೆ."
+  },
+  {
+    q: "21. ಭಾರತದ ಮೊದಲ 'ಖೇಲೊ ಇಂಡಿಯಾ ಬುಡಕಟ್ಟು ಕ್ರೀಡಾಕೂಟ' (Tribal Games) ಎಲ್ಲಿ ಆಯೋಜನೆಗೊಂಡಿತ್ತು?",
+    options: ["A) ಛತ್ತೀಸ್‌ಗಢ", "B) ಜಾರ್ಖಂಡ್", "C) ಒಡಿಶಾ", "D) ಮಧ್ಯಪ್ರದೇಶ"],
+    correct: 0,
+    exp: "ಬುಡಕಟ್ಟು ಕ್ರೀಡಾಪಟುಗಳನ್ನು ಪ್ರೋತ್ಸಾಹಿಸಲು ದೇಶದ ಪ್ರಥಮ 'ಖೇಲೊ ಇಂಡಿಯಾ ಟ್ರೈಬಲ್ ಗೇಮ್ಸ್' ಛತ್ತೀಸ್‌ಗಢದಲ್ಲಿ ನೆರವೇರಿತು."
+  },
+  {
+    q: "22. ಮೊದಲ ಖೇಲೊ ಇಂಡಿಯಾ ಬುಡಕಟ್ಟು ಕ್ರೀಡಾಕೂಟದಲ್ಲಿ 'ಸಮಗ್ರ ಚಾಂಪಿಯನ್' (Overall Champion) ಪಟ್ಟ ಗೆದ್ದ ರಾಜ್ಯ ಯಾವುದು?",
+    options: ["A) ಕರ್ನಾಟಕ", "B) ಛತ್ತೀಸ್‌ಗಢ", "C) ಮಣಿಪುರ", "D) ಅಸ್ಸಾಂ"],
+    correct: 0,
+    exp: "ರಾಷ್ಟ್ರೀಯ ಮಟ್ಟದ ಪ್ರಥಮ ಖೇಲೊ ಇಂಡಿಯಾ ಬುಡಕಟ್ಟು ಕ್ರೀಡಾಕೂಟದಲ್ಲಿ ಕರ್ನಾಟಕದ ಕ್ರೀಡಾಪಟುಗಳು ಅತ್ಯಧಿಕ ಪದಕ ಗೆದ್ದು ಸಮಗ್ರ ಚಾಂಪಿಯನ್ ಆಗಿ ಹೊರಹೊಮ್ಮಿದ್ದಾರೆ."
+  },
+  {
+    q: "23. ಯುವಜನತೆಗೆ ಉದ್ಯೋಗ ಮತ್ತು ಕೌಶಲ್ಯ ಒದಗಿಸಲು ಬಿಡುಗಡೆಯಾದ 'ಭಾರತ ಉದ್ಯೋಗಕ ವಿಕಾಸ ಯೋಜನೆ'ಯ ಮತ್ತೊಂದು ಹೆಸರೇನು?",
+    options: ["A) ಭವಿಷ್ಯ", "B) ಯುವ ಶಕ್ತಿ", "C) ಉದ್ಯೋಗ ಸೇತು", "D) ಕೌಶಲ್ಯ ಭಾರತ"],
+    correct: 0,
+    exp: "ಕೇಂದ್ರ ಸರ್ಕಾರದ ಉದ್ಯೋಗ ಮತ್ತು ತರಬೇತಿ ಉತ್ತೇಜಿಸುವ ಯೋಜನೆಗೆ 'ಭವಿಷ್ಯ' ಯೋಜನೆ ಎಂದು ಕರೆಯಲಾಗುತ್ತದೆ."
+  },
+  {
+    q: "24. ಖಾಸಗಿ ಬಾಹ್ಯಾಕಾಶ ಸಂಸ್ಥೆ 'ಅಗ್ನಿಕುಲ್ ಕಾಸ್ಮೋಸ್' ಪರೀಕ್ಷಿಸಿದ 3D-ಪ್ರಿಂಟೆಡ್ ರಾಕೆಟ್ ಎಂಜಿನ್ ಹೆಸರೇನು?",
+    options: ["A) ಅಗ್ನಿಟ್ (Agnite)", "B) ವಿಕ್ರಮ್ S", "C) ಧ್ರುವ 1", "D) ಅಗ್ನಿಬಾಣ"],
+    correct: 0,
+    exp: "ಚೆನ್ನೈ ಮೂಲದ ಅಗ್ನಿಕುಲ್ ಕಾಸ್ಮೋಸ್ ಸಂಸ್ಥೆಯು ವಿಶ್ವದ ಮೊದಲ ಏಕ-ಭಾಗದ 3D ಪ್ರಿಂಟೆಡ್ ಎಂಜಿನ್ 'ಅಗ್ನಿಟ್' ಪರೀಕ್ಷೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಳಿಸಿದೆ."
+  },
+  {
+    q: "25. ಭಾರತೀಯ ವಾಯುಪಡೆಯು ಹೆಲಿಕಾಪ್ಟರ್‌ನಿಂದ ಉಡಾಯಿಸುವ ಯಾವ ಡ್ರೋನ್ ಯೋಜನೆಯ ಪರೀಕ್ಷೆಯನ್ನು ಯಶಸ್ವಿಗೊಳಿಸಿದೆ?",
+    options: ["A) ವಾಯುಬಾನ್", "B) ಡ್ರೋನ್ ಶಕ್ತಿ", "C) ನಭಸ್ತ್ರ", "D) ತ್ರಿಶೂಲ್ ಡ್ರೋನ್"],
+    correct: 0,
+    exp: "ವಾಯುಪಡೆಯ ಯುದ್ಧ ಸಾಮರ್ಥ್ಯ ಹೆಚ್ಚಿಸಲು ಹೆಲಿಕಾಪ್ಟರ್‌ನಿಂದಲೇ ಸುಲಭವಾಗಿ ಪ್ರಯೋಗಿಸಬಹುದಾದ 'ವಾಯುಬಾನ್' ಡ್ರೋನ್ ವ್ಯವಸ್ಥೆ ಪರೀಕ್ಷಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "26. ಕೇಂದ್ರ ಸರ್ಕಾರದ ಪ್ರಮುಖ ಯೋಜನೆ 'ಜಲ ಜೀವನ್ ಮಿಷನ್' (JJM) 2.0 ನ ಅವಧಿಯನ್ನು ಯಾವ ವರ್ಷದವರೆಗೆ ವಿಸ್ತರಿಸಲಾಗಿದೆ?",
+    options: ["A) 2028 ಡಿಸೆಂಬರ್", "B) 2026 ಮಾರ್ಚ್", "C) 2030 ಡಿಸೆಂಬರ್", "D) 2027 ಜೂನ್"],
+    correct: 0,
+    exp: "ಗ್ರಾಮೀಣ ಮನೆಗಳಿಗೆ ಶೇ.100 ನಲ್ಲಿ ನೀರು ಒದಗಿಸುವ ಜಲ ಜೀವನ್ ಮಿಷನ್ 2.0 ಯೋಜನೆಯ ಗುರಿಯನ್ನು '2028 ಡಿಸೆಂಬರ್‌'ವರೆಗೆ ಲಂಬಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "27. ನಾಸಾ (NASA) ತಜ್ಞರು ಕೈಗೊಂಡಿರುವ ಮಾನವಸಹಿತ ಚಂದ್ರಯಾನ ಮಿಷನ್ 'ಆರ್ಟೆಮಿಸ್-2' ಗಾಗಿ ಬಳಸುತ್ತಿರುವ ನೌಕೆ ಯಾವುದು?",
+    options: ["A) ಒರಿಯನ್ ನೌಕೆ (Orion Spacecraft)", "B) ಅಪೊಲೊ 11", "C) ಕ್ರ್ಯೂ ಡ್ರ್ಯಾಗನ್", "D) ಸ್ಟಾರ್‌ಲೈನರ್"],
+    correct: 0,
+    exp: "ನಾಸಾದ 'ಆರ್ಟೆಮಿಸ್-2' ಬ್ರಹ್ಮಾಂಡ ಮಿಷನ್‌ನಲ್ಲಿ ನಾಲ್ವರು ಗಗನಯಾನಿಗಳನ್ನು ಚಂದ್ರನ ಕಕ್ಷೆಗೆ ಕರೆದೊಯ್ಯಲು 'ಒರಿಯನ್' ಗಗನನೌಕೆಯನ್ನು ಬಳಸಲಾಗುತ್ತಿದೆ."
+  },
+  {
+    q: "28. ಭಾರತೀಯ ನೌಕಾಪಡೆಗೆ ಇತ್ತೀಚೆಗೆ ಸೇರ್ಪಡೆಗೊಂಡ ಬ್ರಹ್ಮೋಸ್ ಕ್ಷಿಪಣಿ ಸಜ್ಜಿತ ಕ್ಷಿಪಣಿ ಧ್ವಂಸಕ ಯುದ್ಧನೌಕೆ ಯಾವುದು?",
+    options: ["A) INS ತಾರಾಗಿರಿ", "B) INS ಹಿಮಗಿರಿ", "C) INS ಉದಯಗಿರಿ", "D) INS ಸೂರತ್"],
+    correct: 0,
+    exp: "ಪ್ರಾಜೆಕ್ಟ್ 17A ಸರಣಿಯ ಅತ್ಯಾಧುನಿಕ ಬ್ರಹ್ಮೋಸ್ ಸೂಪರ್‌ಸಾನಿಕ್ ಕ್ಷಿಪಣಿ ಹೊಂದಿರುವ 'INS ತಾರಾಗಿರಿ' ನೌಕಾಪಡೆಗೆ ಹಸ್ತಾಂತರವಾಗಿದೆ."
+  },
+  {
+    q: "29. ಭಾರತದಲ್ಲಿ ಸ್ವದೇಶಿಯಾಗಿ ನಿರ್ಮಿಸಲಾದ, ಇತ್ತೀಚೆಗೆ ನೌಕಾಪಡೆಗೆ ಸೇರ್ಪಡೆಯಾದ 3ನೇ ಪರಮಾಣು ಚಾಲಿತ ಜಲಲಿಂಗಿ (Submarine) ಯಾವುದು?",
+    options: ["A) INS ಅರಿಧಮನ್", "B) INS ಅರಿಹಂತ್", "C) INS ಅರಿಘಾಟ್", "D) INS ಕಲ್ವರಿ"],
+    correct: 0,
+    exp: "ಭಾರತದ ಜಲಾಂತರ್ಗಾಮಿ ಬಲ ಹೆಚ್ಚಿಸಲು ಸ್ವದೇಶಿ ಪರಮಾಣು ಜಲಾಂತರ್ಗಾಮಿ 'INS ಅರಿಧಮನ್' ಅನ್ನು ಕಾರ್ಯಾಚರಣೆಗೆ ನಿಯೋಜಿಸಲಾಗಿದೆ."
+  },
+  {
+    q: "30. ಹಾರ್ಮುಜ್ ಬಂದರು ಪ್ರಾಂತ್ಯದಲ್ಲಿ ತೈಲ ಮತ್ತು ಇಂಧನ ಸಾಗಣೆಯ ಹಡಗುಗಳನ್ನು ರಕ್ಷಿಸಲು ನೌಕಾಪಡೆ ಜಾರಿಗೆ ತಂದ ಕಾರ್ಯಾಚರಣೆ ಯಾವುದು?",
+    options: ["A) ಆಪರೇಷನ್ ಉರ್ಜಾ ಸುರಕ್ಷಾ", "B) ಆಪರೇಷನ್ ಸಂಕಲ್ಪ", "C) ಆಪರೇಷನ್ ಕಾವೇರಿ", "D) ಆಪರೇಷನ್ ಸಮುದ್ರ ಸೇತು"],
+    correct: 0,
+    exp: "ಅಂತಾರಾಷ್ಟ್ರೀಯ ತೈಲ ಪೂರೈಕೆ ಮಾರ್ಗವಾದ ಹಾರ್ಮುಜ್ ಪ್ರಾಂತ್ಯದ ಕಡಲಸಾಲೆಯಲ್ಲಿ ಭಾರತೀಯ ಹಡಗುಗಳ ರಕ್ಷಣೆಗೆ 'ಆಪರೇಷನ್ ಉರ್ಜಾ ಸುರಕ್ಷಾ' ಕೈಗೊಳ್ಳಲಾಗಿದೆ."
+  },
+  {
+    q: "31. ಭಾರತದಲ್ಲಿ ಪ್ರಥಮ 'ರಿಂಗ್ ಮೆಟ್ರೋ' (Ring Metro) ರೈಲು ಜಾಲವನ್ನು ಉದ್ಘಾಟಿಸಿದ ನಗರ ಯಾವುದು?",
+    options: ["A) ದೆಹಲಿ", "B) ಬೆಂಗಳೂರು", "C) ಮುಂಬೈ", "D) ಕೋಲ್ಕತ್ತಾ"],
+    correct: 0,
+    exp: "ದೆಹಲಿ ಮೆಟ್ರೋದ ಪಿಂಕ್ ಲೈನ್ ಪೂರ್ಣಗೊಳ್ಳುವುದರೊಂದಿಗೆ ಭಾರತದ ಪ್ರಥಮ ಸಂಪೂರ್ಣ 'ರಿಂಗ್ ಮೆಟ್ರೋ' ದೆಹಲಿಯಲ್ಲಿ ಕಾರ್ಯಾಚರಣೆಗೆ ಬಂದಿದೆ."
+  },
+  {
+    q: "32. ನಾಸಾದ ಆರ್ಟೆಮಿಸ್-2 ಮಿಷನ್‌ನ ಮುಖ್ಯ ಕಮಾಂಡರ್ (Commander) ಆಗಿ ಆಯ್ಕೆಯಾದ ಗಗನಯಾನಿ ಯಾರು?",
+    options: ["A) ರೇಡ್ ವೈಸ್‌ಮ್ಯಾನ್ (Reid Wiseman)", "B) ಕ್ರಿಸ್ಟಿನಾ ಕೋಚ್", "C) ಜಿರೆಮಿ ಹ್ಯಾನ್ಸನ್", "D) ವಿಕ್ಟರ್ ಗ್ಲೋವರ್"],
+    correct: 0,
+    exp: "ನಾಸಾದ ನಾಯಕತ್ವ ಹೊಂದಿರುವ 'ಆರ್ಟೆಮಿಸ್-2' ಮಾನವಸಹಿತ ಚಂದ್ರಯಾನ ಯೋಜನೆಯ ಕಮಾಂಡರ್ ಆಗಿ ರೇಡ್ ವೈಸ್‌ಮ್ಯಾನ್ ಆಯ್ಕೆಯಾಗಿದ್ದಾರೆ."
+  },
+  {
+    q: "33. ನಾಸಾದ ಆರ್ಟೆಮಿಸ್-2 ಚಂದ್ರನ ಮಿಷನ್‌ನಲ್ಲಿ ಗಗನಯಾನಿಯಾಗಿ ಆಯ್ಕೆಯಾದ ಪ್ರಥಮ ಮಹಿಳೆ ಯಾರು?",
+    options: ["A) ಕ್ರಿಸ್ಟಿನಾ ಕೋಚ್ (Christina Koch)", "B) ಸುನೀತಾ ವಿಲಿಯಮ್ಸ್", "C) ಕಲ್ಪನಾ ಚೌಲಾ", "D) ಜೆಸ್ಸಿಕಾ ಮೀರ್"],
+    correct: 0,
+    exp: "ಚಂದ್ರನ ಅನ್ವೇಷಣಾ ಕಾರ್ಯಾಚರಣೆಗೆ ಪ್ರಯಾಣಿಸಲಿರುವ ಮೊದಲ ಮಹಿಳೆ ಎಂಬ ಹೆಗ್ಗಳಿಕೆಗೆ ಕ್ರಿಸ್ಟಿನಾ ಕೋಚ್ ಪಾತ್ರರಾಗಿದ್ದಾರೆ."
+  },
+  {
+    q: "34. ವಿಶ್ವವಿಖ್ಯಾತ ಒಡಿಶಾ ಮೂಲದ ಮರಳು ಕಲಾವಿದ ಸುದರ್ಶನ್ ಪಟ್ನಾಯಕ್ ಅವರಿಗೆ ನೀಡಿ ಗೌರವಿಸಿದ ಪ್ರಶಸ್ತಿ ಯಾವುದು?",
+    options: ["A) ಪದ್ಮಶ್ರೀ ಹಾಗೂ ಜಾಗತಿಕ ಮರಳು ಶಿಲ್ಪ ಪ್ರಶಸ್ತಿಗಳು", "B) ಪದ್ಮವಿಭೂಷಣ", "C) ರೇಮನ್ ಮ್ಯಾಗ್ಸೆಸೆ", "D) ಅರ್ಜುನ ಪ್ರಶಸ್ತಿ"],
+    correct: 0,
+    exp: "ಸುದರ್ಶನ್ ಪಟ್ನಾಯಕ್ ಅವರು ಮರಳು ಕಲೆಗೆ ಪದ್ಮಶ್ರೀ ಸೇರಿದಂತೆ ಸಾಲು ಸಾಲು ಅಂತಾರಾಷ್ಟ್ರೀಯ ಗೌರವಗಳನ್ನು ಗಳಿಸಿದ್ದಾರೆ."
+  },
+  {
+    q: "35. ಮ್ಯಾನ್ಮಾರ್ ಮಿಲಿಟರಿ ಬಂಡಾಯ ಹಾಗೂ ರಾಜಕೀಯ ಕ್ಷೋಭೆಯ ನಡುವೆ ಆಡಳಿತ ನಡೆಸುತ್ತಿರುವ ಮಿಲಿಟರಿ ಸರ್ಕಾರವನ್ನು ಏನೆಂದು ಕರೆಯುತ್ತಾರೆ?",
+    options: ["A) ಮಿಲಿಟರಿ ಜುಂಟಾ (Junta)", "B) ಡೆಮಾಕ್ರಟಿಕ್ ಕೌನ್ಸಿಲ್", "C) ಪೀಪಲ್ಸ್ ಪಾರ್ಟಿ", "D) ರಾಯಲ್ ಆಮಿ ಸಂಸತ್ತು"],
+    correct: 0,
+    exp: "ಮಿನ್ ಆಂಗ್ ಹ್ಲೈಂಗ್ ನೇತೃತ್ವದ ಸೇನಾ ಆಡಳಿತವನ್ನು ಜಾಗತಿಕವಾಗಿ 'ಮಿಲಿಟರಿ ಜುಂಟಾ' ಎಂದು ಗುರುತಿಸಲಾಗುತ್ತದೆ."
+  },
+  {
+    q: "36. ಜ್ಞಾನಪೀಠ ಪ್ರಶಸ್ತಿ ಪಡೆದ ತಮಿಳು ಸಾಹಿತಿ ವೈರಮುತ್ತು ಅವರ ಪ್ರಮುಖ ಸಾಹಿತ್ಯಿಕ ಕ್ಷೇತ್ರ ಯಾವುದು?",
+    options: ["A) ತಮಿಳು ಕವನಗಳು, ಕಾದಂಬರಿ ಮತ್ತು ಚಲನಚಿತ್ರ ಸಾಹಿತ್ಯ", "B) ಸಂಸ್ಕೃತ ನಾಟಕಗಳು", "C) ಇಂಗ್ಲಿಷ್ ಪ್ರಬಂಧಗಳು", "D) ತೆಲುಗು ಜಾನಪದ"],
+    correct: 0,
+    exp: "ವೈರಮುತ್ತು ಅವರು ತಮಿಳು ಸಾಹಿತ್ಯ ಮತ್ತು ಚಿತ್ರರಂಗದ ತಮಿಳು ಗೀತರಚನೆಗೆ ನೀಡಿದ ಅಪ್ರತಿಮ ಕೊಡುಗೆಗಾಗಿ ಈ ಗೌರವ ಪಡೆದಿದ್ದಾರೆ."
+  },
+  {
+    q: "37. ನೇಪಾಳದ ರಾಜಕೀಯ ಇತಿಹಾಸದಲ್ಲಿ ಕಠ್ಮಂಡು ಮೇಯರ್ ಆಗಿ ಪ್ರಸಿದ್ಧಿ ಪಡೆದು ಪ್ರಧಾನಿಯಾದ ನಾಯಕ ಯಾರು?",
+    options: ["A) ಬಾಲೇಂದ್ರ ಶಾ (Balen Shah)", "B) ಪ್ರಚಂಡ", "C) ರವಿ ಲಮಿಛಾನೆ", "D) ಕೆಪಿ ಓಲಿ"],
+    correct: 0,
+    exp: "ಇಂಜಿನಿಯರ್ ಹಾಗೂ ಹಿಪ್-ಹಾಪ್ ಗಾಯಕ ಬಾಲೇಂದ್ರ ಶಾ (ಬಾಲೆನ್) ಅವರು ಕಠ್ಮಂಡು ಮೇಯರ್ ಆಗಿ ಜನಪ್ರಿಯತೆ ಗಳಿಸಿ ನಂತರ ದೇಶದ ಪ್ರಧಾನಿಯಾದರು."
+  },
+  {
+    q: "38. ಆರ್ಟೆಮಿಸ್-2 ಚಂದ್ರನ ಮಿಷನ್ ತಂಡದಲ್ಲಿದ್ದ ಕೆನಡಾ ಬಾಹ್ಯಾಕಾಶ ಸಂಸ್ಥೆಯ (CSA) ಗಗನಯಾನಿ ಯಾರು?",
+    options: ["A) ಜಿರೆಮಿ ಹ್ಯಾನ್ಸನ್ (Jeremy Hansen)", "B) ವಿಕ್ಟರ್ ಗ್ಲೋವರ್", "C) ರೇಡ್ ವೈಸ್‌ಮ್ಯಾನ್", "D) ಡೇವಿಡ್ ಸೇಂಟ್-ಜಾಕ್ಸ್"],
+    correct: 0,
+    exp: "ಅಮೆರಿಕದ ಜೊತೆಗೂಡಿ ಚಂದ್ರನ ಕಕ್ಷೆಗೆ ಪ್ರಯಾಣಿಸುವ ನಾಲ್ವರು ಗಗನಯಾನಿಗಳ ಪೈಕಿ ಕೆನಡಾದ ಜಿರೆಮಿ ಹ್ಯಾನ್ಸನ್ ಒಬ್ಬರಾಗಿದ್ದಾರೆ."
+  },
+  {
+    q: "39. 'ಸ್ಪರ್ಧಾ ವಿಜೇತ' ಏಪ್ರಿಲ್ 2026ರ ಮಾಸಪತ್ರಿಕೆಯ ಸಂಪುಟ ಮತ್ತು ಸಂಚಿಕೆ ಸಂಖ್ಯೆ ಎಷ್ಟು?",
+    options: ["A) ಸಂಪುಟ-19, ಸಂಚಿಕೆ-223, ಬೆಲೆ ₹60/-", "B) ಸಂಪುಟ-20, ಸಂಚಿಕೆ-225, ಬೆಲೆ ₹50/-", "C) ಸಂಪುಟ-18, ಸಂಚಿಕೆ-200, ಬೆಲೆ ₹70/-", "D) ಸಂಪುಟ-15, ಸಂಚಿಕೆ-100, ಬೆಲೆ ₹100/-"],
+    correct: 0,
+    exp: "ಏಪ್ರಿಲ್ 2026ರ ಸ್ಪರ್ಧಾ ವಿಜೇತ ಪತ್ರಿಕೆಯು ಸಂಪುಟ-19, ಸಂಚಿಕೆ-223 ಆಗಿದ್ದು 116 ಪುಟಗಳನ್ನು ಒಳಗೊಂಡಿದೆ."
+  },
+  {
+    q: "40. 'ಸ್ಪರ್ಧಾ ವಿಜೇತ' ಯಾವ ರೀತಿಯ ಪರೀಕ್ಷೆಗಳಿಗೆ ನೆರವಾಗುವ ಮುಖ್ಯ ಶೈಕ್ಷಣಿಕ ಮಾಸಪತ್ರಿಕೆಯಾಗಿದೆ?",
+    options: ["A) KAS, PSI, ESI, PDO, FDA, SDA, Group-C, VAO, CTI & PC", "B) ಕೇಂದ್ರೀಯ ರೈಲ್ವೆ ಮಾತ್ರ", "C) ಬ್ಯಾಂಕಿಂಗ್ ಐಬಿಪಿಎಸ್ ಮಾತ್ರ", "D) ನೀಟ್ (NEET) ಪರೀಕ್ಷೆಗಳಿಗೆ"],
+    correct: 0,
+    exp: "ಸ್ಪರ್ಧಾ ವಿಜೇತ ಪತ್ರಿಕೆಯು ಕರ್ನಾಟಕದ ಕೆಪಿಎಸ್‌ಸಿ, ಪೊಲೀಸ್, ಪಿಡಿಒ ಸೇರಿದಂತೆ ಎಲ್ಲಾ ಸರ್ಕಾರಿ ಸ್ಪರ್ಧಾತ್ಮಕ ಪರೀಕ್ಷೆಗಳ ಪ್ರಚಲಿತ ಘಟನೆಗಳಿಗೆ ಅತ್ಯಂತ ಉಪಯುಕ್ತವಾಗಿದೆ."
+  }
+];
+
+let currentIndex = 0;
+let userAnswers = new Array(quizData.length).fill(null);
+
+function initQuiz() {
+  renderPalette();
+  loadQuestion(currentIndex);
+}
+
+function renderPalette() {
+  const palette = document.getElementById('palette');
+  palette.innerHTML = '';
+  quizData.forEach((_, index) => {
+    const btn = document.createElement('button');
+    btn.className = `palette-btn ${index === currentIndex ? 'active' : ''}`;
+    btn.innerText = index + 1;
+    
+    if (userAnswers[index] !== null) {
+      if (userAnswers[index] === quizData[index].correct) {
+        btn.classList.add('answered-correct');
+      } else {
+        btn.classList.add('answered-incorrect');
+      }
+    }
+    
+    btn.onclick = () => jumpToQuestion(index);
+    palette.appendChild(btn);
+  });
+}
+
+function loadQuestion(index) {
+  const qData = quizData[index];
+  document.getElementById('question-text').innerText = qData.q;
+  
+  const optionsContainer = document.getElementById('options-container');
+  optionsContainer.innerHTML = '';
+  
+  const expContainer = document.getElementById('explanation-container');
+  expContainer.innerHTML = '';
+
+  const isAnswered = userAnswers[index] !== null;
+
+  qData.options.forEach((opt, optIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerText = opt;
+
+    if (isAnswered) {
+      btn.disabled = true;
+      if (optIdx === qData.correct) {
+        btn.classList.add('show-correct');
+      }
+      if (userAnswers[index] === optIdx) {
+        if (optIdx === qData.correct) {
+          btn.classList.add('selected-correct');
+        } else {
+          btn.classList.add('selected-incorrect');
+        }
+      }
+    } else {
+      btn.onclick = () => selectOption(optIdx);
+    }
+
+    optionsContainer.appendChild(btn);
+  });
+
+  if (isAnswered) {
+    const isCorrect = userAnswers[index] === qData.correct;
+    expContainer.innerHTML = `
+      <div class="explanation-box ${isCorrect ? 'correct' : ''}">
+        <h4>${isCorrect ? 'ಸರಿಯಾದ ಉತ್ತರ!' : 'ತಪ್ಪು (Incorrect)'}</h4>
+        <p><b>ಸರಿಯಾದ ಉತ್ತರ:</b> ${qData.options[qData.correct]}</p>
+        <p style="margin-top:5px;"><b>ವಿವರಣೆ:</b> ${qData.exp}</p>
+      </div>
+    `;
+  }
+
+  document.getElementById('prev-btn').disabled = index === 0;
+  document.getElementById('next-btn').disabled = index === quizData.length - 1;
+  
+  renderPalette();
+  updateScore();
+}
+
+function selectOption(optionIndex) {
+  userAnswers[currentIndex] = optionIndex;
+  loadQuestion(currentIndex);
+}
+
+function jumpToQuestion(index) {
+  currentIndex = index;
+  loadQuestion(currentIndex);
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    loadQuestion(currentIndex);
+  }
+}
+
+function nextQuestion() {
+  if (currentIndex < quizData.length - 1) {
+    currentIndex++;
+    loadQuestion(currentIndex);
+  }
+}
+
+function updateScore() {
+  const score = userAnswers.reduce((acc, ans, idx) => {
+    return ans === quizData[idx].correct ? acc + 1 : acc;
+  }, 0);
+  document.getElementById('score').innerText = score;
+}
+
+window.onload = initQuiz;
+</script>
+
+</body>
+</html>
