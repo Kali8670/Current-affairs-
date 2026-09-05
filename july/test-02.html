@@ -7,45 +7,134 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background-color: #f4f6f9; color: #333; }
-    header { background-color: #0d3b66; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #002244; }
-    header h1 { font-size: 1.1rem; }
-    .timer { background: #b7094c; padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
+    
+    /* Dark Blue Header */
+    header { 
+      background-color: #1a237e; 
+      color: white; 
+      padding: 12px 20px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      border-bottom: 3px solid #0d47a1; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    header h1 { font-size: 1.1rem; font-weight: 600; }
+    .timer { 
+      background: #dc3545; 
+      padding: 6px 14px; 
+      border-radius: 4px; 
+      font-weight: bold; 
+      font-size: 0.9rem; 
+      box-shadow: 0 0 8px rgba(220, 53, 69, 0.6);
+    }
     
     .container { display: flex; max-width: 1240px; margin: 15px auto; gap: 15px; padding: 0 10px; }
-    .main-content { flex: 3; background: white; border: 1px solid #ccc; border-radius: 4px; padding: 20px; min-height: 520px; }
-    .sidebar { flex: 1; background: white; border: 1px solid #ccc; border-radius: 4px; padding: 15px; }
+    .main-content { flex: 3; background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; min-height: 520px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .sidebar { flex: 1; background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     
     .q-header { font-size: 1.05rem; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; line-height: 1.5; }
     .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-    .option-btn { padding: 12px 15px; border: 1px solid #ccc; border-radius: 4px; background: #fff; text-align: left; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; transition: background 0.2s; }
-    .option-btn:hover { background: #f0f4f8; }
+    .option-btn { 
+      padding: 12px 15px; 
+      border: 1px solid #ccc; 
+      border-radius: 4px; 
+      background: #fff; 
+      text-align: left; 
+      cursor: pointer; 
+      font-size: 0.95rem; 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      transition: all 0.2s; 
+    }
+    .option-btn:hover:not(:disabled) { background: #f0f4f8; border-color: #1a237e; }
     
-    /* CBT Result Styles matching screenshot */
-    .option-btn.selected-correct { background-color: #d4edda; border-color: #28a745; color: #155724; font-weight: bold; }
-    .option-btn.selected-incorrect { background-color: #f8d7da; border-color: #dc3545; color: #721c24; }
-    .option-btn.show-correct { background-color: #d4edda; border-color: #28a745; color: #155724; }
+    /* CBT Result Styles with Glowing Visual Effects */
+    .option-btn.selected-correct, .option-btn.show-correct { 
+      background-color: #d4edda !important; 
+      border-color: #28a745 !important; 
+      color: #155724 !important; 
+      font-weight: bold;
+      box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+    }
+    .option-btn.selected-incorrect { 
+      background-color: #f8d7da !important; 
+      border-color: #dc3545 !important; 
+      color: #721c24 !important; 
+      box-shadow: 0 0 8px rgba(220, 53, 69, 0.5);
+    }
     
-    .explanation-box { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 4px; font-size: 0.9rem; margin-top: 15px; line-height: 1.5; }
-    .explanation-box.correct { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+    .explanation-box { 
+      background-color: #f8d7da; 
+      border: 1px solid #f5c6cb; 
+      color: #721c24; 
+      padding: 15px; 
+      border-radius: 4px; 
+      font-size: 0.9rem; 
+      margin-top: 15px; 
+      line-height: 1.5; 
+      box-shadow: 0 0 6px rgba(220, 53, 69, 0.2);
+    }
+    .explanation-box.correct { 
+      background-color: #d4edda; 
+      border-color: #c3e6cb; 
+      color: #155724; 
+      box-shadow: 0 0 6px rgba(40, 167, 69, 0.2);
+    }
     .explanation-box h4 { font-size: 0.95rem; margin-bottom: 5px; }
     
     .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
-    .nav-btn { padding: 8px 16px; border: none; background: #0d3b66; color: white; border-radius: 4px; cursor: pointer; }
+    .nav-btn { padding: 8px 16px; border: none; background: #1a237e; color: white; border-radius: 4px; cursor: pointer; font-weight: 500; }
     .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* Action Control Buttons Styling */
+    .action-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px; }
+    .btn-retest { 
+      padding: 10px; 
+      border: none; 
+      background-color: #28a745; 
+      color: white; 
+      border-radius: 4px; 
+      font-weight: bold; 
+      cursor: pointer; 
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.7); 
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-retest:hover { box-shadow: 0 0 14px rgba(76, 175, 80, 0.9); transform: translateY(-1px); }
+    
+    .btn-wrong-test { 
+      padding: 10px; 
+      border: none; 
+      background-color: #dc3545; 
+      color: white; 
+      border-radius: 4px; 
+      font-weight: bold; 
+      cursor: pointer; 
+      box-shadow: 0 0 10px rgba(244, 67, 54, 0.7); 
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-wrong-test:hover { box-shadow: 0 0 14px rgba(244, 67, 54, 0.9); transform: translateY(-1px); }
 
     /* Palette Sidebar */
     .sidebar h3 { font-size: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 12px; text-align: center; }
-    .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; max-height: 400px; overflow-y: auto; }
+    .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; max-height: 380px; overflow-y: auto; padding: 2px; }
     .palette-btn { padding: 8px 0; border: 1px solid #bbb; background: #fff; cursor: pointer; border-radius: 3px; font-size: 0.82rem; font-weight: bold; }
-    .palette-btn.active { border: 2px solid #000; }
-    .palette-btn.answered-correct { background-color: #28a745; color: white; border-color: #28a745; }
-    .palette-btn.answered-incorrect { background-color: #dc3545; color: white; border-color: #dc3545; }
+    .palette-btn.active { border: 2px solid #1a237e; box-shadow: 0 0 6px #1a237e; font-weight: 800; }
+    .palette-btn.answered-correct { background-color: #28a745; color: white; border-color: #28a745; box-shadow: 0 0 6px rgba(40, 167, 69, 0.7); }
+    .palette-btn.answered-incorrect { background-color: #dc3545; color: white; border-color: #dc3545; box-shadow: 0 0 6px rgba(220, 53, 69, 0.7); }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .sidebar { order: 2; }
+      .main-content { order: 1; }
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Karnataka PC & SSC CBT Exam Mock Test</h1>
+  <h1 id="test-title">Karnataka PC & SSC CBT Exam Mock Test</h1>
   <div class="timer">Time Remaining: <span id="timer">25:00</span></div>
 </header>
 
@@ -62,229 +151,303 @@
 
   <div class="sidebar">
     <h3>Question Palette</h3>
-    <p style="font-size:0.85rem; text-align:center;">Score: <span id="score">0</span> / 35</p>
+    <p style="font-size:0.85rem; text-align:center;">Score: <span id="score">0</span> / <span id="total-questions">35</span></p>
     <div class="palette-grid" id="palette"></div>
+    
+    <div class="action-buttons">
+      <button class="btn-retest" onclick="retestAll()">ಮರುಪರೀಕ್ಷೆ (Retest All)</button>
+      <button class="btn-wrong-test" onclick="testWrongAnswers()">Test Wrong Answers</button>
+    </div>
   </div>
 </div>
 
 <script>
-const quizData = [
+const originalQuizData = [
   {
+    originalIndex: 1,
     q: "1. 12ನೇ ಅಂತರರಾಷ್ಟ್ರೀಯ ಯೋಗ ದಿನದ (ಜೂನ್ 21) ಮುಖ್ಯ ಕಾರ್ಯಕ್ರಮವು ಎಲ್ಲಿ ನೆರವೇರಿತು?",
     options: ["A) ಕರ್ತವ್ಯ ಪಥ, ನವದೆಹಲಿ", "B) ಕೋಲ್ಕತ್ತಾ ರೇಡ್ ರೋಡ್", "C) ಮೈಸೂರು ಅರಮನೆ ಅಂಗಳ", "D) ಲಕ್ನೋ ಮೈದಾನ"],
-    correct: 1,
+    correctText: "B) ಕೋಲ್ಕತ್ತಾ ರೇಡ್ ರೋಡ್",
     exp: "12ನೇ ಅಂತರರಾಷ್ಟ್ರೀಯ ಯೋಗ ದಿನದ ಪ್ರಮುಖ ರಾಷ್ಟ್ರೀಯ ಕಾರ್ಯಕ್ರಮವು 'ಕೋಲ್ಕತ್ತಾ ರೇಡ್ ರೋಡ್' ನಲ್ಲಿ ನಡೆಯಿತು. ಇದರ ಧ್ವೇಯವಾಕ್ಯ 'ಆರೋಗ್ಯಕರ ಮುಪ್ಪಿಗಾಗಿ ಯೋಗ' ಆಗಿತ್ತು."
   },
   {
+    originalIndex: 2,
     q: "2. 2026ರ ಭಾರತದ ಮೊದಲ ವಿಶ್ವ ಯೋಗಾಸನ ಚಾಂಪಿಯನ್‌ಶಿಪ್‌ನಲ್ಲಿ ಅತಿ ಹೆಚ್ಚು ಪದಕ ಗೆದ್ದು ಪ್ರಥಮ ಸ್ಥಾನ ಪಡೆದ ದೇಶ ಯಾವುದು?",
     options: ["A) ಜಪಾನ್", "B) ಅರ್ಜೆಂಟೀನಾ", "C) ಭಾರತ", "D) ಬ್ರೆಜಿಲ್"],
-    correct: 2,
+    correctText: "C) ಭಾರತ",
     exp: "ಭಾರತವು 102 ಚಿನ್ನ, 9 ಬೆಳ್ಳಿ, ಹಾಗೂ 3 ಕಂಚಿನ ಪದಕಗಳೊಂದಿಗೆ (ಒಟ್ಟು 114 ಪದಕ) ಅಗ್ರಸ್ಥಾನ ಪಡೆಯಿತು. ಜಪಾನ್ 2ನೇ ಹಾಗೂ ಅರ್ಜೆಂಟೀನಾ 3ನೇ ಸ್ಥಾನ ಪಡೆದವು."
   },
   {
+    originalIndex: 3,
     q: "3. 'ನಾಫೆಡ್' (NAFED) ಇತ್ತೀಚೆಗೆ ಇ-ಹರಾಜು ಪ್ರಕ್ರಿಯೆಗಾಗಿ ಬಿಡುಗಡೆ ಮಾಡಿದ ನೂತನ ಪೋರ್ಟಲ್ ಯಾವುದು?",
     options: ["A) ಈ-ಕಿಸಾನ್ ಪೋರ್ಟಲ್", "B) ನಾಫೆಡ್-ಇನ್ (NAFED-IN)", "C) ಕೃಷಿ-ಮಿತ್ರ", "D) ಅಗ್ರಿ-ಹರಾಜು"],
-    correct: 1,
+    correctText: "B) ನಾಫೆಡ್-ಇನ್ (NAFED-IN)",
     exp: "ನಾಫೆಡ್ ಸಂಸ್ಥೆಯು ಇ-ಹರಾಜು ಪ್ರಕ್ರಿಯೆಗಳನ್ನು ಪಾರದರ್ಶಕಗೊಳಿಸಲು 'ನಾಫೆಡ್-ಇನ್' (NAFED-IN) ಪೋರ್ಟಲ್ ಅನ್ನು ಬಿಡುಗಡೆ ಮಾಡಿದೆ."
   },
   {
+    originalIndex: 4,
     q: "4. ದ್ವಿದಳ ಧಾನ್ಯಗಳು ಮತ್ತು ಎಣ್ಣೆ ಬೀಜಗಳ ದಾಸ್ತಾನು ನಿರ್ವಹಣೆಗಾಗಿ NAFED ಬಿಡುಗಡೆ ಮಾಡಿದ ವ್ಯವಸ್ಥೆ ಯಾವುದು?",
     options: ["A) ದೃಷ್ಟಿ (DRISHTI) ಪೋರ್ಟಲ್", "B) ಶಕ್ತಿ ಪೋರ್ಟಲ್", "C) ಧಾನ್ಯ ಸಂಪದ", "D) ಎಣ್ಣೆ-ದಾಸ್ತಾನು"],
-    correct: 0,
+    correctText: "A) ದೃಷ್ಟಿ (DRISHTI) ಪೋರ್ಟಲ್",
     exp: "ದ್ವಿದಳ ಧಾನ್ಯ ಹಾಗೂ ಎಣ್ಣೆ ಬೀಜಗಳ ದಾಸ್ತಾನು ಮತ್ತು ಸಂಗ್ರಹಣೆಯ ಮೇಲ್ವಿಚಾರಣೆಗಾಗಿ NAFED ಸಂಸ್ಥೆಯು 'ದೃಷ್ಟಿ' (DRISHTI) ಪೋರ್ಟಲ್ ಪ್ರಾರಂಭಿಸಿದೆ."
   },
   {
+    originalIndex: 5,
     q: "5. ಜೂನ್ 10, 2026ರ ವೇಳೆಗೆ 4,399 ದಿನಗಳ ಆಡಳಿತ ಪೂರ್ಣಗೊಳಿಸಿ ಸುದೀರ್ಘಾವಧಿ ಸೇವೆ ಸಲ್ಲಿಸಿದ ಚುನಾಯಿತ ಪ್ರಧಾನಿ ಯಾರು?",
     options: ["A) ಜವಾಹರಲಾಲ್ ನೆಹರೂ", "B) ಇಂದಿರಾ ಗಾಂಧಿ", "C) ನರೇಂದ್ರ ಮೋದಿ", "D) ಅಟಲ್ ಬಿಹಾರಿ ವಾಜಪೇಯಿ"],
-    correct: 2,
+    correctText: "C) ನರೇಂದ್ರ ಮೋದಿ",
     exp: "ಪ್ರಧಾನಿ ನರೇಂದ್ರ ಮೋದಿ ಅವರು ಜೂನ್ 10, 2026 ರ ಹೊತ್ತಿಗೆ 4,399 ದಿನಗಳ ಸುದೀರ್ಘ ಆಡಳಿತವನ್ನು ಪೂರೈಸಿದ ಚುನಾಯಿತ ಪ್ರಧಾನಿಯಾಗಿದ್ದಾರೆ."
   },
   {
+    originalIndex: 6,
     q: "6. ಪ್ರಧಾನಿ ಮೋದಿಯವರ ಸಿಶೆಲ್ಸ್ ಭೇಟಿಯ ವೇಳೆ ಸಿಶೆಲ್ಸ್ ಸರ್ಕಾರ ಅವರಿಗೆ ನೀಡಿದ ಅತ್ಯುನ್ನತ ನಾಗರಿಕ ಪ್ರಶಸ್ತಿ ಯಾವುದು?",
     options: ["A) ಆರ್ಡರ್ ಆಫ್ ದ ನೈಲ್", "B) ಗಾರ್ಡಿಯನ್ ಆಫ್ ದಿ ಬ್ಲೂ ಹರೈಸನ್", "C) ಲೀಜನ್ ಆಫ್ ಆನರ್", "D) ಸೆಂಟ್ ಆಂಡ್ರ್ಯೂ ಪ್ರಶಸ್ತಿ"],
-    correct: 1,
+    correctText: "B) ಗಾರ್ಡಿಯನ್ ಆಫ್ ದಿ ಬ್ಲೂ ಹರೈಸನ್",
     exp: "ಸಿಶೆಲ್ಸ್ ದೇಶಕ್ಕೆ ಭೇಟಿ ನೀಡಿದಾಗ 19 ಒಪ್ಪಂದಗಳಿಗೆ ಸಹಿ ಹಾಕಲಾಯಿತು ಮತ್ತು ಪ್ರಧಾನಿಯವರಿಗೆ 'ಗಾರ್ಡಿಯನ್ ಆಫ್ ದಿ ಬ್ಲೂ ಹರೈಸನ್' ಪ್ರಶಸ್ತಿ ನೀಡಲಾಯಿತು."
   },
   {
+    originalIndex: 7,
     q: "7. ಸ್ಲೊವಾಕಿಯಾ ದೇಶದ ಅತ್ಯುನ್ನತ ನಾಗರಿಕ ಗೌರವವಾದ 'ದಿ ಆರ್ಡರ್ ಆಫ್ ದಿ ವೈಟ್ ಡಬಲ್ ಕ್ರಾಸ್' ಪ್ರಶಸ್ತಿಯನ್ನು ಯಾರಿಗೆ ನೀಡಲಾಯಿತು?",
     options: ["A) ಪ್ರಧಾನಿ ನರೇಂದ್ರ ಮೋದಿ", "B) ದ್ರೌಪದಿ ಮುರ್ಮು", "C) ಎಸ್. ಜೈಶಂಕರ್", "D) ರಾಜನಾಥ್ ಸಿಂಗ್"],
-    correct: 0,
+    correctText: "A) ಪ್ರಧಾನಿ ನರೇಂದ್ರ ಮೋದಿ",
     exp: "ಸ್ಲೊವಾಕಿಯಾ ಪ್ರವಾಸದ ವೇಳೆ (12 ವರ್ಷಗಳಲ್ಲಿ ಅವರ 100ನೇ ವಿದೇಶಿ ಪ್ರವಾಸ) ಪ್ರಧಾನಿ ನರೇಂದ್ರ ಮೋದಿಯವರಿಗೆ ಈ ಗೌರವವನ್ನು ನೀಡಲಾಯಿತು."
   },
   {
+    originalIndex: 8,
     q: "8. ಇತ್ತೀಚೆಗೆ 10 ಶತಕೋಟಿ ಯೆನ್ ಹೂಡಿಕೆ ಒಪ್ಪಂದಕ್ಕಾಗಿ ಭಾರತಕ್ಕೆ ಭೇಟಿ ನೀಡಿದ ಜಪಾನ್‌ನ ಪ್ರಧಾನಿ ಯಾರು?",
     options: ["A) ಫ್ಯೂಮಿಯೋ ಕಿಶಿಡಾ", "B) ಶಿಂದೋ ಅಬೆ", "C) ಸನತ್‌ಕಿಚಿ", "D) ಯೋಶಿಹಿಡೆ ಸುಗಾ"],
-    correct: 2,
+    correctText: "C) ಸನತ್‌ಕಿಚಿ",
     exp: "ಜಪಾನ್ ಪ್ರಧಾನಿ ಸನತ್‌ಕಿಚಿ ಅವರು ಭಾರತಕ್ಕೆ ಭೇಟಿ ನೀಡಿ 10 ಶತಕೋಟಿ ಯೆನ್ ಮೌಲ್ಯದ ಹೂಡಿಕೆ ಒಪ್ಪಂದಗಳಿಗೆ ಅಂತಿಮ ಮುದ್ರೆ ಒತ್ತಿದರು."
   },
   {
+    originalIndex: 9,
     q: "9. ಭಾರತದ UPI (Unified Payments Interface) ಪಾವತಿ ವ್ಯವಸ್ಥೆಯನ್ನು ಅಳವಡಿಸಿಕೊಂಡ 9ನೇ ಅಂತರರಾಷ್ಟ್ರೀಯ ರಾಷ್ಟ್ರ ಯಾವುದು?",
     options: ["A) ಸಿಂಗಾಪುರ", "B) ಫ್ರಾನ್ಸ್", "C) ಕಾಂಬೋಡಿಯಾ", "D) ಗ್ರೀಸ್"],
-    correct: 2,
+    correctText: "C) ಕಾಂಬೋಡಿಯಾ",
     exp: "ಭಾರತದ ಯುಪಿಐ ವ್ಯವಸ್ಥೆಯನ್ನು ಅಂಗೀಕರಿಸಿದ 9ನೇ ರಾಷ್ಟ್ರವಾಗಿ 'ಕಾಂಬೋಡಿಯಾ' ಹೊರಹೊಮ್ಮಿದೆ."
   },
   {
+    originalIndex: 10,
     q: "10. ಭಾರತದ ಯುಪಿಐ (UPI) ಪಾವತಿ ಸೇವೆಯನ್ನು ತನ್ನ ದೇಶದಲ್ಲಿ ಜಾರಿಗೆ ತಂದ 10ನೇ ರಾಷ್ಟ್ರ ಯಾವುದು?",
     options: ["A) ಗ್ರೀಸ್", "B) ಯುಎಇ", "C) ಜಪಾನ್", "D) ಜರ್ಮನಿ"],
-    correct: 0,
+    correctText: "A) ಗ್ರೀಸ್",
     exp: "ಯುರೋಪ್‌ನ 'ಗ್ರೀಸ್' ದೇಶವು ಭಾರತದ ಯುಪಿಐ ಸೇವೆಗಳನ್ನು ಸ್ವೀಕರಿಸಿದ 10ನೇ ದೇಶವಾಗಿದೆ."
   },
   {
+    originalIndex: 11,
     q: "11. 'VB-G-RAM-G' ಯೋಜನೆಯ ರಾಷ್ಟ್ರ ಮಟ್ಟದ ಲೋಗೋ ವಿನ್ಯಾಸ ಸ್ಪರ್ಧೆಯಲ್ಲಿ ಪ್ರಥಮ ಬಹುಮಾನ ಗೆದ್ದವರು ಯಾರು?",
     options: ["A) ಮಂಜುನಾಥ್ - ಮೈಸೂರು", "B) ರಾಮ್‌ಪ್ರಸಾದ್ ಕೆ. (ಪುತ್ತೂರು)", "C) ಸುರೇಶ್ ಬಾಬು - ಬೆಳಗಾವಿ", "D) ರಮೇಶ್ ದೇಶ್‌ಪಾಂಡೆ"],
-    correct: 1,
+    correctText: "B) ರಾಮ್‌ಪ್ರಸಾದ್ ಕೆ. (ಪುತ್ತೂರು)",
     exp: "ಕರ್ನಾಟಕದ ದಕ್ಷಿಣ ಕನ್ನಡ ಜಿಲ್ಲೆಯ ಪುತ್ತೂರಿನ 'ರಾಮ್‌ಪ್ರಸಾದ್ ಕೆ.' ಅವರು ರಾಷ್ಟ್ರ ಮಟ್ಟದ ಲೋಗೋ ವಿನ್ಯಾಸ ಸ್ಪರ್ಧೆಯಲ್ಲಿ ಪ್ರಥಮ ಸ್ಥಾನ ಪಡೆದರು."
   },
   {
+    originalIndex: 12,
     q: "12. ಜುಲೈ 01 ರಿಂದ ಜಾರಿಗೆ ಬಂದ VB-G-RAM-G ಯೋಜನೆಯಡಿ ಕರ್ನಾಟಕದಲ್ಲಿ ಹೊಸದಾಗಿ ಪರಿಷ್ಕರಿಸಿದ ದಿನಕೂಲಿ ದರ ಎಷ್ಟು?",
     options: ["A) ₹349", "B) ₹382", "C) ₹400", "D) ₹315"],
-    correct: 1,
+    correctText: "B) ₹382",
     exp: "ತಿರುಪತಿಯಲ್ಲಿ ಅಧಿಕೃತವಾಗಿ ಚಾಲನೆ ನೀಡಲಾದ VB-G-RAM-G ಯೋಜನೆಯಡಿ ಕರ್ನಾಟಕದ ದಿನಕೂಲಿ ದರವನ್ನು ₹382 ಕ್ಕೆ ಪರಿಷ್ಕರಿಸಲಾಗಿದೆ."
   },
   {
+    originalIndex: 13,
     q: "13. ಕರ್ನಾಟಕ ರಾಜ್ಯದ ಮೊದಲ 'ನಗರ ಸುರಂಗ ರಸ್ತೆ' (Tunnel Road) ಯೋಜನೆಯ ಶಂಕುಸ್ಥಾಪನೆಯನ್ನು ಎಲ್ಲಿಂದ ಎಲ್ಲಿಯವರೆಗೆ ನಡೆಸಲಾಗಿದೆ?",
     options: ["A) ಸಿಲ್ಕ್ ಬೋರ್ಡ್ ನಿಂದ ಕೆ.ಆರ್. ಪುರಂ", "B) ಹೆಬ್ಬಾಳದಿಂದ ಮೇಖ್ರಿ ಸರ್ಕಲ್", "C) ಯಶವಂತಪುರದಿಂದ ಮೆಜೆಸ್ಟಿಕ್", "D) ನಾಯಂಡಹಳ್ಳಿಯಿಂದ ಬನೇರುಘಟ್ಟ"],
-    correct: 1,
+    correctText: "B) ಹೆಬ್ಬಾಳದಿಂದ ಮೇಖ್ರಿ ಸರ್ಕಲ್",
     exp: "ಬೆಂಗಳೂರಿನ ಸಂಚಾರ ದಟ್ಟಣೆ ನಿಯಂತ್ರಿಸಲು ಹೆಬ್ಬಾಳದಿಂದ ಮೇಖ್ರಿ ಸರ್ಕಲ್‌ವರೆಗೆ ರಾಜ್ಯದ ಮೊದಲ ನಗರ ಸುರಂಗ ರಸ್ತೆಗೆ ಶಂಕುಸ್ಥಾಪನೆ ಮಾಡಲಾಗಿದೆ."
   },
   {
+    originalIndex: 14,
     q: "14. ಭಾರತದಲ್ಲಿ ಫಿಜಿಕಲ್ ಇಂಟೆಲಿಜೆನ್ಸ್ (Physical Intelligence) ಪರಿಚಯಿಸಲು ಯಾವ ಸಂಸ್ಥೆಗಳು ಒಪ್ಪಂದ ಮಾಡಿಕೊಂಡಿವೆ?",
     options: ["A) MEIL & ಅನಾಲಾಗ್", "B) TCS & ಇನ್ಫೋಸಿಸ್", "C) ISRO & DRDO", "D) Wipro & Google"],
-    correct: 0,
+    correctText: "A) MEIL & ಅನಾಲಾಗ್",
     exp: "ಭಾರತೀಯ ಉದ್ಯಮ ರಂಗದಲ್ಲಿ ಫಿಜಿಕಲ್ ಇಂಟೆಲಿಜೆನ್ಸ್ ತಂತ್ರಜ್ಞಾನವನ್ನು ಪರಿಚಯಿಸಲು MEIL ಮತ್ತು ಅನಾಲಾಗ್ ಸಂಸ್ಥೆಗಳು ಸಹಭಾಗಿತ್ವ ವಹಿಸಿವೆ."
   },
   {
+    originalIndex: 15,
     q: "15. ಬ್ರಿಟನ್‌ನಲ್ಲಿ ವಾಣಿಜ್ಯ ವ್ಯಾಪಾರ ಪ್ರಕರಣವನ್ನು ನ್ಯಾಯಾಲಯದಲ್ಲಿ ಗೆದ್ದ ವಿಶ್ವದ ಮೊದಲ ಎಐ (AI) ವಕೀಲ ತಂತ್ರಜ್ಞಾನ ಯಾವುದು?",
     options: ["A) ಗಾರ್ಫೀಲ್ಡ್ AI ಬಾಟ್‌ಬಾಟ್", "B) ಲೀಗಲ್ ಜಿಪಿಟಿ", "C) ಹಾರ್ವಿ ಎಐ", "D) ರೋಬೋ ಕಾಪ್"],
-    correct: 0,
+    correctText: "A) ಗಾರ್ಫೀಲ್ಡ್ AI ಬಾಟ್‌ಬಾಟ್",
     exp: "ಬ್ರಿಟನ್‌ನಲ್ಲಿ 'ಗಾರ್ಫೀಲ್ಡ್ AI ಬಾಟ್‌ಬಾಟ್' ನ್ಯಾಯಾಲಯದ ವ್ಯಾಪಾರ ಪ್ರಕರಣದಲ್ಲಿ ಯಶಸ್ವಿಯಾಗಿ ವಾದಿಸಿ ಗೆದ್ದ ವಿಶ್ವದ ಮೊದಲ AI ವಕೀಲ ಎನಿಸಿದೆ."
   },
   {
+    originalIndex: 16,
     q: "16. 52ನೇ G-7 ರಾಷ್ಟ್ರಗಳ ವಾರ್ಷಿಕ ಶೃಂಗಸಭೆಯು ಯಾವ ದೇಶದಲ್ಲಿ ಆಯೋಜನೆಗೊಂಡಿತ್ತು?",
     options: ["A) ಇಟಲಿ", "B) ಜರ್ಮನಿ", "C) ಫ್ರಾನ್ಸ್", "D) ಕೆನಡಾ"],
-    correct: 2,
+    correctText: "C) ಫ್ರಾನ್ಸ್",
     exp: "ಪ್ರಮುಖ ಅಭಿವೃದ್ಧಿ ಹೊಂದಿದ ರಾಷ್ಟ್ರಗಳ ಒಕ್ಕೂಟವಾದ 52ನೇ G-7 ವಾರ್ಷಿಕ ಶೃಂಗಸಭೆಯು 'ಫ್ರಾನ್ಸ್' ನಲ್ಲಿ ಜರುಗಿತು."
   },
   {
+    originalIndex: 17,
     q: "17. 2026ರ ಐಸಿಸಿ ಮಹಿಳಾ T-20 ವಿಶ್ವಕಪ್ ಚಾಂಪಿಯನ್ ಪಟ್ಟವನ್ನು ಗೆದ್ದುಕೊಂಡ ತಂಡ ಯಾವುದು?",
     options: ["A) ಇಂಗ್ಲೆಂಡ್", "B) ಭಾರತ", "C) ಆಸ್ಟ್ರೇಲಿಯಾ", "D) ದಕ್ಷಿಣ ಆಫ್ರಿಕಾ"],
-    correct: 2,
+    correctText: "C) ಆಸ್ಟ್ರೇಲಿಯಾ",
     exp: "2026ರ ಐಸಿಸಿ ಮಹಿಳಾ T-20 ವಿಶ್ವಕಪ್ ಫೈನಲ್‌ನಲ್ಲಿ ಇಂಗ್ಲೆಂಡ್ ತಂಡವನ್ನು ಸೋಲಿಸಿ 'ಆಸ್ಟ್ರೇಲಿಯಾ' ತಂಡವು ಚಾಂಪಿಯನ್ ಆಯಿತು."
   },
   {
+    originalIndex: 18,
     q: "18. 'ಪಿಚ್ ಬ್ಲಾಕ್' (Pitch Black) ಜಂಟಿ ದ್ವೈವಾರ್ಷಿಕ ವಾಯುಪಡೆ ಸಮರಾಭ್ಯಾಸವು ಯಾವ ದೇಶಗಳ ನಡುವೆ ನಡೆಯುತ್ತದೆ?",
     options: ["A) ಆಸ್ಟ್ರೇಲಿಯಾ & ಭಾರತ", "B) ಅಮೆರಿಕ & ಭಾರತ", "C) ಜಪಾನ್ & ಭಾರತ", "D) ಫ್ರಾನ್ಸ್ & ಭಾರತ"],
-    correct: 0,
+    correctText: "A) ಆಸ್ಟ್ರೇಲಿಯಾ & ಭಾರತ",
     exp: "'ಪಿಚ್ ಬ್ಲಾಕ್' ಸಮರಾಭ್ಯಾಸವು ಆಸ್ಟ್ರೇಲಿಯಾ ಮತ್ತು ಭಾರತೀಯ ವಾಯುಪಡೆಗಳ (Air Forces) ನಡುವೆ ನಡೆಯುವ ಸಮರಾಭ್ಯಾಸವಾಗಿದೆ."
   },
   {
+    originalIndex: 19,
     q: "19. ಇತ್ತೀಚೆಗೆ ನಿಧನರಾದ ಕೆ.ಟಿ. ಶಿವಪ್ರಸಾದ್ ಅವರು ಯಾವ ಕ್ಷೇತ್ರದಲ್ಲಿ ಅಂತರರಾಷ್ಟ್ರೀಯ ಖ್ಯಾತಿ ಗಳಿಸಿದ್ದರು?",
     options: ["A) ಚಿತ್ರಕಲೆ", "B) ಶಾಸ್ತ್ರೀಯ ಸಂಗೀತ", "C) ರಂಗಭೂಮಿ", "D) ಚಲನಚಿತ್ರ ನಿರ್ದೇಶನ"],
-    correct: 0,
+    correctText: "A) ಚಿತ್ರಕಲೆ",
     exp: "ಕೆ.ಟಿ. ಶಿವಪ್ರಸಾದ್ ಅವರು ಕರ್ನಾಟಕ ಮೂಲದ ಅಂತರರಾಷ್ಟ್ರೀಯ ಖ್ಯಾತಿಯ ಹಿರಿಯ ಚಿತ್ರಕಲಾವಿದರಾಗಿದ್ದರು."
   },
   {
+    originalIndex: 20,
     q: "20. ಭಾರತದಲ್ಲೇ ನಿರ್ಮಿಸಲಾದ 'C-295' ಸೇನಾ ಸಾರಿಗೆ ವಿಮಾನದ ಪ್ರಥಮ ಹಾರಾಟವು ಎಲ್ಲಿ ನಡೆಯಿತು?",
     options: ["A) ಬೆಂಗಳೂರು", "B) ವಡೋದರಾ (ಗುಜರಾತ್)", "C) ಹೈದರಾಬಾದ್", "D) ನಾಸಿಕ್"],
-    correct: 1,
+    correctText: "B) ವಡೋದರಾ (ಗುಜರಾತ್)",
     exp: "ಟಾಟಾ-ಏರ್‌ಬಸ್ ಯೋಜನೆ ಅಡಿಯಲ್ಲಿ ಗುಜರಾತ್‌ನ 'ವಡೋದರಾ' ಘಟಕದಲ್ಲಿ ತಯಾರಾದ C-295 ಸೇನಾ ಸಾರಿಗೆ ವಿಮಾನ ಯಶಸ್ವಿಯಾಗಿ ಮೊದಲ ಹಾರಾಟ ನಡೆಸಿತು."
   },
   {
+    originalIndex: 21,
     q: "21. ಭಾರತದ ಅತ್ಯಂತ ಮೊದಲ 'ಹಸಿರು ಮೆಥನಾಲ್' (Green Methanol) ಉತ್ಪಾದನಾ ಪ್ಲಾಂಟ್ ಎಲ್ಲಿ ಸ್ಥಾಪನೆಗೊಂಡಿದೆ?",
     options: ["A) ಕಚ್ (ಗುಜರಾತ್)", "B) ಮಂಗ್ಲೋರ್ (ಕರ್ನಾಟಕ)", "C) ವಿಶಾಖಪಟ್ಟಣಂ", "D) ಪಾರಾದೀಪ್"],
-    correct: 0,
+    correctText: "A) ಕಚ್ (ಗುಜರಾತ್)",
     exp: "ಗುಜರಾತ್‌ನ 'ಕಚ್' ಪ್ರದೇಶದಲ್ಲಿ ಭಾರತದ ಮೊದಲ ಪ್ರಾಯೋಗಿಕ ಹಸಿರು ಮೆಥನಾಲ್ ಉತ್ಪಾದನಾ ಸ್ಥಾವರವನ್ನು ಸ್ಥಾಪಿಸಲಾಗಿದೆ."
   },
   {
+    originalIndex: 22,
     q: "22. ಕೇಂದ್ರೀಯ ಸಂಸ್ಥೆಯಲ್ಲಿ ಎಐ ಮತ್ತು ದತ್ತಾಂಶ ವಿಜ್ಞಾನದಲ್ಲಿ (AI & Data Science) ಪ್ರತ್ಯೇಕ B.Tech ಕೋರ್ಸ್ ಆರಂಭಿಸಿದ ನಗರ ಯಾವುದು?",
     options: ["A) ದೆಹಲಿ", "B) ಮುಂಬೈ", "C) ಕೊಯಮತ್ತೂರು", "D) ಪುಣೆ"],
-    correct: 0,
+    correctText: "A) ದೆಹಲಿ",
     exp: "ದೆಹಲಿಯ ಕೇಂದ್ರೀಯ ತಾಂತ್ರಿಕ ಸಂಸ್ಥೆಯಲ್ಲಿ AI ಮತ್ತು ಡೇಟಾ ಸೈನ್ಸ್ ವಿಷಯದಲ್ಲಿ ಪದವಿ (B.Tech) ಕೋರ್ಸ್ ಅನ್ನು ಹೊಸದಾಗಿ ಆರಂಭಿಸಲಾಗಿದೆ."
   },
   {
+    originalIndex: 23,
     q: "23. ಬಹುರಾಷ್ಟ್ರೀಯ ಜಂಟಿ ಸೇನಾ ಅಭ್ಯಾಸ 'ಖಾನ್‌ಕ್ವೆಸ್ಟ್' (Khan Quest) ಎಲ್ಲಿ ಜರುಗಿತು?",
     options: ["A) ಉಲಾನ್ ಬಟಾರ್ (ಮಂಗೋಲಿಯಾ)", "B) ಕಠ್ಮಂಡು (ನೇಪಾಳ)", "C) ಢಾಕಾ (ಬಾಂಗ್ಲಾದೇಶ)", "D) ಅಸ್ತಾನಾ (ಕಜಕಸ್ತಾನ್)"],
-    correct: 0,
+    correctText: "A) ಉಲಾನ್ ಬಟಾರ್ (ಮಂಗೋಲಿಯಾ)",
     exp: "ಬಹುರಾಷ್ಟ್ರೀಯ ಸಶಸ್ತ್ರ ಪಡೆಗಳ 'ಖಾನ್‌ಕ್ವೆಸ್ಟ್' ಸೇನಾ ಸಮರಾಭ್ಯಾಸವು ಮಂಗೋಲಿಯಾದ ರಾಜಧಾನಿ 'ಉಲಾನ್ ಬಟಾರ್' ನಲ್ಲಿ ನಡೆಯಿತು."
   },
   {
+    originalIndex: 24,
     q: "24. 'ಇಂಟರ್‌ನ್ಯಾಷನಲ್ ಬೂಕರ್ ಪ್ರಶಸ್ತಿ'ಯನ್ನು ಪ್ರಸ್ತುತ ಏನೆಂದು ಮರುನಾಮಕರಣ ಮಾಡಲಾಗಿದೆ?",
     options: ["A) ಬುಖ್ರಿನ್ ಇಂಟರ್‌ನ್ಯಾಷನಲ್ ಬೂಕರ್ ಪ್ರಶಸ್ತಿ", "B) ಗ್ಲೋಬಲ್ ಸಾಹಿತ್ಯ ಪ್ರಶಸ್ತಿ", "C) ಬೂಕರ್ ಸಾಹಿತ್ಯ ರತ್ನ", "D) ಕಲಿಂಗ ಬೂಕರ್ ಪ್ರಶಸ್ತಿ"],
-    correct: 0,
+    correctText: "A) ಬುಖ್ರಿನ್ ಇಂಟರ್‌ನ್ಯಾಷನಲ್ ಬೂಕರ್ ಪ್ರಶಸ್ತಿ",
     exp: "ಸಾಹಿತ್ಯ ಕ್ಷೇತ್ರದ ಅತ್ಯುನ್ನತ ಇಂಟರ್‌ನ್ಯಾಷನಲ್ ಬೂಕರ್ ಪ್ರಶಸ್ತಿಯ ಹೆಸರನ್ನು 'ಬುಖ್ರಿನ್ ಇಂಟರ್‌ನ್ಯಾಷನಲ್ ಬೂಕರ್ ಪ್ರಶಸ್ತಿ' ಎಂದು ಬದಲಾಯಿಸಲಾಗಿದೆ."
   },
   {
+    originalIndex: 25,
     q: "25. ಅಮೆರಿಕದ ಸ್ವಾತಂತ್ರ್ಯೋತ್ಸವ ಸಂಭ್ರಮದಲ್ಲಿ ಭಾಗವಹಿಸಿದ ಭಾರತೀಯ ನೌಕಾಪಡೆಯ ತರಬೇತಿ ಹಡಗು ಯಾವುದು?",
     options: ["A) INS ತರಂಗಿಣಿ", "B) INS ಸುದರ್ಶಿನಿ", "C) INS ವಿಕ್ರಮಾದಿತ್ಯ", "D) INS ವಿಕ್ರಾಂತ್"],
-    correct: 1,
+    correctText: "B) INS ಸುದರ್ಶಿನಿ",
     exp: "ಅಮೆರಿಕ ದೇಶದ ಸ್ವಾತಂತ್ರ್ಯೋತ್ಸವದ ಸಂಭ್ರಮಾಚರಣೆಯಲ್ಲಿ ಭಾರತೀಯ ನೌಕಾಪಡೆಯ 'INS ಸುದರ್ಶಿನಿ' ನೌಕೆಯು ಭಾಗವಹಿಸಿತ್ತು."
   },
   {
+    originalIndex: 26,
     q: "26. 'ಗ್ರೀನ್ ಆಸ್ಕರ್' ಎಂದೇ ಪ್ರಸಿದ್ಧವಾದ 'ವಿಟ್ಲಿ ಪ್ರಶಸ್ತಿ' (Whitley Award) ಪಡೆದ ಭಾರತೀಯ ಪರಿಸರವಾದಿಗಳು ಯಾರು?",
     options: ["A) ಪೂರ್ಣಿಮಾ ಶರ್ಮ & ಡಾ. ಬರ್ನಾಲ ಸಬ್‌ನೀಸ್", "B) ಸುನೀತಾ ನಾರಾಯಣ್ & ವಂದನಾ ಶಿವ", "C) ತುಳಸಿ ಗೌಡ & ಸಾಲುಮರದ ತಿಮ್ಮಕ್ಕ", "D) ಮೇಧಾ ಪಾಟ್ಕರ್ & ಜಾದವ್ ಪಾಯೆಂಗ್"],
-    correct: 0,
+    correctText: "A) ಪೂರ್ಣಿಮಾ ಶರ್ಮ & ಡಾ. ಬರ್ನಾಲ ಸಬ್‌ನೀಸ್",
     exp: "ವನ್ಯಜೀವಿ ಮತ್ತು ಪರಿಸರ ಸಂರಕ್ಷಣೆಗಾಗಿ ನೀಡಲಾಗುವ 2026ರ 'ವಿಟ್ಲಿ ಪ್ರಶಸ್ತಿ'ಗೆ ಭಾರತದ ಪೂರ್ಣಿಮಾ ಶರ್ಮ ಮತ್ತು ಡಾ. ಬರ್ನಾಲ ಸಬ್‌ನೀಸ್ ಭಾಜನರಾಗಿದ್ದಾರೆ."
   },
   {
+    originalIndex: 27,
     q: "27. ವಿಶ್ವಸಂಸ್ಥೆ ಆಚರಿಸುವ 'ವಿಶ್ವ ಹಾಲಿನ ದಿನ'ವನ್ನು (World Milk Day) ಪ್ರತಿವರ್ಷ ಯಾವ ದಿನಾಂಕದಂದು ಆಚರಿಸಲಾಗುತ್ತದೆ?",
     options: ["A) ಜೂನ್ 01", "B) ಜೂನ್ 05", "C) ಜೂನ್ 12", "D) ಜೂನ್ 29"],
-    correct: 0,
+    correctText: "A) ಜೂನ್ 01",
     exp: "ಪ್ರತಿವರ್ಷ ಜೂನ್ 01 ರಂದು ಜಾಗತಿಕವಾಗಿ 'ವಿಶ್ವ ಹಾಲಿನ ದಿನ'ವನ್ನಾಗಿ ಆಚರಿಸಲಾಗುತ್ತದೆ."
   },
   {
+    originalIndex: 28,
     q: "28. 'ವಿಶ್ವ ಸಾಗರ ದಿನ'ವನ್ನು (World Ocean Day) ಜಾಗತಿಕವಾಗಿ ಯಾವ ದಿನಾಂಕದಂದು ಆಚರಿಸಲಾಗುತ್ತದೆ?",
     options: ["A) ಜೂನ್ 01", "B) ಜೂನ್ 08", "C) ಜೂನ್ 21", "D) ಜೂನ್ 15"],
-    correct: 1,
+    correctText: "B) ಜೂನ್ 08",
     exp: "ಸಾಗರ ಸಂಪನ್ಮೂಲಗಳ ಸಂರಕ್ಷಣೆಗಾಗಿ ಜೂನ್ 08 ರಂದು 'ವಿಶ್ವ ಸಾಗರ ದಿನ'ವನ್ನಾಗಿ ಆಚರಿಸಲಾಗುತ್ತದೆ."
   },
   {
+    originalIndex: 29,
     q: "29. 'ವಿಶ್ವ ಬಾಲಕಾರ್ಮಿಕ ಪದ್ಧತಿ ವಿರೋಧಿ ದಿನ'ವನ್ನು (World Day Against Child Labour) ಯಾವಾಗ ಆಚರಿಸಲಾಗುತ್ತದೆ?",
     options: ["A) ಜೂನ್ 12", "B) ಜೂನ್ 18", "C) ಜೂನ್ 25", "D) ಜೂನ್ 30"],
-    correct: 0,
+    correctText: "A) ಜೂನ್ 12",
     exp: "ಬಾಲಕಾರ್ಮಿಕ ಪದ್ಧತಿಯನ್ನು ನಿರ್ಮೂಲನೆ ಮಾಡುವ ಜಾಗೃತಿಗಾಗಿ ಪ್ರತಿವರ್ಷ ಜೂನ್ 12 ರಂದು ಈ ದಿನವನ್ನು ಆಚರಿಸಲಾಗುತ್ತದೆ."
   },
   {
+    originalIndex: 30,
     q: "30. ಪ್ರಶಾಂತ್ ಚಂದ್ರ ಮಹಲನೋಬಿಸ್ ಅವರ ಜನ್ಮದಿನದ ನೆನಪಿನಲ್ಲಿ ಆಚರಿಸಲಾಗುವ 'ರಾಷ್ಟ್ರೀಯ ಸಂಖ್ಯಾಶಾಸ್ತ್ರ ದಿನ' (National Statistics Day) ಯಾವುದು?",
     options: ["A) ಜೂನ್ 05", "B) ಜೂನ್ 15", "C) ಜೂನ್ 29", "D) ಜುಲೈ 01"],
-    correct: 2,
+    correctText: "C) ಜೂನ್ 29",
     exp: "ಭಾರತದಲ್ಲಿ ಪ್ರತಿವರ್ಷ ಜೂನ್ 29 ರಂದು 'ರಾಷ್ಟ್ರೀಯ ಸಂಖ್ಯಾಶಾಸ್ತ್ರ ದಿನ'ವನ್ನಾಗಿ ಆಚರಿಸಲಾಗುತ್ತದೆ."
   },
   {
+    originalIndex: 31,
     q: "31. ಭಾರತೀಯ ಹವಾಮಾನ ಇಲಾಖೆಯು (IMD) ತನ್ನ 7ನೇ ಪ್ರಾದೇಶಿಕ ಹವಾಮಾನ ಕೇಂದ್ರವನ್ನು ಎಲ್ಲಿ ಉದ್ಘಾಟಿಸಿದೆ?",
     options: ["A) ಶ್ರೀನಗರ", "B) ಜಮ್ಮು", "C) ಲೆಹ್", "D) ಡೆಹರಡೂನ್"],
-    correct: 1,
+    correctText: "B) ಜಮ್ಮು",
     exp: "ಭಾರತದ 7ನೇ ಪ್ರಾದೇಶಿಕ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ ಕೇಂದ್ರವನ್ನು (7th Regional Meteorological Centre) ಜಮ್ಮುವಿನಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾಗಿದೆ."
   },
   {
+    originalIndex: 32,
     q: "32. ದೇಶದ ಮೊದಲ 'ಖಾಸಗಿ ಚಿನ್ನದ ಗಣಿಗಾರಿಕೆ' (Private Gold Mine) ಯೋಜನೆಗೆ ಎಲ್ಲಿ ಚಾಲನೆ ನೀಡಲಾಗಿದೆ?",
     options: ["A) ಕೆ.ಜಿ.ಎಫ್. (ಕೋಲಾರ)", "B) ಜೊನ್ನಗಿರಿ, ಕರ್ನೂಲ್ ಜಿಲ್ಲೆ (ಆಂಧ್ರಪ್ರದೇಶ)", "C) ಹಟ್ಟಿ (ರಾಯಚೂರು)", "D) ಸಿಂಘ್‌ಭೂಮ್ (ಜಾರ್ಖಂಡ್)"],
-    correct: 1,
+    correctText: "B) ಜೊನ್ನಗಿರಿ, ಕರ್ನೂಲ್ ಜಿಲ್ಲೆ (ಆಂಧ್ರಪ್ರದೇಶ)",
     exp: "ಆಂಧ್ರಪ್ರದೇಶದ ಕರ್ನೂಲ್ ಜಿಲ್ಲೆಯ 'ಜೊನ್ನಗಿರಿ'ಯಲ್ಲಿ ದೇಶದ ಮೊದಲ ಖಾಸಗಿ ವಲಯದ ಚಿನ್ನದ ಗಣಿ ಉದ್ಯಮ ಉದ್ಘಾಟನೆಗೊಂಡಿದೆ."
   },
   {
+    originalIndex: 33,
     q: "33. 'ಏರ್‌ಬೌಂಡ್' ಸಂಸ್ಥೆಯೊಂದಿಗೆ ಸೇರಿ ಆಂಧ್ರಪ್ರದೇಶದಲ್ಲಿ 'ವಿಶ್ವದ ಅತಿ ದೊಡ್ಡ ಡ್ರೋನ್ ಡೆಲಿವರಿ ನೆಟ್‌ವರ್ಕ್' ಸ್ಥಾಪಿಸಿದ ನವೋದ್ಯಮ ನಗರ ಯಾವುದು?",
     options: ["A) ಬೆಂಗಳೂರು", "B) ಹೈದರಾಬಾದ್", "C) ಚೆನ್ನೈ", "D) ಪುಣೆ"],
-    correct: 0,
+    correctText: "A) ಬೆಂಗಳೂರು",
     exp: "ಬೆಂಗಳೂರಿನ ನವೋದ್ಯಮ 'ಏರ್‌ಬೌಂಡ್' ಸಂಸ್ಥೆಯು ಆಂಧ್ರಪ್ರದೇಶದಾದ್ಯಂತ ವಿಶ್ವದ ಬೃಹತ್ 'ಡ್ರೋನ್ ಡೆಲಿವರಿ ನೆಟ್‌ವರ್ಕ್' ಆರಂಭಿಸಿದೆ."
   },
   {
+    originalIndex: 34,
     q: "34. ಕರ್ನಾಟಕ ಸರ್ಕಾರವು 2028ರ ವೇಳೆಗೆ ರಾಜ್ಯವನ್ನು 'ನಶೆ ಮುಕ್ತ' ಮಾಡಲು ಆರಂಭಿಸಿದ ಜಾಗೃತಿ ಅಭಿಯಾನಗಳು ಯಾವುವು?",
     options: ["A) ಆಪರೇಷನ್ ರೈಸ್ & ಬೇಡ ಬ್ರೋ", "B) ಶಕ್ತಿ & ಗೃಹಜ್ಯೋತಿ", "C) ಸುರಕ್ಷಾ & ನಿರ್ಭಯ", "D) ಯುವ ಸ್ಪಂದನ"],
-    correct: 0,
+    correctText: "A) ಆಪರೇಷನ್ ರೈಸ್ & ಬೇಡ ಬ್ರೋ",
     exp: "2028ರ ಹೊತ್ತಿಗೆ ಕರ್ನಾಟಕವನ್ನು ಮಾದಕವಸ್ತು ಮುಕ್ತಗೊಳಿಸಲು 'ಆಪರೇಷನ್ ರೈಸ್' ಹಾಗೂ 'ಬೇಡ ಬ್ರೋ' ಜಾಗೃತಿ ಆಂದೋಲನಗಳನ್ನು ಹಮ್ಮಿಕೊಳ್ಳಲಾಗಿದೆ."
   },
   {
+    originalIndex: 35,
     q: "35. 'ನಮೋ ಗ್ರೀನ್ ರೈಲು' ಯೋಜನೆ ಅಡಿಯಲ್ಲಿ ಭಾರತದ ಮೊದಲ 'ಹೈಡ್ರೋಜನ್ ರೈಲು' ಪರೀಕ್ಷಾರ್ಥ ಸಂಚಾರವು ಎಲ್ಲಿ ನಡೆಯಿತು?",
     options: ["A) ಹರಿಯಾಣದ ಜಿಂದ್ - ಸೋನಿಪತ್ ಜಂಕ್ಷನ್", "B) ಮುಂಬೈ - ಪುಣೆ", "C) ಬೆಂಗಳೂರು - ಮೈಸೂರು", "D) ದೆಹಲಿ - ಆಗ್ರಾ"],
-    correct: 0,
+    correctText: "A) ಹರಿಯಾಣದ ಜಿಂದ್ - ಸೋನಿಪತ್ ಜಂಕ್ಷನ್",
     exp: "ಪರಿಸರಸ್ನೇಹಿ ತಂತ್ರಜ್ಞಾನದ ದೇಶದ ಪ್ರಥಮ ಹೈಡ್ರೋಜನ್ ರೈಲಿನ (Namo Green Train) ಪರೀಕ್ಷಾರ್ಥ ಓಟವು ಹರಿಯಾಣದ ಜಿಂದ್‌ನಿಂದ ಸೋನಿಪತ್ ಜಂಕ್ಷನ್ ನಡುವೆ ನಡೆಯಿತು."
   }
 ];
 
+let currentQuizData = [];
 let currentIndex = 0;
-let userAnswers = new Array(quizData.length).fill(null);
+let userAnswers = [];
+let wrongTestCounter = 1;
+
+// Helper function to shuffle an array (Fisher-Yates Shuffle)
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Prepare question data with jumbled options
+function prepareQuestionData(questions) {
+  return questions.map(qObj => {
+    const shuffledOptions = shuffleArray(qObj.options);
+    const correctIdx = shuffledOptions.indexOf(qObj.correctText);
+    return {
+      originalIndex: qObj.originalIndex,
+      q: qObj.q,
+      options: shuffledOptions,
+      correct: correctIdx,
+      correctText: qObj.correctText,
+      exp: qObj.exp
+    };
+  });
+}
 
 function initQuiz() {
+  currentQuizData = prepareQuestionData(originalQuizData);
+  userAnswers = new Array(currentQuizData.length).fill(null);
+  currentIndex = 0;
+  wrongTestCounter = 1;
+  document.getElementById('test-title').innerText = "Karnataka PC & SSC CBT Exam Mock Test";
+  document.getElementById('total-questions').innerText = currentQuizData.length;
   renderPalette();
   loadQuestion(currentIndex);
 }
@@ -292,13 +455,14 @@ function initQuiz() {
 function renderPalette() {
   const palette = document.getElementById('palette');
   palette.innerHTML = '';
-  quizData.forEach((_, index) => {
+  currentQuizData.forEach((qObj, index) => {
     const btn = document.createElement('button');
     btn.className = `palette-btn ${index === currentIndex ? 'active' : ''}`;
-    btn.innerText = index + 1;
+    // Always preserve and show original global question number
+    btn.innerText = qObj.originalIndex;
     
     if (userAnswers[index] !== null) {
-      if (userAnswers[index] === quizData[index].correct) {
+      if (userAnswers[index] === qObj.correct) {
         btn.classList.add('answered-correct');
       } else {
         btn.classList.add('answered-incorrect');
@@ -311,7 +475,7 @@ function renderPalette() {
 }
 
 function loadQuestion(index) {
-  const qData = quizData[index];
+  const qData = currentQuizData[index];
   document.getElementById('question-text').innerText = qData.q;
   
   const optionsContainer = document.getElementById('options-container');
@@ -358,7 +522,7 @@ function loadQuestion(index) {
   }
 
   document.getElementById('prev-btn').disabled = index === 0;
-  document.getElementById('next-btn').disabled = index === quizData.length - 1;
+  document.getElementById('next-btn').disabled = index === currentQuizData.length - 1;
   
   renderPalette();
   updateScore();
@@ -382,7 +546,7 @@ function prevQuestion() {
 }
 
 function nextQuestion() {
-  if (currentIndex < quizData.length - 1) {
+  if (currentIndex < currentQuizData.length - 1) {
     currentIndex++;
     loadQuestion(currentIndex);
   }
@@ -390,9 +554,41 @@ function nextQuestion() {
 
 function updateScore() {
   const score = userAnswers.reduce((acc, ans, idx) => {
-    return ans === quizData[idx].correct ? acc + 1 : acc;
+    return ans === currentQuizData[idx].correct ? acc + 1 : acc;
   }, 0);
   document.getElementById('score').innerText = score;
+}
+
+function retestAll() {
+  initQuiz();
+}
+
+function testWrongAnswers() {
+  const wrongQuestions = [];
+  
+  currentQuizData.forEach((qData, idx) => {
+    if (userAnswers[idx] !== null && userAnswers[idx] !== qData.correct) {
+      // Retrieve original item structure for re-jumbling
+      const origItem = originalQuizData.find(o => o.originalIndex === qData.originalIndex);
+      if (origItem) wrongQuestions.push(origItem);
+    }
+  });
+
+  if (wrongQuestions.length === 0) {
+    alert("No wrong answers found! Excellent job.");
+    return;
+  }
+
+  currentQuizData = prepareQuestionData(wrongQuestions);
+  userAnswers = new Array(currentQuizData.length).fill(null);
+  currentIndex = 0;
+  
+  document.getElementById('test-title').innerText = `Karnataka PC & SSC CBT Exam Mock Test (Wrong Test-${wrongTestCounter})`;
+  wrongTestCounter++;
+  
+  document.getElementById('total-questions').innerText = currentQuizData.length;
+  renderPalette();
+  loadQuestion(currentIndex);
 }
 
 window.onload = initQuiz;
