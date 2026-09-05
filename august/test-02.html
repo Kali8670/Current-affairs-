@@ -6,107 +6,107 @@
     <title>ಸಾಮಾನ್ಯ ಜ್ಞಾನ & ಸಂವಿಧಾನ ರಸಪ್ರಶ್ನೆ (212 ಪ್ರಶ್ನೆಗಳು)</title>
     <style>
         :root {
+            --header-bg: #1a237e;
             --primary-color: #1a73e8;
             --bg-color: #f4f7f6;
             --card-bg: #ffffff;
             --text-color: #333333;
-            --success-color: #28a745;
+            --success-color: #4caf50;
+            --error-color: #f44336;
             --border-color: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
-            padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
-        }
-
-        .score-board {
-            position: sticky;
-            top: 10px;
-            background: var(--primary-color);
+        header {
+            background-color: var(--header-bg);
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: bold;
-            z-index: 100;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        .retest-btn {
-            background-color: #ff9800;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-
-        .retest-btn:hover {
-            background-color: #e68a00;
-        }
-
-        .quiz-item {
-            background: #fafafa;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            transition: border-color 0.2s;
-        }
-
-        .quiz-item:hover {
-            border-color: var(--primary-color);
-        }
-
-        .question {
-            font-size: 1.05rem;
+        header h1 {
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 12px;
+        }
+
+        .timer-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ff5252;
+            border: 1px solid #ff5252;
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .quiz-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .quiz-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
             line-height: 1.5;
         }
 
-        .options {
+        .options-grid {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
 
         .option-btn {
             background: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 10px 15px;
+            border: 1.5px solid var(--border-color);
+            padding: 12px 18px;
             text-align: left;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.95rem;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            color: var(--text-color);
         }
 
         .option-btn:hover:not([disabled]) {
@@ -115,40 +115,211 @@
         }
 
         .option-btn.correct {
-            background-color: #d4edda !important;
-            border-color: #28a745 !important;
-            color: #155724;
+            background-color: #e8f5e9 !important;
+            border-color: var(--success-color) !important;
+            color: #1b5e20 !important;
             font-weight: bold;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
         }
 
         .option-btn.wrong {
-            background-color: #f8d7da !important;
-            border-color: #dc3545 !important;
-            color: #721c24;
+            background-color: #ffebee !important;
+            border-color: var(--error-color) !important;
+            color: #b71c1c !important;
+            box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
         }
 
         .explanation {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #e7f3fe;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e8f0fe;
             border-left: 4px solid var(--primary-color);
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             display: none;
-            border-radius: 0 4px 4px 0;
+            border-radius: 0 6px 6px 0;
+            line-height: 1.4;
+        }
+
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .nav-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .side-panel {
+            width: 320px;
+            display: flex;
+            flex-direction: flex-col;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .panel-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .score-info {
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-btn {
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: transform 0.1s, box-shadow 0.2s;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        .retest-all-btn {
+            background-color: var(--success-color);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+        }
+
+        .test-wrong-btn {
+            background-color: var(--error-color);
+            box-shadow: 0 0 10px rgba(244, 67, 54, 0.7);
+        }
+
+        .palette-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .palette-btn {
+            aspect-ratio: 1;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .palette-btn.active {
+            border: 2px solid var(--primary-color) !important;
+            background-color: #e8f0fe;
+        }
+
+        .palette-btn.correct {
+            background-color: var(--success-color) !important;
+            color: white;
+            border-color: var(--success-color);
+            box-shadow: 0 0 6px rgba(76, 175, 80, 0.8);
+        }
+
+        .palette-btn.wrong {
+            background-color: var(--error-color) !important;
+            color: white;
+            border-color: var(--error-color);
+            box-shadow: 0 0 6px rgba(244, 67, 54, 0.8);
+        }
+
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .side-panel {
+                width: 100%;
+            }
+            .palette-grid {
+                grid-template-columns: repeat(8, 1fr);
+                max-height: 200px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>ಸಾಮಾನ್ಯ ಜ್ಞಾನ & ಸಂವಿಧಾನ ರಸಪ್ರಶ್ನೆ</h1>
-    
-    <div class="score-board">
-        <span>ಫಲಿತಾಂಶ: <span id="score">0</span> / 212</span>
-        <button class="retest-btn" onclick="resetQuiz()">Retest / ಪುನಃ ಪ್ರಯತ್ನಿಸಿ</button>
+<header>
+    <h1 id="header-title">ಸಾಮಾನ್ಯ ಜ್ಞಾನ & ಸಂವಿಧಾನ ರಸಪ್ರಶ್ನೆ</h1>
+    <div class="timer-box" id="timer">⏱️ 00:00:00</div>
+</header>
+
+<div class="main-layout">
+    <div class="quiz-container">
+        <div class="quiz-card" id="quiz-card">
+            <div class="question-title" id="q-title">ಲೋಡ್ ಆಗುತ್ತಿದೆ...</div>
+            <div class="options-grid" id="options-grid"></div>
+            <div class="explanation" id="explanation"></div>
+        </div>
+
+        <div class="nav-controls">
+            <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">← ಹಿಂದಿನ (Previous)</button>
+            <button class="nav-btn" id="next-btn" onclick="navigate(1)">ಮುಂದಿನ (Next) →</button>
+        </div>
     </div>
 
-    <div id="quiz-container"></div>
+    <div class="side-panel">
+        <div class="panel-card">
+            <div class="score-info">
+                <span>ಫಲಿತಾಂಶ Score:</span>
+                <span id="score-display">0 / 212</span>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn retest-all-btn" onclick="retestAll()">ಮರುಪರೀಕ್ಷೆ (Retest All)</button>
+                <button class="action-btn test-wrong-btn" onclick="testWrongAnswers()">Test Wrong Answers</button>
+            </div>
+
+            <div class="palette-title">ಪ್ರಶ್ನೆಗಳ ವಿವರ (Question Palette):</div>
+            <div class="palette-grid" id="palette-grid"></div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -283,7 +454,7 @@ const rawData = [
     "128. ರಾಜ್ಯದ ಪ್ರಥಮ ಸಾವಯವ ತಾಲೂಕು/ಜಿಲ್ಲೆ ಅಭಿವೃದ್ಧಿ ಯೋಜನೆಗಳು 2025-26 ಬಜೆಟ್‌ನಲ್ಲಿ ಘೋಷಿತವಾಗಿವೆ",
     "129. ಅನಂತ ಯೋಜನೆ: ಸೋಲಾರ್ ಮೈಕ್ರೋಕ್ರಿಡ್‌ಗಳನ್ನು ಸಾರ್ವಜನಿಕ-ಖಾಸಗಿ ಸಹಭಾಗಿತ್ವದಲ್ಲಿ (PPP) ಸ್ಥಾಪಿಸುವ ಯೋಜನೆ",
     "130. ಧಾರವಾಡ ಕೈಗಾರಿಕಾ ನೋಡ್: ಬೆಂಗಳೂರು-ಮುಂಬೈ ಕೈಗಾರಿಕಾ ಕಾರಿಡಾರ್ ಯೋಜನೆ ಅಡಿ ₹30,000 ಕೋಟಿ ಹೂಡಿಕೆ",
-    "131. ಲಕ್ಕುಂಡಿ ಪ್ರವಾಸೋದ್ಯಮ ಸರ್ಕ್ಯೂಟ್: ಗದಗ ಜಿಲ್ಲೆಯ ಲಕ್ಕುಂಡಿ ಇತಿಹಾಸ ಪ್ರಸಿದ್ಧ ಪ್ರವಾಸಿ ತಾಣ ಅಭಿವೃದ್ಧಿ",
+    "131. ಲಕ್ಕುಂಡಿ ಪ್ರವಾಸೋದ್ಯಮ ಸರ್ಕ್ಯೂಟ್: ಗಗದ ಜಿಲ್ಲೆಯ ಲಕ್ಕುಂಡಿ ಇತಿಹಾಸ ಪ್ರಸಿದ್ಧ ಪ್ರವಾಸಿ ತಾಣ ಅಭಿವೃದ್ಧಿ",
     "132. ಡ್ರೋನ್ ಪರೀಕ್ಷಾ ಕೇಂದ್ರ: ಚಿಕ್ಕಬಳ್ಳಾಪುರ ಜಿಲ್ಲೆಯಲ್ಲಿ ಡ್ರೋನ್ ಟೆಸ್ಟಿಂಗ್ ಸೌಲಭ್ಯಕ್ಕೆ ಅವಕಾಶ",
     "133. ಕನ್ನಡ ಕಲಿ ಮತ್ತು ನುಡಿ ತಂತ್ರಾಂಶಗಳು ಕನ್ನಡ ಭಾಷಾ ಅಭಿವೃದ್ಧಿಗೆ ಪೂರಕವಾಗಿವೆ",
     "134. ಭೂಮಿ 8.0 ಸಾಫ್ಟ್‌ವೇರ್: ಕಂದಾಯ ದಾಖಲೆಗಳ ಡಿಜಿಟಲೀಕರಣದ ಹೊಸ ಆವೃತ್ತಿ",
@@ -367,120 +538,208 @@ const rawData = [
     "212. NSDP (Net State Domestic Product): ನಿವ್ವಳ ರಾಜ್ಯ ದೇಶೀಯ ಉತ್ಪನ್ನ - GSDP ಯಿಂದ ಸವಕಳಿ ವೆಚ್ಚವನ್ನು (Depreciation) ಕಳೆದಾಗ ಸಿಗುವ ಮೌಲ್ಯ"
 ];
 
-function generateQuizData() {
-    return rawData.map((item, index) => {
+function shuffleArray(array) {
+    let arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function processQuestions() {
+    return rawData.map((item) => {
         const parts = item.split(". ");
-        const qNum = parts[0];
+        const originalId = parseInt(parts[0]);
         const content = parts.slice(1).join(". ");
         
         let questionText = "";
         let correctAnswer = "";
-        let wrongAnswers = [];
 
         if (content.includes(":")) {
             const splitContent = content.split(":");
             questionText = splitContent[0].trim() + " ಎಂದರೇನು/ಯಾರು?";
             correctAnswer = splitContent[1].trim();
         } else {
-            questionText = `ಪಾಯಿಂಟ್ ${qNum} ಗೆ ಸಂಬಂಧಿಸಿದ ಸರಿಯಾದ ಮಾಹಿತಿ ಯಾವುದು?`;
+            questionText = `ಪಾಯಿಂಟ್ ${originalId} ಗೆ ಸಂಬಂಧಿಸಿದ ಸರಿಯಾದ ಮಾಹಿತಿ ಯಾವುದು?`;
             correctAnswer = content.trim();
         }
 
-        wrongAnswers = [
+        const wrongAnswers = [
             "ಮೇಲಿನ ಯಾವುದೂ ಅಲ್ಲ",
             "ಇದು ಸಂವಿಧಾನದ 370ನೇ ವಿಧಿಗೆ ಸಂಬಂಧಿಸಿದೆ",
             "ಇದು ಕೇವಲ ಕೇಂದ್ರ ಸರ್ಕಾರಕ್ಕೆ ಮಾತ್ರ ಅನ್ವಯಿಸುತ್ತದೆ"
         ];
 
-        let options = [correctAnswer, ...wrongAnswers];
-        options.sort(() => Math.random() - 0.5);
+        let options = shuffleArray([correctAnswer, ...wrongAnswers]);
 
         return {
-            id: index + 1,
-            question: `${qNum}. ${questionText}`,
+            originalId: originalId,
+            question: `${originalId}. ${questionText}`,
             options: options,
             correct: correctAnswer,
-            fullText: content
+            fullText: content,
+            userSelected: null,
+            isCorrect: null
         };
     });
 }
 
-const quizData = generateQuizData();
-let score = 0;
-let answeredQuestions = new Set();
+let allQuestions = processQuestions();
+let currentActiveQuestions = [...allQuestions];
+let currentIndex = 0;
+let wrongTestCount = 1;
+let secondsElapsed = 0;
+let timerInterval = null;
 
-function renderQuiz() {
-    const container = document.getElementById('quiz-container');
-    container.innerHTML = '';
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        secondsElapsed++;
+        let hrs = Math.floor(secondsElapsed / 3600);
+        let mins = Math.floor((secondsElapsed % 3600) / 60);
+        let secs = secondsElapsed % 60;
+        document.getElementById('timer').innerText = 
+            `⏱️ ${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }, 1000);
+}
 
-    quizData.forEach((q) => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'quiz-item';
-        itemDiv.id = `q-${q.id}`;
+function renderQuestion() {
+    const q = currentActiveQuestions[currentIndex];
+    if (!q) return;
 
-        const qTitle = document.createElement('div');
-        qTitle.className = 'question';
-        qTitle.innerText = q.question;
-        itemDiv.appendChild(qTitle);
+    document.getElementById('q-title').innerText = q.question;
+    const optionsGrid = document.getElementById('options-grid');
+    optionsGrid.innerHTML = '';
 
-        const optionsDiv = document.createElement('div');
-        optionsDiv.className = 'options';
+    q.options.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt;
 
-        q.options.forEach((opt) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(q.id, opt, q.correct, btn);
-            optionsDiv.appendChild(btn);
-        });
+        if (q.userSelected !== null) {
+            btn.disabled = true;
+            if (opt === q.correct) {
+                btn.classList.add('correct');
+            }
+            if (q.userSelected === opt && !q.isCorrect) {
+                btn.classList.add('wrong');
+            }
+        } else {
+            btn.onclick = () => selectOption(opt);
+        }
 
-        itemDiv.appendChild(optionsDiv);
+        optionsGrid.appendChild(btn);
+    });
 
-        const expDiv = document.createElement('div');
-        expDiv.className = 'explanation';
-        expDiv.id = `exp-${q.id}`;
+    const expDiv = document.getElementById('explanation');
+    if (q.userSelected !== null) {
+        expDiv.style.display = 'block';
         expDiv.innerHTML = `<strong>ಸರಿಯಾದ ಮಾಹಿತಿ:</strong> ${q.fullText}`;
-        itemDiv.appendChild(expDiv);
+    } else {
+        expDiv.style.display = 'none';
+    }
 
-        container.appendChild(itemDiv);
+    document.getElementById('prev-btn').disabled = currentIndex === 0;
+    document.getElementById('next-btn').disabled = currentIndex === currentActiveQuestions.length - 1;
+
+    updatePalette();
+    updateScoreDisplay();
+}
+
+function selectOption(selectedOpt) {
+    const q = currentActiveQuestions[currentIndex];
+    if (q.userSelected !== null) return;
+
+    q.userSelected = selectedOpt;
+    q.isCorrect = (selectedOpt === q.correct);
+
+    renderQuestion();
+}
+
+function navigate(direction) {
+    const newIndex = currentIndex + direction;
+    if (newIndex >= 0 && newIndex < currentActiveQuestions.length) {
+        currentIndex = newIndex;
+        renderQuestion();
+    }
+}
+
+function updatePalette() {
+    const paletteGrid = document.getElementById('palette-grid');
+    paletteGrid.innerHTML = '';
+
+    currentActiveQuestions.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'palette-btn';
+        btn.innerText = q.originalId;
+
+        if (idx === currentIndex) {
+            btn.classList.add('active');
+        }
+
+        if (q.userSelected !== null) {
+            if (q.isCorrect) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+            }
+        }
+
+        btn.onclick = () => {
+            currentIndex = idx;
+            renderQuestion();
+        };
+
+        paletteGrid.appendChild(btn);
     });
 }
 
-function checkAnswer(qId, selectedOpt, correctOpt, btnElement) {
-    if (answeredQuestions.has(qId)) return;
-    answeredQuestions.add(qId);
+function updateScoreDisplay() {
+    const correctCount = currentActiveQuestions.filter(q => q.isCorrect === true).length;
+    document.getElementById('score-display').innerText = `${correctCount} / ${currentActiveQuestions.length}`;
+}
 
-    const parentDiv = document.getElementById(`q-${qId}`);
-    const buttons = parentDiv.querySelectorAll('.option-btn');
-    const expDiv = document.getElementById(`exp-${qId}`);
+function retestAll() {
+    allQuestions.forEach(q => {
+        q.userSelected = null;
+        q.isCorrect = null;
+        q.options = shuffleArray(q.options);
+    });
+    currentActiveQuestions = [...allQuestions];
+    currentIndex = 0;
+    wrongTestCount = 1;
+    document.getElementById('header-title').innerText = "ಸಾಮಾನ್ಯ ಜ್ಞಾನ & ಸಂವಿಧಾನ ರಸಪ್ರಶ್ನೆ";
+    secondsElapsed = 0;
+    startTimer();
+    renderQuestion();
+}
 
-    buttons.forEach(b => b.disabled = true);
+function testWrongAnswers() {
+    const wrongQuestions = currentActiveQuestions.filter(q => q.userSelected !== null && q.isCorrect === false);
 
-    if (selectedOpt === correctOpt) {
-        btnElement.classList.add('correct');
-        score++;
-        document.getElementById('score').innerText = score;
-    } else {
-        btnElement.classList.add('wrong');
-        buttons.forEach(b => {
-            if (b.innerText === correctOpt) {
-                b.classList.add('correct');
-            }
-        });
+    if (wrongQuestions.length === 0) {
+        alert("ತಪ್ಪು ಉತ್ತರ ನೀಡಿದ ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ! (No incorrect answers found to re-test.)");
+        return;
     }
-    expDiv.style.display = 'block';
+
+    wrongQuestions.forEach(q => {
+        q.userSelected = null;
+        q.isCorrect = null;
+        q.options = shuffleArray(q.options);
+    });
+
+    currentActiveQuestions = wrongQuestions;
+    currentIndex = 0;
+    document.getElementById('header-title').innerText = `ಸಾಮಾನ್ಯ ಜ್ಞಾನ & ಸಂವಿಧಾನ - Wrong Test-${wrongTestCount}`;
+    wrongTestCount++;
+
+    renderQuestion();
 }
 
-function resetQuiz() {
-    score = 0;
-    answeredQuestions.clear();
-    document.getElementById('score').innerText = score;
-    renderQuiz();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Initialize Quiz on page load
-renderQuiz();
+// Initial Run
+startTimer();
+renderQuestion();
 </script>
 
 </body>
