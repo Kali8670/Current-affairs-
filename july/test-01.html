@@ -7,46 +7,135 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background-color: #f4f6f9; color: #333; }
-    header { background-color: #0d3b66; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #002244; }
-    header h1 { font-size: 1.1rem; }
-    .timer { background: #b7094c; padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
+    
+    /* Dark Blue Header */
+    header { 
+      background-color: #1a237e; 
+      color: white; 
+      padding: 12px 20px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      border-bottom: 3px solid #0d47a1; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    header h1 { font-size: 1.1rem; font-weight: 600; }
+    .timer { 
+      background: #dc3545; 
+      padding: 6px 14px; 
+      border-radius: 4px; 
+      font-weight: bold; 
+      font-size: 0.9rem; 
+      box-shadow: 0 0 8px rgba(220, 53, 69, 0.6);
+    }
     
     .container { display: flex; max-width: 1200px; margin: 15px auto; gap: 15px; padding: 0 10px; }
-    .main-content { flex: 3; background: white; border: 1px solid #ccc; border-radius: 4px; padding: 20px; min-height: 500px; }
-    .sidebar { flex: 1; background: white; border: 1px solid #ccc; border-radius: 4px; padding: 15px; }
+    .main-content { flex: 3; background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; min-height: 500px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .sidebar { flex: 1; background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     
     .q-header { font-size: 1.05rem; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; line-height: 1.5; }
     .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-    .option-btn { padding: 12px 15px; border: 1px solid #ccc; border-radius: 4px; background: #fff; text-align: left; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; transition: background 0.2s; }
-    .option-btn:hover { background: #f0f4f8; }
+    .option-btn { 
+      padding: 12px 15px; 
+      border: 1px solid #ccc; 
+      border-radius: 4px; 
+      background: #fff; 
+      text-align: left; 
+      cursor: pointer; 
+      font-size: 0.95rem; 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      transition: all 0.2s; 
+    }
+    .option-btn:hover:not(:disabled) { background: #f0f4f8; border-color: #1a237e; }
     
-    /* Result Styles matching screenshot */
-    .option-btn.selected-correct { background-color: #d4edda; border-color: #28a745; color: #155724; font-weight: bold; }
-    .option-btn.selected-incorrect { background-color: #f8d7da; border-color: #dc3545; color: #721c24; }
-    .option-btn.show-correct { background-color: #d4edda; border-color: #28a745; color: #155724; }
+    /* Result Styles with Glow Effects */
+    .option-btn.selected-correct, .option-btn.show-correct { 
+      background-color: #d4edda !important; 
+      border-color: #28a745 !important; 
+      color: #155724 !important; 
+      font-weight: bold;
+      box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+    }
+    .option-btn.selected-incorrect { 
+      background-color: #f8d7da !important; 
+      border-color: #dc3545 !important; 
+      color: #721c24 !important; 
+      box-shadow: 0 0 8px rgba(220, 53, 69, 0.5);
+    }
     
-    .explanation-box { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 4px; font-size: 0.9rem; margin-top: 15px; line-height: 1.5; }
-    .explanation-box.correct { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+    .explanation-box { 
+      background-color: #f8d7da; 
+      border: 1px solid #f5c6cb; 
+      color: #721c24; 
+      padding: 15px; 
+      border-radius: 4px; 
+      font-size: 0.9rem; 
+      margin-top: 15px; 
+      line-height: 1.5; 
+      box-shadow: 0 0 6px rgba(220, 53, 69, 0.2);
+    }
+    .explanation-box.correct { 
+      background-color: #d4edda; 
+      border-color: #c3e6cb; 
+      color: #155724; 
+      box-shadow: 0 0 6px rgba(40, 167, 69, 0.2);
+    }
     .explanation-box h4 { font-size: 0.95rem; margin-bottom: 5px; }
     
     .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
-    .nav-btn { padding: 8px 16px; border: none; background: #0d3b66; color: white; border-radius: 4px; cursor: pointer; }
+    .nav-btn { padding: 8px 16px; border: none; background: #1a237e; color: white; border-radius: 4px; cursor: pointer; font-weight: 500; }
     .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
 
-    /* Question Palette */
+    /* Action Control Buttons Styling */
+    .action-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px; }
+    .btn-retest { 
+      padding: 10px; 
+      border: none; 
+      background-color: #28a745; 
+      color: white; 
+      border-radius: 4px; 
+      font-weight: bold; 
+      cursor: pointer; 
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.7); 
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-retest:hover { box-shadow: 0 0 14px rgba(76, 175, 80, 0.9); transform: translateY(-1px); }
+    
+    .btn-wrong-test { 
+      padding: 10px; 
+      border: none; 
+      background-color: #dc3545; 
+      color: white; 
+      border-radius: 4px; 
+      font-weight: bold; 
+      cursor: pointer; 
+      box-shadow: 0 0 10px rgba(244, 67, 54, 0.7); 
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-wrong-test:hover { box-shadow: 0 0 14px rgba(244, 67, 54, 0.9); transform: translateY(-1px); }
+
+    /* Sidebar Palette Grid */
     .sidebar h3 { font-size: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 12px; text-align: center; }
-    .palette-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+    .palette-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; max-height: 320px; overflow-y: auto; padding: 2px; }
     .palette-btn { padding: 8px 0; border: 1px solid #bbb; background: #fff; cursor: pointer; border-radius: 3px; font-size: 0.85rem; font-weight: bold; }
-    .palette-btn.active { border: 2px solid #000; }
-    .palette-btn.answered-correct { background-color: #28a745; color: white; border-color: #28a745; }
-    .palette-btn.answered-incorrect { background-color: #dc3545; color: white; border-color: #dc3545; }
+    .palette-btn.active { border: 2px solid #1a237e; box-shadow: 0 0 6px #1a237e; font-weight: 800; }
+    .palette-btn.answered-correct { background-color: #28a745; color: white; border-color: #28a745; box-shadow: 0 0 6px rgba(40, 167, 69, 0.7); }
+    .palette-btn.answered-incorrect { background-color: #dc3545; color: white; border-color: #dc3545; box-shadow: 0 0 6px rgba(220, 53, 69, 0.7); }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .sidebar { order: 2; }
+      .main-content { order: 1; }
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Karnataka PC & SSC CBT Exam Mock Test</h1>
-  <div class="timer">Time Remaining: <span id="timer">14:46</span></div>
+  <h1 id="test-title">Karnataka PC & SSC CBT Exam Mock Test</h1>
+  <div class="timer">Time Remaining: <span id="timer">15:00</span></div>
 </header>
 
 <div class="container">
@@ -62,217 +151,289 @@
 
   <div class="sidebar">
     <h3>Question Palette</h3>
-    <p style="font-size:0.85rem; text-align:center;">Score: <span id="score">0</span> / 33</p>
+    <p style="font-size:0.85rem; text-align:center;">Score: <span id="score">0</span> / <span id="total-questions">33</span></p>
     <div class="palette-grid" id="palette"></div>
+    
+    <div class="action-buttons">
+      <button class="btn-retest" onclick="retestAll()">ಮರುಪರೀಕ್ಷೆ (Retest All)</button>
+      <button class="btn-wrong-test" onclick="testWrongAnswers()">Test Wrong Answers</button>
+    </div>
   </div>
 </div>
 
 <script>
-const quizData = [
+const originalQuizData = [
   {
+    originalIndex: 1,
     q: "1. 19ನೇ ವರ್ಷದ 'ಸ್ಪರ್ಧಾ ವಿಜೇತ' ಮಾಸಪತ್ರಿಕೆಯು ಯಾವ ಮಾಸಿಕ ಆವೃತ್ತಿಯಾಗಿದೆ?",
     options: ["A) ಜೂನ್ 2026", "B) ಜುಲೈ 2026", "C) ಆಗಸ್ಟ್ 2026", "D) ಜನವರಿ 2026"],
-    correct: 1,
+    correctText: "B) ಜುಲೈ 2026",
     exp: "ಸ್ಪರ್ಧಾ ವಿಜೇತ ಪತ್ರಿಕೆಯ ಈ ಸಂಚಿಕೆಯು 'ಜುಲೈ 2026' ಅವಧಿಯದ್ದಾಗಿದ್ದು, ಇದು 19ನೇ ವರ್ಷದ ಸಂಭ್ರಮಾಚರಣೆಯ ಸಂಪುಟ-19, ಸಂಚಿಕೆ-226 ಆಗಿದೆ."
   },
   {
+    originalIndex: 2,
     q: "2. ಇತ್ತೀಚೆಗೆ 'ವಿಶ್ವದ ಮೊದಲ ಟ್ರಿಲಿಯನಿಯರ್' ಎಂದು ಗುರುತಿಸಿಕೊಂಡವರು ಯಾರು?",
     options: ["A) ಜೆಫ್ ಬೆಜೋಸ್", "B) ಬರ್ನಾರ್ಡ್ ಅರ್ನಾಲ್ಟ್", "C) ಎಲಾನ್ ಮಸ್ಕ್", "D) ಗೌತಮ್ ಅದಾನಿ"],
-    correct: 2,
+    correctText: "C) ಎಲಾನ್ ಮಸ್ಕ್",
     exp: "ಟೆಸ್ಲಾ ಹಾಗೂ ಸ್ಪೇಸ್‌ಎಕ್ಸ್ ಕಂಪನಿಯ ಮುಖ್ಯಸ್ಥರಾದ ಎಲಾನ್ ಮಸ್ಕ್ ಅವರು ವಿಶ್ವದ ಮೊದಲ ಟ್ರಿಲಿಯನಿಯರ್ ಆಗಿ ಹೊರಹೊಮ್ಮಿದ್ದಾರೆ."
   },
   {
+    originalIndex: 3,
     q: "3. ಸುಪ್ರೀಂ ಕೋರ್ಟ್‌ನ ಕಾನೂನು ಸೇವೆಗಳ ಸಮಿತಿಯ ಅಧ್ಯಕ್ಷರಾಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
     options: ["A) ನ್ಯಾಯ. ಬಿ.ವಿ. ನಾಗರತ್ನ", "B) ನ್ಯಾಯ. ಡಿ.ವೈ. ಚಂದ್ರಚೂಡ್", "C) ನ್ಯಾಯ. ಸಂಜೀವ್ ಖನ್ನಾ", "D) ನ್ಯಾಯ. ಬಿ.ಆರ್. ಗವಾಯಿ"],
-    correct: 0,
+    correctText: "A) ನ್ಯಾಯ. ಬಿ.ವಿ. ನಾಗರತ್ನ",
     exp: "ಸುಪ್ರೀಂ ಕೋರ್ಟ್‌ನ ಹಿರಿಯ ನ್ಯಾಯಮೂರ್ತಿಗಳಾದ ನ್ಯಾಯ. ಬಿ.ವಿ. ನಾಗರತ್ನ ಅವರು ಸುಪ್ರೀಂ ಕೋರ್ಟ್‌ನ ಕಾನೂನು ಸೇವೆಗಳ ಸಮಿತಿಯ ಅಧ್ಯಕ್ಷರಾಗಿ ನೇಮಕಗೊಂಡಿದ್ದಾರೆ."
   },
   {
+    originalIndex: 4,
     q: "4. ಹೆಚ್‌ಡಿಎಫ್‌ಸಿ (HDFC) ಬ್ಯಾಂಕ್‌ನ ನೂತನ ಅಧ್ಯಕ್ಷರಾಗಿ ಯಾರು ಆಯ್ಕೆಯಾಗಿದ್ದಾರೆ?",
     options: ["A) ಶಕ್ತಿಕಾಂತ್ ದಾಸ್", "B) ಸುನಿಲ್ ಅರೋರಾ", "C) ರಾಜೀವ್ ಕುಮಾರ್", "D) ಸುಶೀಲ್ ಚಂದ್ರ"],
-    correct: 2,
+    correctText: "C) ರಾಜೀವ್ ಕುಮಾರ್",
     exp: "ಮಾಜಿ ಮುಖ್ಯ ಚುನಾವಣಾ ಆಯುಕ್ತರಾದ 'ರಾಜೀವ್ ಕುಮಾರ್' ಅವರನ್ನು ಹೆಚ್‌ಡಿಎಫ್‌ಸಿ ಬ್ಯಾಂಕ್‌ನ ನೂತನ ಅಧ್ಯಕ್ಷರನ್ನಾಗಿ ನೇಮಕ ಮಾಡಲಾಗಿದೆ."
   },
   {
+    originalIndex: 5,
     q: "5. ಭಾರತೀಯ ಗುಪ್ತಚರ ಇಲಾಖೆ (IB) ಯ ನೂತನ ಮುಖ್ಯಸ್ಥರಾಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
     options: ["A) ತಪನ್ ದೇಕಾ", "B) ಮಹೇಶ್ ದೀಕ್ಷಿತ್", "C) ರವಿ ಸಿನ್ಹಾ", "D) ಸಮಂತ್ ಗೋಯಲ್"],
-    correct: 1,
+    correctText: "B) ಮಹೇಶ್ ದೀಕ್ಷಿತ್",
     exp: "ಮಹೇಶ್ ದೀಕ್ಷಿತ್ ಅವರು ಭಾರತದ ಪ್ರಮುಖ ಗುಪ್ತಚರ ಸಂಸ್ಥೆಯಾದ IB (Intelligence Bureau) ಯ ನೂತನ ಮುಖ್ಯಸ್ಥರಾಗಿ ಬಾಧ್ಯತೆ ವಹಿಸಿಕೊಂಡಿದ್ದಾರೆ."
   },
   {
+    originalIndex: 6,
     q: "6. ಭಾರತೀಯ ಭೂಸೇನೆಯ (Indian Army) 31ನೇ ಮುಖ್ಯಸ್ಥರಾಗಿ ಯಾರು ಅಧಿಕಾರ ವಹಿಸಿಕೊಂಡಿದ್ದಾರೆ?",
     options: ["A) ಜನರಲ್ ಮನೋಜ್ ಪಾಂಡೆ", "B) ಜನರಲ್ ಉಪೇಂದ್ರ ದ್ವಿವೇದಿ", "C) ಜನರಲ್ ಧೀರಜ್ ಸೇಠ್", "D) ಜನರಲ್ ಅನಿಲ್ ಚೌಹಾಣ್"],
-    correct: 2,
+    correctText: "C) ಜನರಲ್ ಧೀರಜ್ ಸೇಠ್",
     exp: "ಜನರಲ್ 'ಧೀರಜ್ ಸೇಠ್' ಅವರು ಭಾರತೀಯ ಭೂಸೇನೆಯ 31ನೇ ನೂತನ ಭೂಸೇನಾ ಮುಖ್ಯಸ್ಥರಾಗಿ (Chief of Army Staff) ಅಧಿಕಾರ ವಹಿಸಿಕೊಂಡಿದ್ದಾರೆ."
   },
   {
+    originalIndex: 7,
     q: "7. 16ನೇ ಬ್ರಿಕ್ಸ್ (BRICS) ಕೃಷಿ ಸಚಿವರ ಸಭೆಯಲ್ಲಿ ಅಂಗೀಕರಿಸಲ್ಪಟ್ಟ ಘೋಷಣೆ ಯಾವುದು?",
     options: ["A) ದೆಹಲಿ ಘೋಷಣೆ", "B) ಇಂದೋರ್ ಘೋಷಣೆ", "C) ಬೆಜೈಂಗ್ ಘೋಷಣೆ", "D) ಜೋಹಾನ್ಸ್‌ಬರ್ಗ್ ಘೋಷಣೆ"],
-    correct: 1,
+    correctText: "B) ಇಂದೋರ್ ಘೋಷಣೆ",
     exp: "16ನೇ ಬ್ರಿಕ್ಸ್ ಕೃಷಿ ಸಚಿವರ ಸಭೆಯು ಭಾರತದ ಮಧ್ಯಪ್ರದೇಶದ ಇಂದೋರ್‌ನಲ್ಲಿ ನಡೆದಿದ್ದು, ಇದರಲ್ಲಿ 'ಇಂದೋರ್ ಘೋಷಣೆ'ಯನ್ನು ಅಂಗೀಕರಿಸಲಾಯಿತು."
   },
   {
+    originalIndex: 8,
     q: "8. 2026ರ ಬ್ರಿಕ್ಸ್ (BRICS) ಶೃಂಗಸಭೆಗೆ ಭಾರತದ 'ಷೇರ್ಪಾ' (Sherpa) ಆಗಿ ಯಾರು ನೇಮಕಗೊಂಡಿದ್ದಾರೆ?",
     options: ["A) ಸುಧಾಕರ್ ದಲೇಲಾ", "B) ಶಂಭು ಎಲ್. ಹಕ್ಕಿ", "C) ವಿನಯ್ ಮೋಹನ್ ಕ್ವಾತ್ರಾ", "D) ಎಸ್. ಜೈಶಂಕರ್"],
-    correct: 0,
+    correctText: "A) ಸುಧಾಕರ್ ದಲೇಲಾ",
     exp: "BRICS INDIA 2026 ಗಾಗಿ ಸುಧಾಕರ್ ದಲೇಲಾ ಅವರನ್ನು ಭಾರತದ 'ಷೇರ್ಪಾ' ಆಗಿ ಹಾಗೂ ಶ್ರೀ ಶಂಭು ಎಲ್. ಹಕ್ಕಿ ಅವರನ್ನು ಸೋಸ್‌ಷೇರ್ಪಾ ಆಗಿ ನೇಮಿಸಲಾಗಿದೆ."
   },
   {
+    originalIndex: 9,
     q: "9. ಇತ್ತೀಚೆಗೆ ಒಡಿಶಾದ 'ಕಟಕ್' (Cuttack) ನಗರದ ಅಧಿಕೃತ ಹೆಸರನ್ನು ಏನೆಂದು ಬದಲಾಯಿಸಲಾಗಿದೆ?",
     options: ["A) ಕಟಕ", "B) ಕಟಕ್ ನಗರ", "C) ಕಟಕಪುರಿ", "D) ಒಡಿಶಾ ಕಟಕ್"],
-    correct: 0,
+    correctText: "A) ಕಟಕ",
     exp: "ಒಡಿಶಾದ ಐತಿಹಾಸಿಕ ನಗರ 'ಕಟಕ್' ನ ಹೆಸರನ್ನು ಇನ್ನು ಮುಂದೆ ಅಧಿಕೃತವಾಗಿ 'ಕಟಕ' ಎಂದು ಕರೆಯಲು ತೀರ್ಮಾನಿಸಲಾಗಿದೆ."
   },
   {
+    originalIndex: 10,
     q: "10. ಇತ್ತೀಚೆಗೆ ನಿಧನರಾದ 'ಜಸ್ಪಾಲ್ ರಾಣಾ' ಅವರು ಯಾವ ಕ್ರೀಡೆಯ ದಿಗಜ್ಜ ತರಬೇತುದಾರರಾಗಿದ್ದರು (Coach)?",
     options: ["A) ಬ್ಯಾಡ್ಮಿಂಟನ್", "B) ಕುಸ್ತಿ", "C) ಶೂಟಿಂಗ್ (ಬಂದೂಕು ಶೂಟಿಂಗ್)", "D) ಕ್ರಿಕೆಟ್"],
-    correct: 2,
+    correctText: "C) ಶೂಟಿಂಗ್ (ಬಂದೂಕು ಶೂಟಿಂಗ್)",
     exp: "ಜಸ್ಪಾಲ್ ರಾಣಾ ಅವರು ಭಾರತದ ಪ್ರಸಿದ್ಧ ಶೂಟಿಂಗ್ ಕ್ರೀಡಾಪಟು ಹಾಗೂ ಅನೇಕ ಒಲಂಪಿಕ್ ವಿಜೇತರನ್ನು ರೂಪಿಸಿದ ದಿಗಜ್ಜ ಶೂಟಿಂಗ್ ಕೋಚ್ ಆಗಿದ್ದರು."
   },
   {
+    originalIndex: 11,
     q: "11. 'ಅವತಾರ್ ಎಐ' ಕಂಪನಿಯು ಹೊಸದಾಗಿ ಬಿಡುಗಡೆ ಮಾಡಿದ ಎಐ ಮಾದರಿಯ ಹೆಸರೇನು?",
     options: ["A) ಸೋರಾ ಎಐ", "B) ವರ್ಯ ಎಐ (Varya AI)", "C) ಜೆಮಿನಿ ಎಐ", "D) ಕ್ಲಾಡ್ ಎಐ"],
-    correct: 1,
+    correctText: "B) ವರ್ಯ ಎಐ (Varya AI)",
     exp: "ಅವತಾರ್ ಎಐ (Avatar AI) ಸಂಸ್ಥೆಯು ಉತ್ಪನ್ನ ವಿನ್ಯಾಸ, ವೀಡಿಯೊ ತಯಾರಿಕೆಗೆ ಸಹಕಾರಿಯಾಗಬಲ್ಲ 'ವರ್ಯ ಎಐ' (Varya AI) ಮಾದರಿಯನ್ನು ಬಿಡುಗಡೆ ಮಾಡಿದೆ."
   },
   {
+    originalIndex: 12,
     q: "12. ಅಂಡಮಾನ್‌ನ 'ಶ್ರೀ ವಿಜಯಪುರಂ-3' ಸಂಶೋಧನಾ ಬಾವಿಯಲ್ಲಿ ಇತ್ತೀಚೆಗೆ ಯಾವ ನೈಸರ್ಗಿಕ ಸಂಪನ್ಮೂಲ ಪತ್ತೆಯಾಗಿದೆ?",
     options: ["A) ಕಚ್ಚಾ ತೈಲ (Petroleum)", "B) ನೈಸರ್ಗಿಕ ಅನಿಲ (Natural Gas)", "C) ಕಲ್ಲಿದ್ದಲು", "D) ಯುರೇನಿಯಂ"],
-    correct: 1,
+    correctText: "B) ನೈಸರ್ಗಿಕ ಅನಿಲ (Natural Gas)",
     exp: "ಅಂಡಮಾನ್ ದ್ವೀಪ ಪ್ರದೇಶದ ಶ್ರೀ ವಿಜಯಪುರಂ-3 ಸಂಶೋಧನಾ ಬಾವಿಯಲ್ಲಿ ನೈಸರ್ಗಿಕ ಅನಿಲ (Natural Gas) ನೂತನ ಶೇಖರಣೆ ಪತ್ತೆಯಾಗಿದೆ."
   },
   {
+    originalIndex: 13,
     q: "13. ಬೆಂಗಳೂರು ಕೃಷಿ ವಿಶ್ವವಿದ್ಯಾಲಯವು ಅಭಿವೃದ್ಧಿಪಡಿಸಿದ 'ML-322' ಎಂಬುದು ಯಾವ ಬೆಳೆಯ ಬರ ಸಹಿಷ್ಣು ತಳಿಯಾಗಿದೆ?",
     options: ["A) ಭತ್ತ", "B) ಜೋಳ", "C) ರಾಗಿ", "D) ತೊಗರಿ"],
-    correct: 2,
+    correctText: "C) ರಾಗಿ",
     exp: "'ML-322' ಎಂಬುದು ಬೆಂಗಳೂರು ಕೃಷಿ ವಿ.ವಿ. ಸಂಶೋಧನೆ ನಡೆಸಿ ಅಭಿವೃದ್ಧಿಪಡಿಸಿದ ಹೊಸ ಬರ ಸಹಿಷ್ಣು ರಾಗಿ ತಳಿಯಾಗಿದೆ."
   },
   {
+    originalIndex: 14,
     q: "14. ನಾಗರಿಕ ಸೇವೆಗಳನ್ನು ಉತ್ತೇಜಿಸಲು ಕರ್ನಾಟಕ ರಾಜ್ಯದಲ್ಲಿ ಹೊಸದಾಗಿ ಸ್ಥಾಪನೆಯಾದ ಇಲಾಖೆ ಯಾವುದು?",
     options: ["A) ಜನ ಸೇವಾ ಇಲಾಖೆ", "B) ಪ್ರಜಾ ಸೇವಾ ಇಲಾಖೆ", "C) ಕಲ್ಯಾಣ ಸೇವಾ ಇಲಾಖೆ", "D) ಸುಶಾಸನ ಇಲಾಖೆ"],
-    correct: 1,
+    correctText: "B) ಪ್ರಜಾ ಸೇವಾ ಇಲಾಖೆ",
     exp: "ಕರ್ನಾಟಕ ಸರ್ಕಾರವು ಸಾರ್ವಜನಿಕ ಸೇವೆಗಳನ್ನು ಸುಲಭವಾಗಿ ತಲುಪಿಸಲು 'ಪ್ರಜಾ ಸೇವಾ ಇಲಾಖೆ'ಯನ್ನು ಅಸ್ತಿತ್ವಕ್ಕೆ ತಂದಿದೆ."
   },
   {
+    originalIndex: 15,
     q: "15. ಬೆಂಗಳೂರಿನ QPIAI ಸಂಸ್ಥೆಯು ನಿರ್ಮಿಸಿದ 64-ಕ್ಯುಬಿಟ್ ಸೂಪರ್ ಕಂಡಕ್ಟಿಂಗ್ ಕ್ವಾಂಟಂ ಪ್ರೊಸೆಸರ್ ಹೆಸರೇನು?",
     options: ["A) ಶರಾವತಿ", "B) ಕಾವೇರಿ", "C) ಗಂಗಾ", "D) ನೇತ್ರಾವತಿ"],
-    correct: 1,
+    correctText: "B) ಕಾವೇರಿ",
     exp: "ಬೆಂಗಳೂರು ಮೂಲದ QPIAI ಸಂಸ್ಥೆಯು ದೇಶದ ಮೊದಲ 64-ಕ್ಯುಬಿಟ್ ಸೂಪರ್ ಕಂಡಕ್ಟಿಂಗ್ ಕ್ವಾಂಟಂ ಪ್ರೊಸೆಸರ್ 'ಕಾವೇರಿ'ಯನ್ನು ನಿರ್ಮಿಸಿದೆ."
   },
   {
+    originalIndex: 16,
     q: "16. ಇತ್ತೀಚೆಗೆ ರಾಷ್ಟ್ರೀಯ ಇ-ಗವರ್ನೆನ್ಸ್ ಪ್ರಶಸ್ತಿ ಪಡೆದ ಕರ್ನಾಟಕದ ಪೋರ್ಟಲ್ ಯಾವುದು?",
     options: ["A) ಇ-ಸ್ವತ್ತು", "B) ಇ-ಜಾಗೃತಿ ಪೋರ್ಟಲ್", "C) ಸೇವಾ ಸಿಂಧು", "D) ಕುಟುಂಬ ಪೋರ್ಟಲ್"],
-    correct: 1,
-    exp: "ಗ್ರಾಹಕ ಜಾಗೃತಿ ಹಾಗೂ ಇ-ಆಡಳಿತ ಸೇವೆಗಾಗಿ 'ಇ-ಜಾಗೃತಿ' ಪೋರ್ಟಲ್‌ಗೆ ರಾಷ್ಟ್ರೀಯ ಇ-ಗವರ್ನೆನ್ಸ್ ಪ್ರಶಸ್ತಿ ಲಭಿಸಿದೆ."
+    correctText: "B) ಇ-ಜಾಗೃತಿ ಪೋರ್ಟಲ್",
+    exp: "ಗ್ರಾಹಕ ಜಾಗೃತಿ ಹಾಗೂ ಇ-ಆಡಳಿತ ಸೇವೆಗಾಗಿ 'ಇ-ಜಾಗೃತಿ' ಪೋರ್ಟಲ್‌ನ ಚಿನ್ನದ ಪ್ರಶಸ್ತಿ ಲಭಿಸಿದೆ."
   },
   {
+    originalIndex: 17,
     q: "17. 'ಜೋಜಿಲಾ ಸುರಂಗ ಮಾರ್ಗ'ವು (Zojila Tunnel) ಯಾವ ಪ್ರದೇಶಗಳನ್ನು ಸಂಪರ್ಕಿಸುತ್ತದೆ?",
     options: ["A) ಜಮ್ಮು - ಕತ್ರಾ", "B) ಶ್ರೀನಗರ - ಲಡಾಖ್", "C) ಮನಾಲಿ - ಲೇಹ್", "D) ಶಿಮ್ಲಾ - ಕುಲ್ಲು"],
-    correct: 1,
+    correctText: "B) ಶ್ರೀನಗರ - ಲಡಾಖ್",
     exp: "ಜೋಜಿಲಾ ಸುರಂಗ ಮಾರ್ಗವು ಜಮ್ಮು-ಕಾಶ್ಮೀರದ ಶ್ರೀನಗರದಿಂದ ಲಡಾಖ್ ಪ್ರದೇಶಕ್ಕೆ ಸರ್ವಋತು ಸಂಪರ್ಕ ಕಲ್ಪಿಸುತ್ತದೆ."
   },
   {
+    originalIndex: 18,
     q: "18. 2026ರ 'ವಿಶ್ವ ಪರಿಸರ ದಿನ'ದ (ಜೂನ್ 05) ಆತಿಥ್ಯ ವಹಿಸಿದ ದೇಶದ ನಗರ ಯಾವುದು?",
     options: ["A) ಭಾರತ (ನವದೆಹಲಿ)", "B) ಅಜರ್‌ಬೈಜಾನ್ (ಬಾಕು)", "C) ಈಜಿಪ್ಟ್ (ಕೈರೋ)", "D) ಬ್ರೆಜಿಲ್ (ರಿಯೋ)"],
-    correct: 1,
+    correctText: "B) ಅಜರ್‌ಬೈಜಾನ್ (ಬಾಕು)",
     exp: "2026ರ ವಿಶ್ವ ಪರಿಸರ ದಿನದ UNEP ನೇತೃತ್ವದ ಅಧಿಕೃತ ಆಚರಣೆಯ ಆತಿಥ್ಯವನ್ನು ಅಜರ್‌ಬೈಜಾನ್‌ನ 'ಬಾಕು' ನಗರ ವಹಿಸಿಕೊಂಡಿತ್ತು."
   },
   {
+    originalIndex: 19,
     q: "19. 2026ರ ವಿಶ್ವ ಪರಿಸರ ದಿನದ ಮುಖ್ಯ ಧ್ವೇಯವಾಕ್ಯ (Theme) ಏನಾಗಿತ್ತು?",
     options: ["A) Beat Plastic Pollution", "B) Only One Earth", "C) ಪ್ರಕೃತಿಯಿಂದ ಪ್ರೇರಿತ, ಹವಾಮಾನಕ್ಕಾಗಿ ನಮ್ಮ ಭವಿಷ್ಯಕ್ಕಾಗಿ", "D) Restore Our Earth"],
-    correct: 2,
+    correctText: "C) ಪ್ರಕೃತಿಯಿಂದ ಪ್ರೇರಿತ, ಹವಾಮಾನಕ್ಕಾಗಿ ನಮ್ಮ ಭವಿಷ್ಯಕ್ಕಾಗಿ",
     exp: "2026ರ ವಿಶ್ವ ಪರಿಸರ ದಿನದ ಧ್ವೇಯವಾಕ್ಯ 'ಪ್ರಕೃತಿಯಿಂದ ಪ್ರೇರಿತ, ಹವಾಮಾನಕ್ಕಾಗಿ ನಮ್ಮ ಭವಿಷ್ಯಕ್ಕಾಗಿ' ಮತ್ತು ಪ್ರಚಾರ ಸಂದೇಶ #NowForClimate ಆಗಿತ್ತು."
   },
   {
+    originalIndex: 20,
     q: "20. ಮಹಿಳೆಯರಿಗೆ ಉಚಿತ ಬಸ್ ಪ್ರಯಾಣ ಕಲ್ಪಿಸಲು ಕೇರಳ ರಾಜ್ಯವು ಜಾರಿಗೆ ತಂದ ಯೋಜನೆಯ ಹೆಸರೇನು?",
     options: ["A) ಶಕ್ತಿ ಯೋಜನೆ", "B) ಪ್ರಿಯದರ್ಶಿನಿ ಯೋಜನೆ", "C) ಸ್ತ್ರೀ ಶಕ್ತಿ ಯೋಜನೆ", "D) ಮಾತೃ ವಂದನಾ"],
-    correct: 1,
+    correctText: "B) ಪ್ರಿಯದರ್ಶಿನಿ ಯೋಜನೆ",
     exp: "ಕರ್ನಾಟಕದ 'ಶಕ್ತಿ' ಯೋಜನೆಯಂತೆ, ಕೇರಳ ರಾಜ್ಯವು ಮಹಿಳೆಯರ ಉಚಿತ ಬಸ್ ಪ್ರಯಾಣಕ್ಕಾಗಿ 'ಪ್ರಿಯದರ್ಶಿನಿ' ಯೋಜನೆಯನ್ನು ಚಾಲನೆಗೊಳಿಸಿದೆ."
   },
   {
+    originalIndex: 21,
     q: "21. ರಾಷ್ಟ್ರೀಯ ಇ-ಆಡಳಿತ ಪ್ರಶಸ್ತಿ-2026ರಲ್ಲಿ 'ಪಂಚಾಯತ್ ಪ್ರಗತಿ ಸೂಚ್ಯಂಕ'ಕ್ಕಾಗಿ ಚಿನ್ನದ ಪ್ರಶಸ್ತಿ ಪಡೆದ ವಿಭಾಗ ಯಾವುದು?",
     options: ["A) ನಗರಾಭಿವೃದ್ಧಿ ಇಲಾಖೆ", "B) ಪಂಚಾಯತ್ ಪ್ರಗತಿ ಸೂಚ್ಯಂಕ", "C) ಶಿಕ್ಷಣ ಇಲಾಖೆ", "D) ಆರೋಗ್ಯ ಇಲಾಖೆ"],
-    correct: 1,
+    correctText: "B) ಪಂಚಾಯತ್ ಪ್ರಗತಿ ಸೂಚ್ಯಂಕ",
     exp: "ಪಂಚಾಯತ್ ಮಟ್ಟದ ಮೂಲಸೌಕರ್ಯ ಮತ್ತು ಡಿಜಿಟಲೀಕರಣಕ್ಕಾಗಿ 'ಪಂಚಾಯತ್ ಪ್ರಗತಿ ಸೂಚ್ಯಂಕ'ಕ್ಕೆ ಚಿನ್ನದ ಪ್ರಶಸ್ತಿ ನೀಡಿ ಗೌರವಿಸಲಾಗಿದೆ."
   },
   {
+    originalIndex: 22,
     q: "22. ಆಸ್ಟ್ರೇಲಿಯಾದ ಲೋವಿ ಇನ್‌ಸ್ಟಿಟ್ಯೂಟ್ ಸಮೀಕ್ಷೆಯಂತೆ 'ವಿಶ್ವಾಸಾರ್ಹತೆ ರಾಷ್ಟ್ರಗಳ ಪಟ್ಟಿ'ಯಲ್ಲಿ ಯಾವ ದೇಶ ನಂ.1 ಸ್ಥಾನದಲ್ಲಿದೆ?",
     options: ["A) ಅಮೆರಿಕ", "B) ಜಪಾನ್", "C) ಭಾರತ", "D) ಆಸ್ಟ್ರೇಲಿಯಾ"],
-    correct: 2,
+    correctText: "C) ಭಾರತ",
     exp: "ಲೋವಿ ಇನ್‌ಸ್ಟಿಟ್ಯೂಟ್ ನಡೆಸಿದ ಜಾಗತಿಕ ಸಮೀಕ್ಷೆಯ ಪ್ರಕಾರ ವಿಶ್ವಾಸಾರ್ಹತೆ ಹೊಂದಿರುವ ರಾಷ್ಟ್ರಗಳ ಸಾಲಿನಲ್ಲಿ 'ಭಾರತ' ಪ್ರಥಮ ಸ್ಥಾನ ಪಡೆದಿದೆ."
   },
   {
+    originalIndex: 23,
     q: "23. ಇತ್ತೀಚೆಗೆ ಭೂಕಂಪ ಪೀಡಿತ ವೆನಿಜುವೆಲಾ ದೇಶಕ್ಕೆ ಭಾರತ ನೆರವು ನೀಡಲು ಆರಂಭಿಸಿದ ಕಾರ್ಯಾಚರಣೆ ಯಾವುದು?",
     options: ["A) ಆಪರೇಷನ್ ಕಾವೇರಿ", "B) ಆಪರೇಷನ್ ಅಮಿಸ್ಟಾಡ್ (ಆಪರೇಷನ್ ಸ್ನೇಹ)", "C) ಆಪರೇಷನ್ ದೇವಶಕ್ತಿ", "D) ಆಪರೇಷನ್ ಗಂಗಾ"],
-    correct: 1,
+    correctText: "B) ಆಪರೇಷನ್ ಅಮಿಸ್ಟಾಡ್ (ಆಪರೇಷನ್ ಸ್ನೇಹ)",
     exp: "ಭೂಕಂಪದಿಂದ ಸಂಕಷ್ಟಕ್ಕೆ ಈಡಾಗಿದ್ದ ವೆನಿಜುವೆಲಾಗೆ ಮಾನವೀಯ ನೆರವು ನೀಡಲು ಭಾರತವು 'ಆಪರೇಷನ್ ಅಮಿಸ್ಟಾಡ್' (ಸ್ನೇಹ) ಕಾರ್ಯಾಚರಣೆ ನಡೆಸಿತು."
   },
   {
+    originalIndex: 24,
     q: "24. ಇತ್ತೀಚೆಗೆ ಯಾವ ಖಂಡದಾದ್ಯಂತ ತೀವ್ರ ಸ್ವರೂಪದ 'ಹೀಟ್ ವೇವ್' (ಉಷ್ಣ ಅಲೆ) ದಾಖಲಾಗಿತ್ತು?",
     options: ["A) ಏಷ್ಯಾ", "B) ಯುರೋಪ್", "C) ಆಫ್ರಿಕಾ", "D) ಉತ್ತರ ಅಮೆರಿಕ"],
-    correct: 1,
+    correctText: "B) ಯುರೋಪ್",
     exp: "2026ರ ಬೇಸಿಗೆ ಅವಧಿಯಲ್ಲಿ ಯುರೋಪ್ ಖಂಡದಾದ್ಯಂತ ದಾಖಲೆ ಪ್ರಮಾಣದ ತೀವ್ರ 'ಹೀಟ್ ವೇವ್' ಉಂಟಾಗಿತ್ತು."
   },
   {
+    originalIndex: 25,
     q: "25. ಏಕಕಾಲದಲ್ಲಿ 15 ಲಕ್ಷ ಸಸಿಗಳನ್ನು ನೆಟ್ಟು ಗಿನ್ನೆಸ್ ದಾಖಲೆ ನಿರ್ಮಿಸಿದ ಕರ್ನಾಟಕದ ಸಂಸ್ಥೆ ಯಾವುದು?",
     options: ["A) BBMP", "B) BDA (ಬೆಂಗಳೂರು ಅಭಿವೃದ್ಧಿ ಪ್ರಾಧಿಕಾರ)", "C) KSPCB", "D) ಅರಣ್ಯ ಇಲಾಖೆ"],
-    correct: 1,
+    correctText: "B) BDA (ಬೆಂಗಳೂರು ಅಭಿವೃದ್ಧಿ ಪ್ರಾಧಿಕಾರ)",
     exp: "ಬೆಂಗಳೂರು ಅಭಿವೃದ್ಧಿ ಪ್ರಾಧಿಕಾರ (BDA) ನಗರ ವ್ಯಾಪ್ತಿಯಲ್ಲಿ 15 ಲಕ್ಷ ಸಸಿಗಳನ್ನು ನೆಡುವ ಮೂಲಕ ಗಿನ್ನೆಸ್ ವಿಶ್ವ ದಾಖಲೆಯನ್ನು ಸ್ಥಾಪಿಸಿತು."
   },
   {
+    originalIndex: 26,
     q: "26. 2026ರ ಫ್ರೆಂಚ್ ಓಪನ್ ಟೆನಿಸ್ ಟೂರ್ನಿಯ 'ಮಹಿಳಾ ಸಿಂಗಲ್ಸ್' ಚಾಂಪಿಯನ್ ಯಾರು?",
     options: ["A) ಇಗಾ ಸ್ವಿಯಾಟೆಕ್", "B) ಅರೀನಾ ಸಬಲೆಂಕಾ", "C) ಮಿರಾ ಆಂಡ್ರೀವ (ರಷ್ಯಾ)", "D) ಕೊಕೊ ಗೌಫ್"],
-    correct: 2,
+    correctText: "C) ಮಿರಾ ಆಂಡ್ರೀವ (ರಷ್ಯಾ)",
     exp: "ರಷ್ಯಾದ ಯುವ ಆಟಗಾರ್ತಿ 'ಮಿರಾ ಆಂಡ್ರೀವ' ಅವರು 2026ರ ಫ್ರೆಂಚ್ ಓಪನ್ ಮಹಿಳಾ ಸಿಂಗಲ್ಸ್ ಚಾಂಪಿಯನ್ ಆಗಿ ಹೊರಹೊಮ್ಮಿದ್ದಾರೆ."
   },
   {
+    originalIndex: 27,
     q: "27. 2026ರ ಫ್ರೆಂಚ್ ಓಪನ್ ಟೆನಿಸ್ ಟೂರ್ನಿಯ 'ಪುರುಷರ ಸಿಂಗಲ್ಸ್' ಚಾಂಪಿಯನ್ ಪಟ್ಟ ಗೆದ್ದವರು ಯಾರು?",
     options: ["A) ಕಾರ್ಲೋಸ್ ಅಲ್ಕಾರಾಜ್", "B) ಅಲೆಕ್ಸಾಂಡರ್ ಝ್ವೆರೇವ್ (ಜರ್ಮನಿ)", "C) ನೋವಾಕ್ ಜೊಕೊವಿಚ್", "D) ಡ್ಯಾನಿಲ್ ಮೆಡ್ವೆಡೇವ್"],
-    correct: 1,
+    correctText: "B) ಅಲೆಕ್ಸಾಂಡರ್ ಝ್ವೆರೇವ್ (ಜರ್ಮನಿ)",
     exp: "ಜರ್ಮನಿಯ ಅಲೆಕ್ಸಾಂಡರ್ ಝ್ವೆರೇವ್ ಅವರು 2026ರ ಫ್ರೆಂಚ್ ಓಪನ್ ಟೆನಿಸ್ ಪುರುಷರ ಸಿಂಗಲ್ಸ್ ವಿಭಾಗದಲ್ಲಿ ಚಾಂಪಿಯನ್ ಆದರು."
   },
   {
+    originalIndex: 28,
     q: "28. 'ನಾರ್ವೇ ಚೆಸ್' ಟೂರ್ನಮೆಂಟ್ ಗೆದ್ದ ಮೊದಲ ಭಾರತೀಯ ಆಟಗಾರ ಯಾರು?",
     options: ["A) ಡಿ. ಗುಕೇಶ್", "B) ಆರ್. ಪ್ರಜ್ಞಾನಂದ", "C) ವಿಶ್ವನಾಥನ್ ಆನಂದ್", "D) ಅರ್ಜುನ್ ಎರಿಗೈಸಿ"],
-    correct: 1,
+    correctText: "B) ಆರ್. ಪ್ರಜ್ಞಾನಂದ",
     exp: "ಭಾರತದ ಯುವ ಗ್ರಾಂಡ್‌ಮಾಸ್ಟರ್ 'ಆರ್. ಪ್ರಜ್ಞಾನಂದ' ಅವರು ಜರ್ಮನಿಯ ವಿನ್ಸೆಂಟ್ ಕೀಮರ್ ಅವರನ್ನು ಸೋಲಿಸಿ ನಾರ್ವೇ ಚೆಸ್ ಗೆದ್ದ ಮೊದಲ ಭಾರತೀಯ ಎಂಬ ಹೆಗ್ಗಳಿಕೆಗೆ ಪಾತ್ರರಾದರು."
   },
   {
+    originalIndex: 29,
     q: "29. ತುಂಗಭದ್ರಾ ಜಲಾಶಯದ ಸುರಕ್ಷತೆಗಾಗಿ ಇತ್ತೀಚೆಗೆ ಎಷ್ಟು ನೂತನ ಕ್ರೆಸ್ಟ್ ಗೇಟ್‌ಗಳನ್ನು ಉದ್ಘಾಟಿಸಲಾಯಿತು?",
     options: ["A) 20", "B) 33", "C) 15", "D) 30"],
-    correct: 1,
+    correctText: "B) 33",
     exp: "ತುಂಗಭದ್ರಾ ನದಿಯ ಜಲಾಶಯದಲ್ಲಿ ಹಾನಿಗೊಳಗಾಗಿದ್ದ ಗೇಟ್‌ಗಳ ಬದಲಿಗೆ ನೂತನ '33 ಕ್ರೆಸ್ಟ್ ಗೇಟ್'ಗಳನ್ನು ಉದ್ಘಾಟಿಸಲಾಯಿತು."
   },
   {
+    originalIndex: 30,
     q: "30. ಭಾರತದ 2ನೇ 'ಬುಲೆಟ್ ರೈಲು' ಯೋಜನೆಯನ್ನು ಯಾವ ಮಾರ್ಗಕ್ಕೆ ಘೋಷಿಸಲಾಗಿದೆ?",
     options: ["A) ಮುಂಬೈ - ಅಹಮದಾಬಾದ್", "B) ದೆಹಲಿ - ಸಿಲಿಗುರಿ (ಪಶ್ಚಿಮ ಬಂಗಾಳ)", "C) ಬೆಂಗಳೂರು - ಚೆನ್ನೈ", "D) ದೆಹಲಿ - ವಾರಣಾಸಿ"],
-    correct: 1,
+    correctText: "B) ದೆಹಲಿ - ಸಿಲಿಗುರಿ (ಪಶ್ಚಿಮ ಬಂಗಾಳ)",
     exp: "ಪಶ್ಚಿಮ ಬಂಗಾಳ ಸಂಪರ್ಕಿಸುವ ದೆಹಲಿಯಿಂದ ಸಿಲಿಗುರಿ ಮಾರ್ಗಕ್ಕೆ ದೇಶದ 2ನೇ ಬುಲೆಟ್ ರೈಲು ಯೋಜನೆಯನ್ನು ಅಧಿಕೃತವಾಗಿ ಘೋಷಿಸಲಾಗಿದೆ."
   },
   {
+    originalIndex: 31,
     q: "31. 'ಸ್ಪರ್ಧಾ ವಿಜೇತ' ಮಾಸಪತ್ರಿಕೆಯ ಪ್ರಕಟಣೆಯ ಮುಖ್ಯ ಧ್ಯೇಯವಾಕ್ಯ (Motto) ಯಾವುದು?",
     options: ["A) Truth, Faith, Victory", "B) Creativity, Reality, Validity", "C) Read, Learn, Succeed", "D) Knowledge, Power, Success"],
-    correct: 1,
+    correctText: "B) Creativity, Reality, Validity",
     exp: "ಸ್ಪರ್ಧಾ ವಿಜೇತ ಪತ್ರಿಕೆಯ ಮುಖಪುಟದಲ್ಲಿ ತಿಳಿಸಿದಂತೆ ಅದರ ಪ್ರಮುಖ ಧ್ವೇಯವಾಕ್ಯ 'Creativity, Reality, Validity' ಆಗಿದೆ."
   },
   {
+    originalIndex: 32,
     q: "32. ಜುಲೈ 2026ರ ಸ್ಪರ್ಧಾ ವಿಜೇತ ಪತ್ರಿಕೆಯ ಒಟ್ಟು ಪುಟಗಳ ಸಂಖ್ಯೆ ಎಷ್ಟು?",
     options: ["A) 100", "B) 116", "C) 150", "D) 226"],
-    correct: 1,
+    correctText: "B) 116",
     exp: "ಮುಖಪುಟದ ವಿವರಣೆಯ ಪ್ರಕಾರ ಜುಲೈ 2026ರ ಈ ಸಂಚಿಕೆಯು ಒಟ್ಟು 116 ಪುಟಗಳನ್ನು ಹೊಂದಿದೆ."
   },
   {
+    originalIndex: 33,
     q: "33. ಈ ಕೆಳಗಿನ ಯಾವ ಪರೀಕ್ಷೆಗಳಿಗೆ 'ಸ್ಪರ್ಧಾ ವಿಜೇತ' ಸಿದ್ಧತಾ ಪತ್ರಿಕೆಯು ಉಪಯುಕ್ತವಾಗಿದೆ?",
     options: ["A) KAS & PSI", "B) PDO, FDA & SDA", "C) Group-C & PC", "D) ಮೇಲಿನ ಎಲ್ಲವೂ"],
-    correct: 3,
+    correctText: "D) ಮೇಲಿನ ಎಲ್ಲವೂ",
     exp: "ಈ ನಿಯತಕಾಲಿಕೆಯು KAS, PSI, ESI, PDO, FDA, SDA, Group-C, VAO, CTI, PC ಸೇರಿದಂತೆ ಕರ್ನಾಟಕದ ಎಲ್ಲಾ ಸ್ಪರ್ಧಾತ್ಮಕ ಪರೀಕ್ಷೆಗಳಿಗೆ ಉಪಯುಕ್ತವಾಗಿದೆ."
   }
 ];
 
+let currentQuizData = [];
 let currentIndex = 0;
-let userAnswers = new Array(quizData.length).fill(null);
+let userAnswers = [];
+let wrongTestCounter = 1;
+
+// Helper function to shuffle an array
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Prepare question data with jumbled options
+function prepareQuestionData(questions) {
+  return questions.map(qObj => {
+    const shuffledOptions = shuffleArray(qObj.options);
+    const correctIdx = shuffledOptions.indexOf(qObj.correctText);
+    return {
+      originalIndex: qObj.originalIndex,
+      q: qObj.q,
+      options: shuffledOptions,
+      correct: correctIdx,
+      correctText: qObj.correctText,
+      exp: qObj.exp
+    };
+  });
+}
 
 function initQuiz() {
+  currentQuizData = prepareQuestionData(originalQuizData);
+  userAnswers = new Array(currentQuizData.length).fill(null);
+  currentIndex = 0;
+  wrongTestCounter = 1;
+  document.getElementById('test-title').innerText = "Karnataka PC & SSC CBT Exam Mock Test";
+  document.getElementById('total-questions').innerText = currentQuizData.length;
   renderPalette();
   loadQuestion(currentIndex);
 }
@@ -280,13 +441,14 @@ function initQuiz() {
 function renderPalette() {
   const palette = document.getElementById('palette');
   palette.innerHTML = '';
-  quizData.forEach((_, index) => {
+  currentQuizData.forEach((qObj, index) => {
     const btn = document.createElement('button');
     btn.className = `palette-btn ${index === currentIndex ? 'active' : ''}`;
-    btn.innerText = index + 1;
+    // Always show original global question number
+    btn.innerText = qObj.originalIndex;
     
     if (userAnswers[index] !== null) {
-      if (userAnswers[index] === quizData[index].correct) {
+      if (userAnswers[index] === qObj.correct) {
         btn.classList.add('answered-correct');
       } else {
         btn.classList.add('answered-incorrect');
@@ -299,7 +461,7 @@ function renderPalette() {
 }
 
 function loadQuestion(index) {
-  const qData = quizData[index];
+  const qData = currentQuizData[index];
   document.getElementById('question-text').innerText = qData.q;
   
   const optionsContainer = document.getElementById('options-container');
@@ -346,7 +508,7 @@ function loadQuestion(index) {
   }
 
   document.getElementById('prev-btn').disabled = index === 0;
-  document.getElementById('next-btn').disabled = index === quizData.length - 1;
+  document.getElementById('next-btn').disabled = index === currentQuizData.length - 1;
   
   renderPalette();
   updateScore();
@@ -370,7 +532,7 @@ function prevQuestion() {
 }
 
 function nextQuestion() {
-  if (currentIndex < quizData.length - 1) {
+  if (currentIndex < currentQuizData.length - 1) {
     currentIndex++;
     loadQuestion(currentIndex);
   }
@@ -378,9 +540,41 @@ function nextQuestion() {
 
 function updateScore() {
   const score = userAnswers.reduce((acc, ans, idx) => {
-    return ans === quizData[idx].correct ? acc + 1 : acc;
+    return ans === currentQuizData[idx].correct ? acc + 1 : acc;
   }, 0);
   document.getElementById('score').innerText = score;
+}
+
+function retestAll() {
+  initQuiz();
+}
+
+function testWrongAnswers() {
+  const wrongQuestions = [];
+  
+  currentQuizData.forEach((qData, idx) => {
+    if (userAnswers[idx] !== null && userAnswers[idx] !== qData.correct) {
+      // Find original reference item to re-jumble
+      const origItem = originalQuizData.find(o => o.originalIndex === qData.originalIndex);
+      if (origItem) wrongQuestions.push(origItem);
+    }
+  });
+
+  if (wrongQuestions.length === 0) {
+    alert("No wrong answers found! Excellent job.");
+    return;
+  }
+
+  currentQuizData = prepareQuestionData(wrongQuestions);
+  userAnswers = new Array(currentQuizData.length).fill(null);
+  currentIndex = 0;
+  
+  document.getElementById('test-title').innerText = `Karnataka PC & SSC CBT Exam Mock Test (Wrong Test-${wrongTestCounter})`;
+  wrongTestCounter++;
+  
+  document.getElementById('total-questions').innerText = currentQuizData.length;
+  renderPalette();
+  loadQuestion(currentIndex);
 }
 
 window.onload = initQuiz;
